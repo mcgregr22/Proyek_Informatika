@@ -220,9 +220,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit" class="btn-daftar">Daftar</button>
         </form>
 
-        <div class="login-link">
-            Sudah punya akun? <a href="login.php">Masuk</a>
-        </div>
+       <div class="login-link">
+    Sudah punya akun? <a href="/login">Masuk</a>
+</div>
+
     </div>
     
     <div class="footer">
