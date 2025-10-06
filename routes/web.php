@@ -40,3 +40,6 @@ Route::get('/homepage', function () {
 Route::get('/swapbook', function () {
     return view('swapbook');
 });
+Route::get('/keranjang', function () {
+    return view('keranjang');
+});
