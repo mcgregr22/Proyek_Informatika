@@ -18,10 +18,6 @@ Route::get('/login', function () {
     return view('login');
 });
 
-Route::get('/homepage', function () {
-    return view('homepage');
-});
-
 use Illuminate\Http\Request;
 
 Route::post('/login', function (Request $request) {
@@ -35,3 +31,12 @@ Route::post('/login', function (Request $request) {
     }
 });
 
+
+Route::get('/homepage', function () {
+    return view('homepage');
+});
+
+
+Route::get('/swapbook', function () {
+    return view('swapbook');
+});
