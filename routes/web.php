@@ -22,6 +22,10 @@ Route::get('/homepage', function () {
     return view('homepage');
 });
 
+Route::get('/keranjang', function () {
+    return view('keranjang');
+});
+
 use Illuminate\Http\Request;
 
 Route::post('/login', function (Request $request) {
