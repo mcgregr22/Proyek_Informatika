@@ -13,6 +13,25 @@ Route::get('/home', function () {
 Route::get('/register', function () {
     return view('register');
 });
+
 Route::get('/login', function () {
     return view('login');
 });
+
+Route::get('/homepage', function () {
+    return view('homepage');
+});
+
+use Illuminate\Http\Request;
+
+Route::post('/login', function (Request $request) {
+    $email = $request->input('email');
+    $password = $request->input('password');
+
+    if ($email === '123@gmail.com' && $password === '1234') {
+        return redirect('/homepage');
+    } else {
+        return back()->with('error', 'Email atau password salah!');
+    }
+});
+

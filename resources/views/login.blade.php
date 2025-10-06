@@ -86,6 +86,13 @@
         .register-link a:hover {
             text-decoration: underline;
         }
+
+        /* ✨ Tambahan: pesan error */
+        .error {
+            color: red;
+            font-size: 13px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -102,6 +109,11 @@
                 <input type="password" name="password" placeholder="••••••" required><br>
 
                 <button type="submit">MASUK</button>
+
+                <!-- 🔻 tampilkan pesan error kalau login gagal -->
+                @if(session('error'))
+                    <p class="error">{{ session('error') }}</p>
+                @endif
             </form>
 
             <div class="register-link">
