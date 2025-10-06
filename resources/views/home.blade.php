@@ -86,8 +86,8 @@
 
     <!-- Tombol -->
     <div class="buttons">
-      <button class="btn btn-masuk">Masuk</button>
-      <a href="../view/Register.php" class="btn btn-daftar">Daftar</a>
+      <a href="/login" class="btn btn-masuk">Masuk</a>
+      <a href="/register" class="btn btn-daftar">Daftar</a>
     </div>
   </div>
 </body>
