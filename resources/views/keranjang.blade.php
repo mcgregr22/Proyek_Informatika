@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library-Hub</title>
+    <title>Keranjang | Library-Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
@@ -15,32 +15,6 @@
             color: #0d6efd;
             font-weight: 700;
         }
-        .banner {
-            background: linear-gradient(90deg, #001f54, #003f88);
-            color: white;
-            border-radius: 12px;
-            padding: 40px 20px;
-            margin-top: 30px;
-        }
-        .banner h2 {
-            font-weight: 700;
-        }
-        .book-card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease;
-        }
-        .book-card:hover {
-            transform: translateY(-5px);
-        }
-        .footer {
-            margin-top: 60px;
-            text-align: center;
-            padding: 20px 0;
-            border-top: 1px solid #ddd;
-            color: #777;
-        }
         .navbar-icon {
             font-size: 1.2rem;
             margin-left: 15px;
@@ -49,6 +23,63 @@
         }
         .navbar-icon:hover {
             color: #0d6efd;
+        }
+        .empty-cart {
+            text-align: center;
+            margin-top: 80px;
+        }
+        .empty-cart img {
+            max-width: 280px;
+            opacity: 0.9;
+        }
+        .empty-cart h5 {
+            margin-top: 25px;
+            font-weight: 600;
+            color: #333;
+        }
+        .empty-cart p {
+            color: #777;
+        }
+        .btn-shop {
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 8px;
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
+        .btn-shop:hover {
+            background-color: #003f88;
+            color: white;
+        }
+        .summary-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-top: 40px;
+            background: white;
+            padding: 25px;
+        }
+        .summary-card h6 {
+            font-weight: 600;
+        }
+        .footer {
+            margin-top: 70px;
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid #ddd;
+            color: #777;
+        }
+        .btn-checkout {
+            width: 100%;
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-checkout:hover {
+            background-color: #003f88;
         }
     </style>
 </head>
@@ -66,7 +97,6 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Dropdown Kategori -->
                 <ul class="navbar-nav ms-4">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle fw-semibold" href="#" role="button" data-bs-toggle="dropdown">
@@ -82,21 +112,17 @@
                     </li>
                 </ul>
 
-                <!-- Search -->
                 <form class="d-flex ms-auto me-3" role="search">
                     <input class="form-control" type="search" placeholder="Cari Buku">
                 </form>
 
-                <!-- Menu kanan -->
                 <ul class="navbar-nav align-items-center">
                     <li class="nav-item"><a class="nav-link fw-semibold" href="#">Swapbook</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold" href="#">My Collection</a></li>
                 </ul>
 
-                <!-- 3 Icon Kanan -->
                 <div class="d-flex align-items-center ms-3">
-                  <a href="{{ url('/keranjang') }}" class="navbar-icon"><i class="bi bi-cart"></i></a>
-
+                    <a href="#" class="navbar-icon"><i class="bi bi-cart"></i></a>
                     <a href="#" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
                     <a href="#" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
                 </div>
@@ -104,60 +130,41 @@
         </div>
     </nav>
 
-    <!-- Banner -->
+    <!-- Halaman Keranjang Kosong -->
     <div class="container">
-        <div class="banner text-center mt-4">
-            <h2>WELCOME TO LIBRARY-HUB</h2>
-            <p>"The only thing that you absolutely have to know, is the location of the library."</p>
-            <a href="#" class="btn btn-light btn-sm mt-3">SHOP NOW</a>
-        </div>
-    </div>
+        <div class="empty-cart">
+            <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" alt="Empty Cart">
+            <h5>Keranjang Belanja Kosong</h5>
+            <p>Yuk, temukan buku favoritmu dan tambahkan ke keranjang!</p>
+            <a href="{{ url('/homepage') }}" class="btn btn-shop mt-3">
+    <i class="bi bi-arrow-left"></i> Beranda
+</a>
 
-    <!-- Book Categories -->
-    <div class="container mt-5">
-        <h4 class="mb-3 fw-semibold">Humor & Comedy</h4>
-        <div class="row g-3">
-            @for ($i = 0; $i < 4; $i++)
-            <div class="col-md-3">
-                <div class="card book-card">
-                    <div class="card-body text-center">
-                        <div class="bg-light p-5 rounded mb-2">📘</div>
-                        <h6 class="fw-semibold">Judul Buku</h6>
-                        <p class="text-muted mb-0">Rp. 99.000,00</p>
-                    </div>
-                </div>
-            </div>
-            @endfor
         </div>
 
-        <h4 class="mb-3 mt-5 fw-semibold">History</h4>
-        <div class="row g-3">
-            @for ($i = 0; $i < 6; $i++)
-            <div class="col-md-2">
-                <div class="card book-card">
-                    <div class="card-body text-center">
-                        <div class="bg-light p-4 rounded mb-2">📗</div>
-                        <h6 class="fw-semibold">Judul Buku</h6>
-                        <p class="text-muted mb-0">Rp. 99.000,00</p>
-                    </div>
-                </div>
+        <!-- Ringkasan Pesanan -->
+        <div class="summary-card col-md-6 mx-auto mt-5">
+            <h6 class="mb-3">Ringkasan Pesanan</h6>
+            <div class="d-flex justify-content-between">
+                <span>Subtotal (item):</span>
+                <strong>Rp0</strong>
             </div>
-            @endfor
-        </div>
-
-        <h4 class="mb-3 mt-5 fw-semibold">Recommendations</h4>
-        <div class="row g-3">
-            @for ($i = 0; $i < 5; $i++)
-            <div class="col-md-2">
-                <div class="card book-card">
-                    <div class="card-body text-center">
-                        <div class="bg-light p-4 rounded mb-2">📕</div>
-                        <h6 class="fw-semibold">Judul Buku</h6>
-                        <p class="text-muted mb-0">Rp. 99.000,00</p>
-                    </div>
-                </div>
+            <div class="d-flex justify-content-between">
+                <span>Pajak (10%):</span>
+                <strong>Rp0</strong>
             </div>
-            @endfor
+            <div class="d-flex justify-content-between mb-2">
+                <span>Pengiriman:</span>
+                <strong>Rp0</strong>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between mb-3">
+                <h6>Total:</h6>
+                <h6 class="text-primary fw-bold">Rp0</h6>
+            </div>
+            <button class="btn-checkout">
+                Lanjutkan ke Checkout
+            </button>
         </div>
     </div>
 
