@@ -89,7 +89,7 @@
 
                 <!-- Menu kanan -->
                 <ul class="navbar-nav align-items-center">
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="#">Swapbook</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="/swapbook">Swapbook</a></li>
                     <li class="nav-item"><a class="nav-link fw-semibold" href="#">My Collection</a></li>
                 </ul>
 
