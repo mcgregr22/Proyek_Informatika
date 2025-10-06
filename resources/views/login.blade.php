@@ -50,6 +50,29 @@
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-container input {
+            padding-right: 35px; /* ruang untuk ikon */
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+        }
+
+        .toggle-password:hover {
+            color: #000;
         }
 
         button {
@@ -86,6 +109,12 @@
         .register-link a:hover {
             text-decoration: underline;
         }
+
+        .error {
+            color: red;
+            font-size: 13px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -99,9 +128,16 @@
                 <input type="email" name="email" placeholder="nama@contoh.com" required><br>
 
                 <label for="password">Kata Sandi</label><br>
-                <input type="password" name="password" placeholder="••••••" required><br>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" placeholder="••••••" required>
+                    <span class="toggle-password" onclick="togglePassword()">👁️</span>
+                </div><br>
 
                 <button type="submit">MASUK</button>
+
+                @if(session('error'))
+                    <p class="error">{{ session('error') }}</p>
+                @endif
             </form>
 
             <div class="register-link">
@@ -111,5 +147,19 @@
 
         <div class="footer">© 2025 Library-Hub</div>
     </div>
+
+    <script>
+        function togglePassword() {
+            const password = document.getElementById('password');
+            const icon = document.querySelector('.toggle-password');
+            if (password.type === 'password') {
+                password.type = 'text';
+                icon.textContent = '🔒';
+            } else {
+                password.type = 'password';
+                icon.textContent = '👁️';
+            }
+        }
+    </script>
 </body>
 </html>
