@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library-Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         body {
             background-color: #f8f9fa;
@@ -40,29 +41,64 @@
             border-top: 1px solid #ddd;
             color: #777;
         }
+        .navbar-icon {
+            font-size: 1.2rem;
+            margin-left: 15px;
+            color: #333;
+            transition: color 0.2s;
+        }
+        .navbar-icon:hover {
+            color: #0d6efd;
+        }
     </style>
 </head>
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm">
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">
                 Library-<span>Hub</span>
             </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Dropdown Kategori -->
+                <ul class="navbar-nav ms-4">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-semibold" href="#" role="button" data-bs-toggle="dropdown">
+                            Kategori
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Humor & Comedy</a></li>
+                            <li><a class="dropdown-item" href="#">History</a></li>
+                            <li><a class="dropdown-item" href="#">Science & Tech</a></li>
+                            <li><a class="dropdown-item" href="#">Fiction</a></li>
+                            <li><a class="dropdown-item" href="#">Romance</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <!-- Search -->
                 <form class="d-flex ms-auto me-3" role="search">
                     <input class="form-control" type="search" placeholder="Cari Buku">
                 </form>
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="#">Swapbook</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">My Collection</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cart"></i></a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person-circle"></i></a></li>
+
+                <!-- Menu kanan -->
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="#">Swapbook</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="#">My Collection</a></li>
                 </ul>
+
+                <!-- 3 Icon Kanan -->
+                <div class="d-flex align-items-center ms-3">
+                    <a href="#" class="navbar-icon"><i class="bi bi-cart"></i></a>
+                    <a href="#" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
+                    <a href="#" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
+                </div>
             </div>
         </div>
     </nav>
@@ -80,7 +116,6 @@
     <div class="container mt-5">
         <h4 class="mb-3 fw-semibold">Humor & Comedy</h4>
         <div class="row g-3">
-            <!-- Placeholder for Books -->
             @for ($i = 0; $i < 4; $i++)
             <div class="col-md-3">
                 <div class="card book-card">
