@@ -226,8 +226,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="login-link">
             Sudah punya akun? <a href="login.php">Masuk</a>
         </div>
-        
-    </div> 
+        <div class="login-link">
+        Sudah punya akun? <a href="/login">Masuk</a>
+</div>
+    </div>
     
     <div class="copyright-footer">
         © 2025 Library-Hub
@@ -258,3 +260,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </body>
 </html>
+
