@@ -1,5 +1,5 @@
 <?php
-// Bagian ini adalah simulasi sederhana untuk menangani data yang dikirimkan
+// ... (Bagian PHP tetap sama) ...
 $error_message = "";
 $success_message = "";
 
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Library-Hub</title>
     <style>
-        /* Gaya dasar (sebagian besar sama dengan kode asli) */
+        /* Gaya dasar */
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
@@ -53,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-align: left;
         }
 
+        /* Container utama formulir */
         .register-container {
             background-color: #ffffff;
             padding: 40px;
@@ -61,8 +62,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             width: 100%;
             max-width: 400px;
             margin-top: 50px;
+            /* Tambahkan margin bawah agar ada jarak ke copyright di bawahnya */
+            margin-bottom: 20px; 
         }
 
+        /* Judul Register */
         .register-container h2 {
             color: #3f51b5;
             text-align: center;
@@ -79,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         /* Container untuk Input Sandi dan Ikon */
         .password-container {
-            position: relative; /* Penting untuk memposisikan ikon */
+            position: relative;
             margin-bottom: 20px;
         }
 
@@ -91,8 +95,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 4px;
             box-sizing: border-box;
             color: #6c757d;
-            padding-right: 40px; /* Tambahkan ruang untuk ikon */
-            margin-bottom: 0; /* Hapus margin bawah default */
+            padding-right: 40px;
+            margin-bottom: 0;
         }
 
         /* Ikon Mata (Show/Hide) */
@@ -104,7 +108,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             cursor: pointer;
             color: #888;
             font-size: 18px;
-            /* Jika menggunakan Font Awesome, ganti dengan styling ikon */
         }
 
         /* Styling input umum yang lain */
@@ -112,7 +115,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .form-group input[type="tel"],
         .form-group input[type="email"],
         .form-group select {
-             /* Semua input selain sandi tetap menggunakan gaya umum */
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
@@ -148,15 +150,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 4px;
             text-align: center;
         }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+
+        /* PERBAIKAN: Styling Copyright Footer */
+        .copyright-footer {
+            /* Pastikan lebar sama dengan register-container */
+            width: 100%; 
+            max-width: 480px; /* Lebar = max-width container (400px) + padding kiri/kanan (2x40px = 80px) */
+            text-align: center;
+            font-size: 12px;
+            color: #6c757d; /* Warna abu-abu yang lebih cocok */
+            margin-top: 20px; /* Jarak dari register-container di atasnya */
         }
     </style>
 </head>
@@ -220,13 +223,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit" class="btn-daftar">Daftar</button>
         </form>
 
-       <div class="login-link">
-    Sudah punya akun? <a href="/login">Masuk</a>
+        <div class="login-link">
+            Sudah punya akun? <a href="login.php">Masuk</a>
+        </div>
+        <div class="login-link">
+        Sudah punya akun? <a href="/login">Masuk</a>
 </div>
-
     </div>
     
-    <div class="footer">
+    <div class="copyright-footer">
         © 2025 Library-Hub
     </div>
 
@@ -255,3 +260,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </body>
 </html>
+
