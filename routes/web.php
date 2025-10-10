@@ -51,3 +51,11 @@ Route::get('/mycollection', function () {
 Route::get('/forumdiscuss', function () {
     return view('forumdiscuss');
 });
+
+Route::get('/profil_admin', function () {
+    return view('profil_admin');
+});
+
+Route::get('/profil_user', function () {
+    return view('profil_user');
+});
