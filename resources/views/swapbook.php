@@ -102,7 +102,8 @@
 
                 <!-- 3 Icon Kanan -->
                 <div class="d-flex align-items-center ms-3">
-                    <a href="#" class="navbar-icon"><i class="bi bi-cart"></i></a>
+                    <!-- tombol keranjang -->
+                    <a href="{{ url('/keranjang') }}" class="navbar-icon"><i class="bi bi-cart"></i></a>
                     <a href="#" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
                     <a href="#" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
                 </div>
