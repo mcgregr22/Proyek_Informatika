@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Swapbook - Library-Hub</title>
+    <title>Library-Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
@@ -15,29 +15,24 @@
             color: #0d6efd;
             font-weight: 700;
         }
+        .banner {
+            background: linear-gradient(90deg, #001f54, #003f88);
+            color: white;
+            border-radius: 12px;
+            padding: 40px 20px;
+            margin-top: 30px;
+        }
+        .banner h2 {
+            font-weight: 700;
+        }
         .book-card {
             border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
         }
         .book-card:hover {
             transform: translateY(-5px);
-        }
-        .book-img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-        .btn-swap {
-            background-color: #0d6efd;
-            color: white;
-            border-radius: 20px;
-            font-weight: 500;
-        }
-        .btn-swap:hover {
-            background-color: #0b5ed7;
         }
         .footer {
             margin-top: 60px;
@@ -55,9 +50,6 @@
         .navbar-icon:hover {
             color: #0d6efd;
         }
-        .search-bar {
-            max-width: 350px;
-        }
     </style>
 </head>
 <body>
@@ -65,7 +57,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">
+            <a class="navbar-brand fw-bold" href="homepage">
                 Library-<span>Hub</span>
             </a>
 
@@ -96,15 +88,15 @@
 
                 <!-- Menu kanan -->
                 <ul class="navbar-nav align-items-center">
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="#">Swapbook</a></li>
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="#">My Collection</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="swapbook">Swapbook</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="mycollection">My Collection</a></li>
                 </ul>
 
                 <!-- 3 Icon Kanan -->
                 <div class="d-flex align-items-center ms-3">
                     <!-- tombol keranjang -->
-                    <a href="{{ url('/keranjang') }}" class="navbar-icon"><i class="bi bi-cart"></i></a>
-                    <a href="#" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
+                    <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
+                    <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
                     <a href="#" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
                 </div>
             </div>

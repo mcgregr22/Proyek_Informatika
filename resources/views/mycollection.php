@@ -57,7 +57,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="/homepage">
+            <a class="navbar-brand fw-bold" href="homepage">
                 Library-<span>Hub</span>
             </a>
 
@@ -103,68 +103,58 @@
         </div>
     </nav>
 
-    <!-- Banner -->
-    <div class="container">
-        <div class="banner text-center mt-4">
-            <h2>WELCOME TO LIBRARY-HUB</h2>
-            <p>"The only thing that you absolutely have to know, is the location of the library."</p>
-            <a href="#" class="btn btn-light btn-sm mt-3">SHOP NOW</a>
-        </div>
-    </div>
+<!-- CONTAINER -->
+<div class="container my-5">
+    <h4 class="fw-semibold mb-4">Koleksi Buku</h4>
 
-    <!-- Book Categories -->
-    <div class="container mt-5">
-        <h4 class="mb-3 fw-semibold">Humor & Comedy</h4>
-        <div class="row g-3">
-            @for ($i = 0; $i < 4; $i++)
-            <div class="col-md-3">
-                <div class="card book-card">
-                    <div class="card-body text-center">
-                        <div class="bg-light p-5 rounded mb-2">📘</div>
-                        <h6 class="fw-semibold">Judul Buku</h6>
-                        <p class="text-muted mb-0">Rp. 99.000,00</p>
-                    </div>
+    <!-- Grid Buku -->
+    <div class="row g-4">
+        <!-- Buku 1 -->
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card book-card position-relative">
+                <a href="{{ url('/remove/1') }}" class="position-absolute top-0 end-0 text-decoration-none text-dark fw-bold fs-4 me-2 mt-1">&times;</a>
+                <img src="{{ asset('images/bumi.jpg') }}" class="card-img-top rounded-top" alt="Buku Bumi">
+                <div class="card-body text-center">
+                    <h6 class="mb-0">Tere Liye</h6>
+                    <small class="text-muted">Bumi</small>
                 </div>
             </div>
-            @endfor
         </div>
 
-        <h4 class="mb-3 mt-5 fw-semibold">History</h4>
-        <div class="row g-3">
-            @for ($i = 0; $i < 6; $i++)
-            <div class="col-md-2">
-                <div class="card book-card">
-                    <div class="card-body text-center">
-                        <div class="bg-light p-4 rounded mb-2">📗</div>
-                        <h6 class="fw-semibold">Judul Buku</h6>
-                        <p class="text-muted mb-0">Rp. 99.000,00</p>
-                    </div>
+        <!-- Buku 2 -->
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card book-card position-relative">
+                <a href="{{ url('/remove/2') }}" class="position-absolute top-0 end-0 text-decoration-none text-dark fw-bold fs-4 me-2 mt-1">&times;</a>
+                <img src="{{ asset('images/filosofi_teras.jpg') }}" class="card-img-top rounded-top" alt="Filosofi Teras">
+                <div class="card-body text-center">
+                    <h6 class="mb-0">Henry Manampiring</h6>
+                    <small class="text-muted">Filosofi Teras</small>
                 </div>
             </div>
-            @endfor
         </div>
 
-        <h4 class="mb-3 mt-5 fw-semibold">Recommendations</h4>
-        <div class="row g-3">
-            @for ($i = 0; $i < 5; $i++)
-            <div class="col-md-2">
-                <div class="card book-card">
-                    <div class="card-body text-center">
-                        <div class="bg-light p-4 rounded mb-2">📕</div>
-                        <h6 class="fw-semibold">Judul Buku</h6>
-                        <p class="text-muted mb-0">Rp. 99.000,00</p>
-                    </div>
+        <!-- Buku 3 -->
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card book-card position-relative">
+                <a href="{{ url('/remove/3') }}" class="position-absolute top-0 end-0 text-decoration-none text-dark fw-bold fs-4 me-2 mt-1">&times;</a>
+                <img src="{{ asset('images/laut_bercerita.jpg') }}" class="card-img-top rounded-top" alt="Laut Bercerita">
+                <div class="card-body text-center">
+                    <h6 class="mb-0">Leila S. Chudori</h6>
+                    <small class="text-muted">Laut Bercerita</small>
                 </div>
             </div>
-            @endfor
+        </div>
+
+        <!-- Buku 4 (contoh tambahan) -->
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card book-card position-relative">
+                <a href="{{ url('/remove/4') }}" class="position-absolute top-0 end-0 text-decoration-none text-dark fw-bold fs-4 me-2 mt-1">&times;</a>
+                <img src="{{ asset('images/hujan.jpg') }}" class="card-img-top rounded-top" alt="Hujan">
+                <div class="card-body text-center">
+                    <h6 class="mb-0">Tere Liye</h6>
+                    <small class="text-muted">Hujan</small>
+                </div>
+            </div>
         </div>
     </div>
-
-    <!-- Footer -->
-    <div class="footer">
-        <p>© 2025 Library-Hub</p>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</div>

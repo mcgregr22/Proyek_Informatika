@@ -43,3 +43,11 @@ Route::get('/swapbook', function () {
 Route::get('/keranjang', function () {
     return view('keranjang');
 });
+
+Route::get('/mycollection', function () {
+    return view('mycollection');
+});
+
+Route::get('/forumdiscuss', function () {
+    return view('forumdiscuss');
+});

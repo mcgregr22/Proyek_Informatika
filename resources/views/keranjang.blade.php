@@ -88,7 +88,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">
+            <a class="navbar-brand fw-bold" href="/homepage">
                 Library-<span>Hub</span>
             </a>
 
@@ -117,13 +117,13 @@
                 </form>
 
                 <ul class="navbar-nav align-items-center">
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="#">Swapbook</a></li>
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="#">My Collection</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="/swapbook">Swapbook</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="mycollection">My Collection</a></li>
                 </ul>
 
                 <div class="d-flex align-items-center ms-3">
-                    <a href="#" class="navbar-icon"><i class="bi bi-cart"></i></a>
-                    <a href="#" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
+                    <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
+                    <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
                     <a href="#" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
                 </div>
             </div>
