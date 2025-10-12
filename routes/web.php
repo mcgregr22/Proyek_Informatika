@@ -59,3 +59,14 @@ Route::get('/profil_admin', function () {
 Route::get('/profil_user', function () {
     return view('profil_user');
 });
+
+Route::get('/dashboard_admin', function () {
+    return view('dashboard_admin');
+});
+Route::get('/manajemen_admin', function () {
+    return view('manajemen_admin');
+});
+
+Route::get('/checkout', function () {
+    return view('checkout');
+});

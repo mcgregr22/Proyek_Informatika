@@ -70,59 +70,37 @@
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="/homepage">
-                Library-<span>Hub</span>
-            </a>
+<nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="dashboard_admin">
+      Library-<span>Hub</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <form class="d-flex ms-auto me-3" role="search">
+      <input class="form-control" type="search" placeholder="Cari Buku">
+    </form>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Dropdown Kategori -->
-                <ul class="navbar-nav ms-4">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-semibold" href="#" role="button" data-bs-toggle="dropdown">
-                            Kategori
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Humor & Comedy</a></li>
-                            <li><a class="dropdown-item" href="#">History</a></li>
-                            <li><a class="dropdown-item" href="#">Fiction</a></li>
-                            <li><a class="dropdown-item" href="#">Romance</a></li>
-                        </ul>
-                    </li>
-                </ul>
+    <ul class="navbar-nav align-items-center">
+      <li class="nav-item"><a class="nav-link fw-semibold" href="/manajemen_admin">Pengaturan</a></li>
+    </ul>
 
-                <!-- Search -->
-                <form class="d-flex ms-auto me-3 search-bar" role="search">
-                    <input class="form-control" type="search" placeholder="Cari Buku">
-                </form>
-
-                <!-- Menu kanan -->
-                <ul class="navbar-nav align-items-center">
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="/swapbook">Swapbook</a></li>
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="/mycollection">My Collection</a></li>
-                </ul>
-
-                <!-- 3 Icon Kanan -->
-                <div class="d-flex align-items-center ms-3">
-                    <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
-                    <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
-                    <a href="/profileadmin" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <div class="d-flex align-items-center ms-3">
+      <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
+      <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
+      <a href="/admin" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
+    </div>
+  </div>
+</nav>
 
     <!-- Konten Profil -->
     <div class="container">
         <div class="profile-card mt-5">
             <div class="profile-header">
                 <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile Picture">
-                <h4>{{ $user['nama'] }}</h4>
+                <h4>{{ $admin['nama'] }}</h4>
             </div>
 
             <div class="form-section">
@@ -130,22 +108,22 @@
                 <form>
                     <div class="mb-3">
                         <label class="form-label">Nama Lengkap</label>
-                        <input type="text" class="form-control" value="{{ $user['nama'] }}" readonly>
+                        <input type="text" class="form-control" value="{{ $admin['nama'] }}" readonly>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" value="{{ $user['email'] }}" readonly>
+                        <input type="email" class="form-control" value="{{ $admin['email'] }}" readonly>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Nomor Telepon</label>
-                        <input type="text" class="form-control" value="{{ $user['telepon'] }}" readonly>
+                        <input type="text" class="form-control" value="{{ $admin['telepon'] }}" readonly>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Role</label>
-                        <input type="text" class="form-control" value="{{ $user['role'] }}" readonly>
+                        <input type="text" class="form-control" value="{{ $admin['role'] }}" readonly>
                     </div>
 
                     <hr>
@@ -154,13 +132,13 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Email</label>
-                            <input type="email" class="form-control" value="{{ $user['email'] }}" readonly>
+                            <input type="email" class="form-control" value="{{ $admin['email'] }}" readonly>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Password</label>
                             <!-- Tambahkan input-group untuk tombol mata -->
                             <div class="input-group">
-                                <input id="passwordInput" type="password" class="form-control" value="{{ $user['password'] }}" readonly>
+                                <input id="passwordInput" type="password" class="form-control" value="{{ $admin['password'] }}" readonly>
                                 <button type="button" class="btn btn-outline-secondary" id="togglePassword">
                                     <i id="toggleIcon" class="bi bi-eye"></i>
                                 </button>

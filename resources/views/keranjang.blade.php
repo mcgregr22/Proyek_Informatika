@@ -149,14 +149,6 @@
                 <span>Subtotal (item):</span>
                 <strong>Rp0</strong>
             </div>
-            <div class="d-flex justify-content-between">
-                <span>Pajak (10%):</span>
-                <strong>Rp0</strong>
-            </div>
-            <div class="d-flex justify-content-between mb-2">
-                <span>Pengiriman:</span>
-                <strong>Rp0</strong>
-            </div>
             <hr>
             <div class="d-flex justify-content-between mb-3">
                 <h6>Total:</h6>

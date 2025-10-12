@@ -162,7 +162,7 @@
 
     <!-- Footer -->
     <div class="footer">
-        <p>© 2025 Library-Hub</p>
+    &copy; <?= date('Y'); ?> Library-Hub
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
