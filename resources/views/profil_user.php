@@ -33,6 +33,7 @@
             max-width: 700px;
             margin-left: auto;
             margin-right: auto;
+            position: relative;
         }
         .profile-header {
             text-align: center;
@@ -64,6 +65,23 @@
         }
         .btn-save:hover {
             background-color: #004aad;
+        }
+        /* Tombol keluar di kanan atas kartu */
+        .btn-logout {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            border: none;
+            background-color: #f8f9fa;
+            color: #dc3545;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        .btn-logout:hover {
+            background-color: #dc3545;
+            color: white;
         }
     </style>
 </head>
@@ -120,6 +138,9 @@
     <!-- Konten Profil -->
     <div class="container">
         <div class="profile-card mt-5">
+            <!-- Tombol keluar -->
+            <button class="btn-logout" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Keluar</button>
+
             <div class="profile-header">
                 <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile Picture">
                 <h4>{{ $user['nama'] }}</h4>
@@ -158,7 +179,6 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Password</label>
-                            <!-- Tambahkan input-group untuk tombol mata -->
                             <div class="input-group">
                                 <input id="passwordInput" type="password" class="form-control" value="{{ $user['password'] }}" readonly>
                                 <button type="button" class="btn btn-outline-secondary" id="togglePassword">
@@ -195,6 +215,16 @@
                     pwd.type = 'password';
                     icon.classList.remove('bi-eye-slash');
                     icon.classList.add('bi-eye');
+                }
+            });
+
+            // Tombol Logout dengan konfirmasi
+            const logoutBtn = document.getElementById('logoutBtn');
+            logoutBtn.addEventListener('click', function () {
+                const confirmLogout = confirm('Apakah Anda yakin ingin keluar dari akun ini?');
+                if (confirmLogout) {
+                    // Arahkan ke halaman logout (ganti URL sesuai backend)
+                    window.location.href = "/login";
                 }
             });
         });
