@@ -6,24 +6,32 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-   public function up(): void
+    public function up(): void
     {
         Schema::create('forum_posts', function (Blueprint $table) {
-            $table->id('id_post');
-            $table->foreignId('id_pengguna')->constrained('pengguna')->onDelete('cascade');  // Relasi dengan pengguna
+            $table->id(); // primary key: 'id' (unsigned BIGINT)
+            // relasi ke tabel 'pengguna' (ganti ke 'users' kalau pakai tabel users bawaan laravel)
+            $table->foreignId('pengguna_id')
+                  ->constrained('pengguna')
+                  ->cascadeOnDelete();
+
             $table->string('title', 200);
+            $table->string('slug', 220)->unique(); // opsional tapi disarankan untuk URL
             $table->text('content');
+            $table->unsignedInteger('views')->default(0);
             $table->timestamps();
+            $table->softDeletes();
+
+            // index untuk pencarian cepat
+            $table->index(['pengguna_id', 'created_at']);
         });
+
+        // (opsional) fulltext index untuk title+content jika MySQL-mu mendukung
+        // DB::statement('ALTER TABLE forum_posts ADD FULLTEXT fulltext_title_content (title, content)');
     }
-    /**
-     * Reverse the migrations.
-     */
-   public function down(): void
+
+    public function down(): void
     {
         Schema::dropIfExists('forum_posts');
-    }
+}
 };
