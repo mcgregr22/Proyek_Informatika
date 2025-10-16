@@ -13,12 +13,19 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('name', 255);          // Nama Lengkap
+            $table->string('phone', 20)->nullable(); // Nomor Telepon
+            $table->string('email', 255)->unique();  // Email
+            $table->enum('role', ['pengguna','admin']) // Role User
+                  ->default('pengguna')
+                  ->index();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password');           // Password (akan di-hash)
             $table->rememberToken();
             $table->timestamps();
+
+            // Index tambahan
+            $table->index(['phone']);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -42,8 +49,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
     }
 };
