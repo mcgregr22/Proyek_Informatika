@@ -70,3 +70,6 @@ Route::get('/manajemen_admin', function () {
 Route::get('/checkout', function () {
     return view('checkout');
 });
+Route::get('/request_swap', function () {
+    return view('request_swap');
+});

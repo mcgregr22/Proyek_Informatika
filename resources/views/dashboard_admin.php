@@ -92,7 +92,8 @@
     </form>
 
     <ul class="navbar-nav align-items-center">
-      <li class="nav-item"><a class="nav-link fw-semibold" href="/manajemen_admin">Pengaturan</a></li>
+      <li class="nav-item"><a class="nav-link fw-semibold" href="/request_swap">Swapbook</a></li>
+      <li class="nav-item"><a class="nav-link fw-semibold" href="/manajemen_admin">Akun & Role</a></li>
     </ul>
 
     <div class="d-flex align-items-center ms-3">
