@@ -11,9 +11,10 @@
         .navbar-brand span { color: #0d6efd; font-weight: 700; }
         .banner { background: linear-gradient(90deg, #001f54, #003f88); color: white; border-radius: 12px; padding: 40px 20px; margin-top: 30px; }
         .banner h2 { font-weight: 700; }
-        .book-card { border: none; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); transition: transform 0.2s ease; height: 100%; }
+        .book-card { position: relative; border: none; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,.08); }
+        .book-link { display:block; height:100%; color:inherit; text-decoration:none; }
         .book-card:hover { transform: translateY(-5px); }
-        .book-thumb { width: 90%; height: 120px; object-fit: cover; border-radius: 8px; }
+       .book-thumb { width:120px; height:160px; object-fit:cover; border-radius:8px; }
         .footer { margin-top: 60px; text-align: center; padding: 20px 0; border-top: 1px solid #ddd; color: #777; }
         .navbar-icon { font-size: 1.2rem; margin-left: 15px; color: #333; transition: color 0.2s; }
         .navbar-icon:hover { color: #0d6efd; }
@@ -81,81 +82,112 @@
     <!-- Sections -->
     <div class="container mt-4">
 
-        {{-- HUMOR & COMEDY --}}
-        <h4 class="section-title">Humor & Comedy</h4>
-        <div class="row g-3">
-            @forelse ($booksHumor as $b)
-            <div class="col-6 col-md-3">
-                <div class="card book-card">
-                    <div class="card-body text-center">
-                        <div class="bg-light p-2 rounded mb-2">
-                            @if($b->cover_image)
-                                <img src="{{ $b->cover_image }}" class="book-thumb" alt="cover">
-                            @else
-                                <div class="py-5">📘</div>
-                            @endif
-                        </div>
-                        <h6 class="fw-semibold text-truncate" title="{{ $b->title }}">{{ $b->title }}</h6>
-                        <div class="text-muted small">{{ $b->author }}</div>
-                        <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
-                    </div>
-                </div>
+    <h4 class="section-title">Humor & Comedy</h4>
+<div class="row g-3">
+  @forelse ($booksHumor as $b)
+    <div class="col-6 col-md-3">
+      <div class="card book-card h-100">
+        <a href="{{ route('buku.show', $b->id_buku) }}" class="book-link" aria-label="Lihat {{ $b->title }}">
+          <div class="card-body text-center">
+            <div class="bg-light p-2 rounded mb-2">
+              @if($b->cover_image)
+                <img src="{{ asset($b->cover_image) }}" alt="cover" class="book-thumb">
+              @else
+                <div class="py-5">📘</div>
+              @endif
             </div>
-            @empty
-            <div class="col-12"><p class="text-muted">Belum ada buku kategori ini.</p></div>
-            @endforelse
+            <h6 class="fw-semibold text-truncate" title="{{ $b->title }}">{{ $b->title }}</h6>
+            <div class="text-muted small">{{ $b->author }}</div>
+            <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  @empty
+    <div class="col-12"><p class="text-muted">Belum ada buku kategori ini.</p></div>
+  @endforelse
+</div>
+
+
+
+<h4 class="section-title">History</h4>
+<div class="row g-3">
+  @forelse ($booksHistory as $b)
+    <div class="col-6 col-md-3">
+      <div class="card book-card h-100">
+        <a href="{{ route('buku.show', $b->id_buku) }}" class="book-link" aria-label="Lihat {{ $b->title }}">
+          <div class="card-body text-center">
+            <div class="bg-light p-2 rounded mb-2">
+              @if($b->cover_image)
+                <img src="{{ asset($b->cover_image) }}" alt="cover" class="book-thumb">
+              @else
+                <div class="py-5">📘</div>
+              @endif
+            </div>
+            <h6 class="fw-semibold text-truncate" title="{{ $b->title }}">{{ $b->title }}</h6>
+            <div class="text-muted small">{{ $b->author }}</div>
+            <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  @empty
+    <div class="col-12"><p class="text-muted">Belum ada buku kategori ini.</p></div>
+  @endforelse
+</div>
+
+
+
+       <h4 class="section-title">Recommendations</h4>
+<div class="row g-3">
+  @forelse ($booksRecs as $b)
+    <div class="col-6 col-md-3">
+      <div class="card book-card h-100">
+        <a href="{{ route('buku.show', $b->id_buku) }}" class="book-link" aria-label="Lihat {{ $b->title }}">
+          <div class="card-body text-center">
+            <div class="bg-light p-2 rounded mb-2">
+              @if($b->cover_image)
+                <img src="{{ asset($b->cover_image) }}" alt="cover" class="book-thumb">
+              @else
+                <div class="py-5">📕</div>
+              @endif
+            </div>
+            <h6 class="fw-semibold text-truncate" title="{{ $b->title }}">{{ $b->title }}</h6>
+            <div class="text-muted small">{{ $b->author }}</div>
+            <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  @empty
+    <div class="col-12"><p class="text-muted">Belum ada rekomendasi.</p></div>
+  @endforelse
+</div>
+
+{{-- CONTOH pada loop buku --}}
+@foreach ($booksRecs as $b)
+  <div class="col-6 col-md-2">
+    <div class="card book-card">
+      <div class="card-body text-center">
+        <div class="bg-light p-2 rounded mb-2">
+          @if($b->cover_image)
+            <img src="{{ asset($b->cover_image) }}" class="book-thumb" alt="cover">
+          @else
+            <div class="py-4">📕</div>
+          @endif
         </div>
 
-        {{-- HISTORY --}}
-        <h4 class="section-title">History</h4>
-        <div class="row g-3">
-            @forelse ($booksHistory as $b)
-            <div class="col-6 col-md-2">
-                <div class="card book-card">
-                    <div class="card-body text-center">
-                        <div class="bg-light p-2 rounded mb-2">
-                            @if($b->cover_image)
-                                <img src="{{ $b->cover_image }}" class="book-thumb" alt="cover">
-                            @else
-                                <div class="py-4">📗</div>
-                            @endif
-                        </div>
-                        <h6 class="fw-semibold text-truncate" title="{{ $b->title }}">{{ $b->title }}</h6>
-                        <div class="text-muted small">{{ $b->author }}</div>
-                        <div class="text-muted small">ISBN: {{ $b->isbn }}</div>
-                        <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
-                    </div>
-                </div>
-            </div>
-            @empty
-            <div class="col-12"><p class="text-muted">Belum ada buku kategori ini.</p></div>
-            @endforelse
-        </div>
+        <h6 class="fw-semibold text-truncate" title="{{ $b->title }}">{{ $b->title }}</h6>
+        <div class="text-muted small">{{ $b->author }}</div>
+        <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
 
-        {{-- RECOMMENDATIONS --}}
-        <h4 class="section-title">Recommendations</h4>
-        <div class="row g-3">
-            @forelse ($booksRecs as $b)
-            <div class="col-6 col-md-2">
-                <div class="card book-card">
-                    <div class="card-body text-center">
-                        <div class="bg-light p-2 rounded mb-2">
-                            @if($b->cover_image)
-                                <img src="{{ $b->cover_image }}" class="book-thumb" alt="cover">
-                            @else
-                                <div class="py-4">📕</div>
-                            @endif
-                        </div>
-                        <h6 class="fw-semibold text-truncate" title="{{ $b->title }}">{{ $b->title }}</h6>
-                        <div class="text-muted small">{{ $b->author }}</div>
-                        <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
-                    </div>
-                </div>
-            </div>
-            @empty
-            <div class="col-12"><p class="text-muted">Belum ada rekomendasi.</p></div>
-            @endforelse
-        </div>
+        {{-- 👇 ini membuat seluruh kartu bisa diklik --}}
+        <a href="{{ route('buku.show', ['id' => $b->id_buku]) }}" class="stretched-link"></a>
+      </div>
+    </div>
+  </div>
+@endforeach
+
 
         {{-- Flash success minimal --}}
         @if (session('success'))

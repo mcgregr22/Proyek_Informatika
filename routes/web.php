@@ -39,6 +39,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/mycollection', fn() => view('mycollection'));
     Route::get('/forumdiscuss', fn() => view('forumdiscuss'));
 
+    // DETAIL BUKU
+   Route::get('/buku/{id}', [HomepageController::class, 'show'])->name('buku.show');
+
+
     // LOGOUT
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
