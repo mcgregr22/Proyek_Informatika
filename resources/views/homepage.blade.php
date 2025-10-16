@@ -13,7 +13,7 @@
         .banner h2 { font-weight: 700; }
         .book-card { border: none; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); transition: transform 0.2s ease; height: 100%; }
         .book-card:hover { transform: translateY(-5px); }
-        .book-thumb { width: 100%; height: 140px; object-fit: cover; border-radius: 8px; }
+        .book-thumb { width: 90%; height: 120px; object-fit: cover; border-radius: 8px; }
         .footer { margin-top: 60px; text-align: center; padding: 20px 0; border-top: 1px solid #ddd; color: #777; }
         .navbar-icon { font-size: 1.2rem; margin-left: 15px; color: #333; transition: color 0.2s; }
         .navbar-icon:hover { color: #0d6efd; }
