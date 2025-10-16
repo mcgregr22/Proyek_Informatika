@@ -2,19 +2,21 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegistrasiController;
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\HomepageController;
 
 // ----------------------
-// HALAMAN AWAL & UMUM
+// HALAMAN AWAL (Guest/Public)
 // ----------------------
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome'); // halaman awal sebelum login
 });
 
 // ----------------------
-// REGISTER
+// ROUTE UNTUK TAMU (BELUM LOGIN)
 // ----------------------
 Route::middleware('guest')->group(function () {
+    // REGISTER
     Route::get('/register', [RegistrasiController::class, 'show'])->name('register.show');
     Route::post('/register', [RegistrasiController::class, 'store'])->name('register.store');
 
@@ -24,29 +26,18 @@ Route::middleware('guest')->group(function () {
 });
 
 // ----------------------
-// LOGIN WAJIB UNTUK HALAMAN DALAM
+// ROUTE UNTUK USER YANG SUDAH LOGIN (AUTH)
 // ----------------------
 Route::middleware('auth')->group(function () {
 
-    Route::get('/homepage', function () {
-        return view('homepage');
-    })->name('homepage');
+    // HOMEPAGE DINAMIS
+    Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
 
-    Route::get('/swapbook', function () {
-        return view('swapbook');
-    });
-
-    Route::get('/keranjang', function () {
-        return view('keranjang');
-    });
-
-    Route::get('/mycollection', function () {
-        return view('mycollection');
-    });
-
-    Route::get('/forumdiscuss', function () {
-        return view('forumdiscuss');
-    });
+    // HALAMAN LAIN
+    Route::get('/swapbook', fn() => view('swapbook'));
+    Route::get('/keranjang', fn() => view('keranjang'));
+    Route::get('/mycollection', fn() => view('mycollection'));
+    Route::get('/forumdiscuss', fn() => view('forumdiscuss'));
 
     // LOGOUT
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
