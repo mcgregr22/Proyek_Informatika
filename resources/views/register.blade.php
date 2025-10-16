@@ -1,30 +1,4 @@
-<?php
-// ... (Bagian PHP tetap sama) ...
-$error_message = "";
-$success_message = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil data dari formulir
-    $nama_lengkap = trim($_POST['nama_lengkap']);
-    $nomor_telepon = trim($_POST['nomor_telepon']);
-    $email = trim($_POST['email']);
-    $role = $_POST['role'];
-    $kata_sandi = $_POST['kata_sandi'];
-    $konfirmasi_sandi = $_POST['konfirmasi_sandi'];
-
-    // 1. Validasi Sederhana
-    if (empty($nama_lengkap) || empty($nomor_telepon) || empty($email) || empty($kata_sandi) || empty($konfirmasi_sandi)) {
-        $error_message = "Semua kolom harus diisi.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error_message = "Format email tidak valid.";
-    } elseif ($kata_sandi !== $konfirmasi_sandi) {
-        $error_message = "Kata Sandi dan Konfirmasi Kata Sandi tidak cocok.";
-    } else {
-        // --- SIMULASI PENYIMPANAN DATA (GANTIKAN DENGAN LOGIKA DATABASE ANDA) ---
-        $success_message = "Registrasi berhasil! Data Anda: Nama: $nama_lengkap, Email: $email, Role: $role";
-    }
-}
-?>
+<!-- resources/views/register.blade.php -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -170,53 +144,92 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="register-container">
         <h2>REGISTER</h2>
 
-        <?php
-        if ($error_message) {
-            echo '<div class="message error">' . $error_message . '</div>';
-        }
-        if ($success_message) {
-            echo '<div class="message success">' . $success_message . '</div>';
-        }
-        ?>
+        {{-- Pesan sukses dari session --}}
+        @if (session('success'))
+            <div class="message" style="background:#e7f7ee;color:#065f46;">
+                {{ session('success') }}
+            </div>
+        @endif
 
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+        {{-- Validasi error Laravel --}}
+        @if ($errors->any())
+            <div class="message" style="background:#fde8e8;color:#b91c1c;text-align:left;">
+                <ul style="margin:0 0 0 18px;padding:0;">
+                    @foreach ($errors->all() as $e)
+                        <li>{{ $e }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('register.store') }}" method="POST">
+            @csrf
 
             <div class="form-group">
                 <label for="nama_lengkap">Nama Lengkap</label>
-                <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Nama Lengkap Anda" required>
+                <input
+                    type="text"
+                    id="nama_lengkap"
+                    name="nama_lengkap"
+                    placeholder="Nama Lengkap Anda"
+                    value="{{ old('nama_lengkap') }}"
+                    required>
             </div>
 
             <div class="form-group">
                 <label for="nomor_telepon">Nomor Telepon</label>
-                <input type="tel" id="nomor_telepon" name="nomor_telepon" placeholder="Nomor Telepon" required>
+                <input
+                    type="tel"
+                    id="nomor_telepon"
+                    name="nomor_telepon"
+                    placeholder="Nomor Telepon"
+                    value="{{ old('nomor_telepon') }}"
+                    required>
             </div>
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Email Anda" required>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Email Anda"
+                    value="{{ old('email') }}"
+                    required>
             </div>
 
             <div class="form-group">
                 <label for="role">Role</label>
                 <select id="role" name="role" required>
-                    <option value="Pengguna">Pengguna</option>
-                    <option value="Admin">Admin</option>
+                    {{-- Label tetap seperti desainmu; value diset lowercase agar cocok dengan DB/validasi --}}
+                    <option value="pengguna" {{ old('role','pengguna')=='pengguna' ? 'selected' : '' }}>Pengguna</option>
+                    <option value="admin" {{ old('role')=='admin' ? 'selected' : '' }}>Admin</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="kata_sandi">Kata Sandi</label>
                 <div class="password-container">
-                    <input type="password" id="kata_sandi" name="kata_sandi" placeholder="Kata Sandi" required>
+                    <input
+                        type="password"
+                        id="kata_sandi"
+                        name="kata_sandi"
+                        placeholder="Kata Sandi"
+                        required>
                     <span class="toggle-password" data-target="kata_sandi" onclick="togglePassword(this)">👁️</span>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="konfirmasi_sandi">Konfirmasi Kata Sandi</label>
+                <label for="kata_sandi_confirmation">Konfirmasi Kata Sandi</label>
                 <div class="password-container">
-                    <input type="password" id="konfirmasi_sandi" name="konfirmasi_sandi" placeholder="Konfirmasi Kata Sandi" required>
-                    <span class="toggle-password" data-target="konfirmasi_sandi" onclick="togglePassword(this)">👁️</span>
+                    <input
+                        type="password"
+                        id="kata_sandi_confirmation"
+                        name="kata_sandi_confirmation"
+                        placeholder="Konfirmasi Kata Sandi"
+                        required>
+                    <span class="toggle-password" data-target="kata_sandi_confirmation" onclick="togglePassword(this)">👁️</span>
                 </div>
             </div>
 
@@ -224,7 +237,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
         
         <div class="login-link">
-        Sudah punya akun? <a href="/login">Masuk</a>
+            Sudah punya akun? <a href="{{ route('login.show') }}">Masuk</a>
         </div>
     </div>
     
@@ -245,11 +258,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Periksa tipe input saat ini
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
-            // Ubah ikon/teks menjadi 'sembunyikan' (misal: 🔒 atau teks)
+            // Ubah ikon/teks menjadi 'sembunyikan'
             iconElement.textContent = '🔒';
         } else {
             passwordInput.type = 'password';
-            // Ubah ikon/teks menjadi 'tampilkan' (misal: 👁️ atau teks)
+            // Ubah ikon/teks menjadi 'tampilkan'
             iconElement.textContent = '👁️';
         }
     }
@@ -257,4 +270,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </body>
 </html>
-

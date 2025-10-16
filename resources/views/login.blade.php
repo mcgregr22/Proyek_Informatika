@@ -95,6 +95,17 @@
             
             
             <h2>LOGIN</h2>
+
+            <!-- ✅ Tambahan untuk tampilkan validasi error & pesan sukses -->
+            @if ($errors->any())
+                <p class="error">{{ $errors->first() }}</p>
+            @endif
+
+            @if (session('success'))
+                <p class="error" style="color:green;">{{ session('success') }}</p>
+            @endif
+            <!-- ✅ END TAMBAHAN -->
+
             <form action="/login" method="POST">
                 @csrf
                 <label for="email">Email</label><br>

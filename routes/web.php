@@ -1,75 +1,53 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RegistrasiController;
+use App\Http\Controllers\Auth\LoginController;
 
+// ----------------------
+// HALAMAN AWAL & UMUM
+// ----------------------
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home', function () {
-    return view('home');
+// ----------------------
+// REGISTER
+// ----------------------
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegistrasiController::class, 'show'])->name('register.show');
+    Route::post('/register', [RegistrasiController::class, 'store'])->name('register.store');
+
+    // LOGIN
+    Route::get('/login', [LoginController::class, 'show'])->name('login.show');
+    Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
 });
 
-Route::get('/register', function () {
-    return view('register');
-});
+// ----------------------
+// LOGIN WAJIB UNTUK HALAMAN DALAM
+// ----------------------
+Route::middleware('auth')->group(function () {
 
-Route::get('/login', function () {
-    return view('login');
-});
+    Route::get('/homepage', function () {
+        return view('homepage');
+    })->name('homepage');
 
-use Illuminate\Http\Request;
+    Route::get('/swapbook', function () {
+        return view('swapbook');
+    });
 
-Route::post('/login', function (Request $request) {
-    $email = $request->input('email');
-    $password = $request->input('password');
+    Route::get('/keranjang', function () {
+        return view('keranjang');
+    });
 
-    if ($email === '123@gmail.com' && $password === '1234') {
-        return redirect('/homepage');
-    } else {
-        return back()->with('error', 'Email atau password salah!');
-    }
-});
+    Route::get('/mycollection', function () {
+        return view('mycollection');
+    });
 
+    Route::get('/forumdiscuss', function () {
+        return view('forumdiscuss');
+    });
 
-Route::get('/homepage', function () {
-    return view('homepage');
-});
-
-
-Route::get('/swapbook', function () {
-    return view('swapbook');
-});
-Route::get('/keranjang', function () {
-    return view('keranjang');
-});
-
-Route::get('/mycollection', function () {
-    return view('mycollection');
-});
-
-Route::get('/forumdiscuss', function () {
-    return view('forumdiscuss');
-});
-
-Route::get('/profil_admin', function () {
-    return view('profil_admin');
-});
-
-Route::get('/profil_user', function () {
-    return view('profil_user');
-});
-
-Route::get('/dashboard_admin', function () {
-    return view('dashboard_admin');
-});
-Route::get('/manajemen_admin', function () {
-    return view('manajemen_admin');
-});
-
-Route::get('/checkout', function () {
-    return view('checkout');
-});
-Route::get('/request_swap', function () {
-    return view('request_swap');
+    // LOGOUT
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
