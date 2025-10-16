@@ -97,7 +97,7 @@
                 <div class="d-flex align-items-center ms-3">
                     <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
                     <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
-                    <a href="/profil_user" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
+                    <a href="#" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
                 </div>
             </div>
         </div>
@@ -162,7 +162,7 @@
 
     <!-- Footer -->
     <div class="footer">
-    &copy; <?= date('Y'); ?> Library-Hub
+        <p>© 2025 Library-Hub</p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
