@@ -124,7 +124,7 @@
                 <div class="d-flex align-items-center ms-3">
                     <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
                     <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
-                    <a href="#" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
+                    <a href="/profil_user" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
                 </div>
             </div>
         </div>
@@ -147,14 +147,6 @@
             <h6 class="mb-3">Ringkasan Pesanan</h6>
             <div class="d-flex justify-content-between">
                 <span>Subtotal (item):</span>
-                <strong>Rp0</strong>
-            </div>
-            <div class="d-flex justify-content-between">
-                <span>Pajak (10%):</span>
-                <strong>Rp0</strong>
-            </div>
-            <div class="d-flex justify-content-between mb-2">
-                <span>Pengiriman:</span>
                 <strong>Rp0</strong>
             </div>
             <hr>
