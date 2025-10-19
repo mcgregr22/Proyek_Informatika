@@ -55,9 +55,7 @@
         <div class="d-flex align-items-center ms-3">
           <a href="/keranjang" class="me-2 text-decoration-none text-dark"><i class="bi bi-cart"></i></a>
           <a href="/forumdiscuss" class="me-2 text-decoration-none text-dark"><i class="bi bi-chat-dots"></i></a>
-          <form action="{{ route('logout') }}" method="POST" class="ms-2">
-            @csrf
-            <button class="btn btn-sm btn-outline-secondary">Logout</button>
+          <a href="#" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
           </form>
         </div>
       </div>

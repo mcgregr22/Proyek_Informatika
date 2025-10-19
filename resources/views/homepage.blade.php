@@ -14,12 +14,49 @@
         .book-card { position: relative; border: none; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,.08); }
         .book-link { display:block; height:100%; color:inherit; text-decoration:none; }
         .book-card:hover { transform: translateY(-5px); }
-       .book-thumb { width:120px; height:160px; object-fit:cover; border-radius:8px; }
+        .book-thumb { width:120px; height:160px; object-fit:cover; border-radius:8px; }
         .footer { margin-top: 60px; text-align: center; padding: 20px 0; border-top: 1px solid #ddd; color: #777; }
         .navbar-icon { font-size: 1.2rem; margin-left: 15px; color: #333; transition: color 0.2s; }
         .navbar-icon:hover { color: #0d6efd; }
         .section-title { margin-top: 2rem; margin-bottom: .75rem; font-weight: 600; }
         .price { color:#0d6efd; font-weight:600; }
+
+        /* --- Logout CTA (bawah) --- */
+        .logout-cta {
+            margin-top: 48px;
+        }
+        .btn-logout-pro {
+            border: none;
+            padding: 12px 18px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ff4d4f, #d9363e);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(217,54,62,0.25);
+            transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+        }
+        .btn-logout-pro:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px rgba(217,54,62,0.35);
+            filter: brightness(1.05);
+            color: #fff;
+        }
+        .btn-logout-pro:active {
+            transform: translateY(0);
+            box-shadow: 0 6px 16px rgba(217,54,62,0.25);
+        }
+        .btn-logout-pro i {
+            margin-right: 8px;
+        }
+        .logout-card {
+            border: 1px solid rgba(0,0,0,.06);
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 6px 18px rgba(0,0,0,.06);
+        }
+        .logout-subtext {
+            color:#6c757d;
+            font-size:.925rem;
+        }
     </style>
 </head>
 <body>
@@ -48,7 +85,7 @@
 
                 <!-- Search ke controller -->
                 <form class="d-flex ms-auto me-3" role="search" action="{{ route('homepage') }}" method="GET">
-                    <input class="form-control" type="search" name="q" value="{{ $q ?? '' }}" placeholder="Cari Buku (judul/penulis/ISBN)">
+                    <input class="form-control" type="search" name="q" value="{{ $q ?? '' }}" placeholder="Cari Buku">
                 </form>
 
                 <!-- Menu kanan -->
@@ -57,14 +94,11 @@
                     <li class="nav-item"><a class="nav-link fw-semibold" href="/mycollection">My Collection</a></li>
                 </ul>
 
-                <!-- 3 Icon Kanan -->
+                <!-- 3 Icon Kanan (logout dihapus dari sini, hanya pindah ke bawah) -->
                 <div class="d-flex align-items-center ms-3">
                     <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
                     <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
-                    <form action="{{ route('logout') }}" method="POST" class="ms-2">
-                        @csrf
-                        <button class="btn btn-sm btn-outline-secondary">Logout</button>
-                    </form>
+                    <a href="#" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
                 </div>
             </div>
         </div>
@@ -108,8 +142,6 @@
   @endforelse
 </div>
 
-
-
 <h4 class="section-title">History</h4>
 <div class="row g-3">
   @forelse ($booksHistory as $b)
@@ -136,9 +168,7 @@
   @endforelse
 </div>
 
-
-
-       <h4 class="section-title">Recommendations</h4>
+<h4 class="section-title">Recommendations</h4>
 <div class="row g-3">
   @forelse ($booksRecs as $b)
     <div class="col-6 col-md-3">
@@ -188,11 +218,26 @@
   </div>
 @endforeach
 
-
         {{-- Flash success minimal --}}
         @if (session('success'))
             <div class="alert alert-success mt-3">{{ session('success') }}</div>
         @endif
+    </div>
+
+    <!-- Logout -->
+    <div class="container logout-cta">
+        <div class="logout-card p-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+            <div>
+                <div class="fw-semibold">Selesai berkunjung?</div>
+                <div class="logout-subtext">Klik tombol di kanan untuk keluar dengan aman.</div>
+            </div>
+            <form action="{{ route('logout') }}" method="POST" class="m-0">
+                @csrf
+                <button type="submit" class="btn btn-logout-pro">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+            </form>
+        </div>
     </div>
 
     <!-- Footer -->
