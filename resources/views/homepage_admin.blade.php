@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Library-Hub | Koleksi Buku</title>
+  <title>Library-Hub | Dashboard Admin</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
@@ -80,7 +80,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
   <div class="container">
-    <a class="navbar-brand fw-bold" href="dashboard_admin">
+    <a class="navbar-brand fw-bold" href="{{ route('homepage_admin') }}">
       Library-<span>Hub</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -108,31 +108,40 @@
 <div class="container my-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="fw-semibold mb-0">Daftar Buku</h4>
-    <!-- Tombol untuk memunculkan form tambah buku -->
     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambahBuku">
       <i class="bi bi-plus-circle"></i> Tambah Buku
     </button>
   </div>
 
   <div class="row g-4">
-    <!-- Contoh Buku -->
+    @forelse($books as $book)
     <div class="col-6 col-md-4 col-lg-3">
       <div class="card book-card">
-        <img src="images/bumi.jpg" alt="Bumi">
+        <img src="{{ asset('storage/' . $book->cover_image) }}" alt="{{ $book->title }}">
         <div class="card-body">
-          <p class="book-title mb-0">Bumi</p>
-          <p class="book-author mb-1">Tere Liye</p>
-          <p class="book-price">Rp. 95.000</p>
-          <button class="btn btn-hapus"><i class="bi bi-trash"></i> Hapus</button>
+          <p class="book-title mb-0">{{ $book->title }}</p>
+          <p class="book-author mb-1">{{ $book->author }}</p>
+          <p class="book-price">{{ $book->harga_rupiah }}</p>
+
+          <form action="{{ route('homepage_admin.destroy', $book->id_buku) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button class="btn btn-hapus" onclick="return confirm('Yakin ingin menghapus buku ini?')">
+              <i class="bi bi-trash"></i> Hapus
+            </button>
+          </form>
         </div>
       </div>
     </div>
+    @empty
+    <p class="text-muted text-center">Belum ada buku dalam koleksi.</p>
+    @endforelse
   </div>
 </div>
 
 <!-- MODAL TAMBAH BUKU -->
 <div class="modal fade" id="modalTambahBuku" tabindex="-1" aria-labelledby="modalTambahBukuLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content border-0 rounded-4 shadow">
       <div class="modal-header bg-light">
         <h5 class="modal-title fw-semibold" id="modalTambahBukuLabel">Form Tambah Buku</h5>
@@ -140,28 +149,51 @@
       </div>
 
       <div class="modal-body">
-        <form id="formTambahBuku">
-          <div class="mb-3">
-            <label class="form-label">Judul Buku</label>
-            <input type="text" class="form-control" placeholder="Masukkan judul buku" required>
+        <form action="{{ route('homepage_admin.store') }}" method="POST" enctype="multipart/form-data">
+          @csrf
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">ID Buku</label>
+              <input type="text" name="id_buku" class="form-control" placeholder="Contoh: BK001" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">ID Kategori</label>
+              <input type="text" name="id_kategori" class="form-control" placeholder="Contoh: KT01" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Judul Buku</label>
+              <input type="text" name="title" class="form-control" placeholder="Masukkan judul buku" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Penulis</label>
+              <input type="text" name="author" class="form-control" placeholder="Masukkan nama penulis" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">ISBN</label>
+              <input type="text" name="isbn" class="form-control" placeholder="Masukkan nomor ISBN" required>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Deskripsi</label>
+              <textarea name="deskripsi" class="form-control" rows="3" placeholder="Masukkan deskripsi buku" required></textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Harga</label>
+              <input type="number" name="harga" class="form-control" placeholder="Rp. 0" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Cover Buku</label>
+              <input type="file" name="cover_image" class="form-control" accept="image/*" required>
+            </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label">Nama Pengarang</label>
-            <input type="text" class="form-control" placeholder="Masukkan nama pengarang" required>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Harga</label>
-            <input type="text" class="form-control" placeholder="Rp. 0" required>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Cover Buku</label>
-            <input type="file" class="form-control" accept="image/*">
-          </div>
-
-          <div class="d-grid">
+          <div class="d-grid mt-4">
             <button type="submit" class="btn btn-primary">Tambah Buku</button>
           </div>
         </form>
@@ -176,17 +208,6 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-  // Contoh aksi submit form
-  document.getElementById('formTambahBuku').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Buku berhasil ditambahkan!');
-    var modal = bootstrap.Modal.getInstance(document.getElementById('modalTambahBuku'));
-    modal.hide();
-    this.reset();
-  });
-</script>
 
 </body>
 </html>

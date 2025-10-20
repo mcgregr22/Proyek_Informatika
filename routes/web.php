@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegistrasiController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomepageController;
-
+use App\Http\Controllers\HomePageAdminController;
 // ----------------------
 // HALAMAN AWAL (Guest/Public)
 // ----------------------
@@ -42,3 +42,10 @@ Route::middleware('auth')->group(function () {
     // LOGOUT
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
+
+// ROUTE UNTUK ADMIN
+Route::get('/homepage_admin', [HomePageAdminController::class, 'index'])->name('homepage_admin');
+
+Route::post('/homepage_admin/tambah', [HomePageAdminController::class, 'store'])->name('homepage_admin.store');
+
+Route::delete('/homepage_admin/hapus/{id}', [HomePageAdminController::class, 'destroy'])->name('homepage_admin.destroy');
