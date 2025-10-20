@@ -11,7 +11,7 @@ class HomepageController extends Controller
     {
         $q = $request->get('q');
 
-        // Cari berdasarkan judul, penulis, ISBN (filter semua)
+        // Filter pencarian global (judul/penulis/ISBN)
         $search = function ($query) use ($q) {
             if ($q) {
                 $query->where(function ($x) use ($q) {
@@ -22,29 +22,29 @@ class HomepageController extends Controller
             }
         };
 
-        // Kategori (sesuaikan angka)
+        // ID kategori (sesuaikan dengan data kamu)
         $ID_KAT_HUMOR   = 1;
         $ID_KAT_HISTORY = 2;
 
         // 3 bagian buku
         $booksHumor = Buku::where('id_kategori', $ID_KAT_HUMOR)
-            ->tap($search)
-            ->orderBy('title')
-            ->limit(4)
-            ->get();
+            ->tap($search)->orderBy('title')->limit(4)->get();
 
         $booksHistory = Buku::where('id_kategori', $ID_KAT_HISTORY)
-            ->tap($search)
-            ->orderBy('title')
-            ->limit(6)
-            ->get();
+            ->tap($search)->orderBy('title')->limit(6)->get();
 
         $booksRecs = Buku::tap($search)
-            ->inRandomOrder()
-            ->limit(5)
-            ->get();
+            ->inRandomOrder()->limit(5)->get();
 
-        // Kirim semua ke Blade
+        // Kirim ke Blade
         return view('homepage', compact('booksHumor', 'booksHistory', 'booksRecs', 'q'));
     }
+
+    // ⬇️ Taruh di luar index(), sejajar
+    public function show($id)
+    {
+         $book = Buku::findOrFail($id);
+    
+    return view('detailbuku', compact('book'));
+}
 }
