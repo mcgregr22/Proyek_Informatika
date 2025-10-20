@@ -38,11 +38,28 @@ Route::middleware('auth')->group(function () {
     Route::get('/keranjang', fn() => view('keranjang'));
     Route::get('/mycollection', fn() => view('mycollection'));
     Route::get('/forumdiscuss', fn() => view('forumdiscuss'));
-
+    
     // DETAIL BUKU
    Route::get('/buku/{id}', [HomepageController::class, 'show'])->name('buku.show');
 
 
     // LOGOUT
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+});
+
+Route::get('/manajemen_admin', function () {
+    return view('manajemen_admin'); // halaman awal sebelum login
+});
+
+Route::get('/profil_admin', function () {
+    return view('profil_admin'); // halaman awal sebelum login
+});
+Route::get('/profil_user', function () {
+    return view('profil_user'); // halaman awal sebelum login
+});
+Route::get('/', function () {
+    return view('welcome'); // halaman awal sebelum login
+});
+Route::get('/request_swap', function () {
+    return view('request_swap'); // halaman awal sebelum login
 });
