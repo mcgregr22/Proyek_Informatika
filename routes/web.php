@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegistrasiController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\KeranjangController;
 
 // ----------------------
 // HALAMAN AWAL (Guest/Public)
@@ -33,15 +34,19 @@ Route::middleware('auth')->group(function () {
     // HOMEPAGE DINAMIS
     Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
 
-    // HALAMAN LAIN
-    Route::get('/swapbook', fn() => view('swapbook'));
-    Route::get('/keranjang', fn() => view('keranjang'));
-    Route::get('/mycollection', fn() => view('mycollection'));
-    Route::get('/forumdiscuss', fn() => view('forumdiscuss'));
+    // =========================
+    // KERANJANG 
+    // =========================
+    Route::middleware('auth')->group(function () {
 
+    Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
+    Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
+    Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
+
+
+});
     // DETAIL BUKU
-   Route::get('/buku/{id}', [HomepageController::class, 'show'])->name('buku.show');
-
+    Route::get('/buku/{id}', [HomepageController::class, 'show'])->name('buku.show');
 
     // LOGOUT
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
