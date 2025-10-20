@@ -90,15 +90,15 @@
 
                 <!-- Menu kanan -->
                 <ul class="navbar-nav align-items-center">
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="/swapbook">Swapbook</a></li>
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="/mycollection">My Collection</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="/swapbook">Tukar Buku</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="/mycollection">Koleksi Saya</a></li>
                 </ul>
 
                 <!-- 3 Icon Kanan -->
                 <div class="d-flex align-items-center ms-3">
                     <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
                     <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
-                    <a href="profil_user" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
+                    <a href="/profil_user" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
                 </div>
             </div>
         </div>
@@ -107,15 +107,15 @@
     <!-- Banner -->
     <div class="container">
         <div class="banner text-center mt-4">
-            <h2>WELCOME TO LIBRARY-HUB</h2>
-            <p>"The only thing that you absolutely have to know, is the location of the library."</p>
+            <h2>SELAMAT DATANG DI LIBRARY-HUB</h2>
+            <p>"Satu-satunya hal yang benar-benar perlu kamu ketahui adalah lokasi perpustakaan"</p>
         </div>
     </div>
 
     <!-- Sections -->
     <div class="container mt-4">
 
-    <h4 class="section-title">Humor & Comedy</h4>
+    <h4 class="section-title">Humor & Komedi</h4>
 <div class="row g-3">
   @forelse ($booksHumor as $b)
     <div class="col-6 col-md-3">
@@ -142,7 +142,7 @@
   @endforelse
 </div>
 
-<h4 class="section-title">History</h4>
+<h4 class="section-title">Sejarah</h4>
 <div class="row g-3">
   @forelse ($booksHistory as $b)
     <div class="col-6 col-md-3">
@@ -169,7 +169,7 @@
   @endforelse
 </div>
 
-<h4 class="section-title">Recommendations</h4>
+<h4 class="section-title">Rekomendasi</h4>
 <div class="row g-3">
   @forelse ($booksRecs as $b)
     <div class="col-6 col-md-3">

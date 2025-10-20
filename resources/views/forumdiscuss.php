@@ -98,8 +98,8 @@
             <input class="form-control" type="search" placeholder="Cari Buku">
         </form>
         <ul class="navbar-nav align-items-center">
-            <li class="nav-item"><a class="nav-link fw-semibold" href="/swapbook">Swapbook</a></li>
-            <li class="nav-item"><a class="nav-link fw-semibold" href="/mycollection">My Collection</a></li>
+            <li class="nav-item"><a class="nav-link fw-semibold" href="/swapbook">Tukar Buku</a></li>
+            <li class="nav-item"><a class="nav-link fw-semibold" href="/mycollection">Koleksi Saya</a></li>
         </ul>
         <div class="d-flex align-items-center ms-3">
             <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
@@ -112,7 +112,7 @@
 <div class="container forum-container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold">Forum Diskusi</h3>
-        <button class="add-post-btn">Add Post</button>
+        <button class="add-post-btn">Tambahkan Komentar</button>
     </div>
 
     {{-- Simulasi data post --}}
