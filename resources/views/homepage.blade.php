@@ -94,11 +94,11 @@
                     <li class="nav-item"><a class="nav-link fw-semibold" href="/mycollection">My Collection</a></li>
                 </ul>
 
-                <!-- 3 Icon Kanan (logout dihapus dari sini, hanya pindah ke bawah) -->
+                <!-- 3 Icon Kanan -->
                 <div class="d-flex align-items-center ms-3">
                     <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
                     <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
-                    <a href="#" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
+                    <a href="profil_user" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
                 </div>
             </div>
         </div>
@@ -109,7 +109,6 @@
         <div class="banner text-center mt-4">
             <h2>WELCOME TO LIBRARY-HUB</h2>
             <p>"The only thing that you absolutely have to know, is the location of the library."</p>
-            <a href="#" class="btn btn-light btn-sm mt-3">SHOP NOW</a>
         </div>
     </div>
 
@@ -125,10 +124,11 @@
           <div class="card-body text-center">
             <div class="bg-light p-2 rounded mb-2">
               @if($b->cover_image)
-                <img src="{{ asset($b->cover_image) }}" alt="cover" class="book-thumb">
-              @else
-                <div class="py-5">📘</div>
-              @endif
+  <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb">
+@else
+  <div class="py-5">📘</div>
+@endif
+
             </div>
             <h6 class="fw-semibold text-truncate" title="{{ $b->title }}">{{ $b->title }}</h6>
             <div class="text-muted small">{{ $b->author }}</div>
@@ -151,10 +151,11 @@
           <div class="card-body text-center">
             <div class="bg-light p-2 rounded mb-2">
               @if($b->cover_image)
-                <img src="{{ asset($b->cover_image) }}" alt="cover" class="book-thumb">
-              @else
-                <div class="py-5">📘</div>
-              @endif
+  <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb">
+@else
+  <div class="py-5">📘</div>
+@endif
+
             </div>
             <h6 class="fw-semibold text-truncate" title="{{ $b->title }}">{{ $b->title }}</h6>
             <div class="text-muted small">{{ $b->author }}</div>
@@ -176,11 +177,12 @@
         <a href="{{ route('buku.show', $b->id_buku) }}" class="book-link" aria-label="Lihat {{ $b->title }}">
           <div class="card-body text-center">
             <div class="bg-light p-2 rounded mb-2">
-              @if($b->cover_image)
-                <img src="{{ asset($b->cover_image) }}" alt="cover" class="book-thumb">
-              @else
-                <div class="py-5">📕</div>
-              @endif
+             @if($b->cover_image)
+        <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb">
+        @else
+        <div class="py-5">📘</div>
+        @endif
+
             </div>
             <h6 class="fw-semibold text-truncate" title="{{ $b->title }}">{{ $b->title }}</h6>
             <div class="text-muted small">{{ $b->author }}</div>
@@ -194,29 +196,7 @@
   @endforelse
 </div>
 
-{{-- CONTOH pada loop buku --}}
-@foreach ($booksRecs as $b)
-  <div class="col-6 col-md-2">
-    <div class="card book-card">
-      <div class="card-body text-center">
-        <div class="bg-light p-2 rounded mb-2">
-          @if($b->cover_image)
-            <img src="{{ asset($b->cover_image) }}" class="book-thumb" alt="cover">
-          @else
-            <div class="py-4">📕</div>
-          @endif
-        </div>
 
-        <h6 class="fw-semibold text-truncate" title="{{ $b->title }}">{{ $b->title }}</h6>
-        <div class="text-muted small">{{ $b->author }}</div>
-        <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
-
-        {{-- 👇 ini membuat seluruh kartu bisa diklik --}}
-        <a href="{{ route('buku.show', ['id' => $b->id_buku]) }}" class="stretched-link"></a>
-      </div>
-    </div>
-  </div>
-@endforeach
 
         {{-- Flash success minimal --}}
         @if (session('success'))
@@ -247,4 +227,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html> 

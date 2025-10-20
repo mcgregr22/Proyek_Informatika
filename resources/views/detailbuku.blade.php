@@ -56,7 +56,6 @@
           <a href="/keranjang" class="me-2 text-decoration-none text-dark"><i class="bi bi-cart"></i></a>
           <a href="/forumdiscuss" class="me-2 text-decoration-none text-dark"><i class="bi bi-chat-dots"></i></a>
           <a href="#" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
-          </form>
         </div>
       </div>
     </div>
@@ -68,7 +67,7 @@
         {{-- Kiri: Gambar --}}
         <div class="col-12 col-md-4 text-center">
           @if($book->cover_image)
-            <img src="{{ asset($book->cover_image) }}" class="thumb" alt="cover">
+            <img src="{{ asset('storage/' . $book->cover_image) }}" class="thumb" alt="cover">
           @else
             <div class="thumb d-flex align-items-center justify-content-center bg-light" style="height:380px;">📘</div>
           @endif
