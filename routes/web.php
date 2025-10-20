@@ -5,6 +5,7 @@ use App\Http\Controllers\RegistrasiController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\HomePageAdminController;
+use App\Http\Controllers\ProfilAdminController;
 
 // ----------------------
 // HALAMAN AWAL
@@ -33,11 +34,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
 
     // HOMEPAGE ADMIN
-    // ROUTE UNTUK ADMIN
     Route::get('/homepage_admin', [HomePageAdminController::class, 'index'])->name('homepage_admin');
     Route::post('/homepage_admin/tambah', [HomePageAdminController::class, 'store'])->name('homepage_admin.store');
     Route::delete('/homepage_admin/hapus/{id}', [HomePageAdminController::class, 'destroy'])->name('homepage_admin.destroy');
 
+    // PROFIL ADMIN
+    Route::get('/profil_admin', [ProfilAdminController::class, 'index'])->name('profil_admin');
 
     // HALAMAN LAIN
     Route::get('/swapbook', fn() => view('swapbook'));

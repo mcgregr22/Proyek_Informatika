@@ -47,4 +47,5 @@ class HomepageController extends Controller
     
     return view('detailbuku', compact('book'));
 }
+
 }
