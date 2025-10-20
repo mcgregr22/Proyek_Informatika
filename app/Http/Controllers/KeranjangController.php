@@ -3,86 +3,95 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Keranjang;
 use App\Models\Buku;
 
 class KeranjangController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    // TAMPILKAN KERANJANG
     public function index()
     {
-        $items = Keranjang::where('user_id', Auth::id())
-                          ->with('buku')
-                          ->get();
+        // Struktur cart di session: [id_buku => ['qty' => n]] atau [id_buku => n]
+        $cart = session('cart', []);
 
-        $subtotal = $items->sum(fn($i) => $i->harga * $i->qty);
-        $tax = (int) round($subtotal * 0.10);
-        $total = $subtotal + $tax;
-
-        // JIKA VIEW KAMU bernama keranjang.blade.php (bukan folder)
-        return view('keranjang', compact('items', 'subtotal', 'tax', 'total'));
-
-        
-    }
-
-    // TAMBAH ITEM KE KERANJANG
-    public function add(Request $request)
-    {
-        $data = $request->validate([
-            'book_id' => 'required',
-            'qty'     => 'required|integer|min:1',
-        ]);
-
-        $buku = Buku::findOrFail($data['book_id']);
-
-        $item = Keranjang::firstOrNew([
-            'user_id' => Auth::id(),
-            'id_buku' => $buku->id_buku,
-        ]);
-
-        if ($item->exists) {
-            $item->qty += $data['qty'];
-        } else {
-            $item->qty = $data['qty'];
-            $item->harga = $buku->harga;
+        $qtyById = [];
+        foreach ($cart as $id => $val) {
+            $qtyById[(int) $id] = is_array($val) ? (int) ($val['qty'] ?? 1) : (int) $val;
         }
 
-        $item->save();
+        if (empty($qtyById)) {
+            return view('keranjang', [
+                'items'    => [],
+                'subtotal' => 0,
+                'tax'      => 0,
+                'shipping' => 0,
+                'total'    => 0,
+            ]);
+        }
+
+        // Ambil detail buku berdasarkan id_buku
+        $books = Buku::whereIn('id_buku', array_keys($qtyById))
+            ->get()
+            ->keyBy('id_buku');
+
+        $items = [];
+        $subtotal = 0;
+
+        foreach ($qtyById as $id => $qty) {
+            $book = $books->get($id);
+            if (!$book) continue;
+
+            $price = (int) $book->harga;
+
+            $items[] = [
+                'id_buku'  => $book->id_buku,
+                'title'    => $book->title,
+                'author'   => $book->author,
+                'isbn'     => $book->isbn,
+                'cover'    => $book->cover_image, // contoh: "covers/abc.jpg"
+                'price'    => $price,
+                'qty'      => $qty,
+                'subtotal' => $price * $qty,
+            ];
+
+            $subtotal += $price * $qty;
+        }
+
+        $tax = (int) round($subtotal * 0.10);
+        $shipping = 0;
+        $total = $subtotal + $tax + $shipping;
+
+        return view('keranjang', compact('items', 'subtotal', 'tax', 'shipping', 'total'));
+    }
+
+    // Tambah item ke keranjang
+    public function add(Request $request)
+    {
+        $id  = (int) $request->input('book_id');
+        $qty = max(1, (int) $request->input('qty', 1));
+
+        $cart = session('cart', []);
+        if (isset($cart[$id])) {
+            $cart[$id] = is_array($cart[$id])
+                ? ['qty' => ($cart[$id]['qty'] ?? 0) + $qty]
+                : $cart[$id] + $qty;
+        } else {
+            $cart[$id] = ['qty' => $qty];
+        }
+
+        session(['cart' => $cart]);
 
         return redirect()->route('cart.index')->with('success', 'Buku ditambahkan ke keranjang.');
     }
 
-    // UPDATE QTY
-    public function update(Request $request, $id)
-    {
-        $data = $request->validate(['qty' => 'required|integer|min:1']);
-        $item = Keranjang::where('user_id', Auth::id())->findOrFail($id);
-        $item->qty = $data['qty'];
-        $item->save();
-
-        return back()->with('success', 'Jumlah diperbarui.');
-    }
-
-    // HAPUS SATU ITEM
+    // Hapus satu item dari keranjang
     public function remove($id)
     {
-        $item = Keranjang::where('user_id', Auth::id())->findOrFail($id);
-        $item->delete();
+        $cart = session('cart', []);
 
-        return back()->with('success', 'Item dihapus.');
-    }
+        if (isset($cart[$id])) {
+            unset($cart[$id]);
+            session(['cart' => $cart]);
+        }
 
-    // KOSONGKAN KERANJANG
-    public function clear()
-    {
-        Keranjang::where('user_id', Auth::id())->delete();
-
-        return back()->with('success', 'Keranjang dikosongkan.');
+        return redirect()->route('cart.index')->with('success', 'Buku berhasil dihapus dari keranjang.');
     }
 }

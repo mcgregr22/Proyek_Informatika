@@ -40,10 +40,10 @@ class HomepageController extends Controller
         return view('homepage', compact('booksHumor', 'booksHistory', 'booksRecs', 'q'));
     }
 
-    // ⬇️ Taruh di luar index(), sejajar
+    // ⬇️ Taruh di luar index()
     public function show($id)
     {
-         $book = Buku::findOrFail($id);
+         $book = Buku::where('id_buku', $id)->firstOrFail();
     
     return view('detailbuku', compact('book'));
 }

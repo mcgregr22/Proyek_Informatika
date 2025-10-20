@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Buku;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class HomePageAdminController extends Controller
@@ -54,7 +56,7 @@ class HomePageAdminController extends Controller
         $book = Buku::findOrFail($id);
 
         if ($book->cover_image) {
-            \Storage::disk('public')->delete($book->cover_image);
+            Storage::disk('public')->delete($book->cover_image);
         }
 
         $book->delete();
