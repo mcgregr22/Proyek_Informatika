@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\HomePageAdminController;
 // ----------------------
+// ----------------------
 // HALAMAN AWAL (Guest/Public)
 // ----------------------
 Route::get('/', function () {
@@ -40,7 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/forumdiscuss', fn() => view('forumdiscuss'));
 
     // DETAIL BUKU
-   Route::get('/buku/{id}', [HomepageController::class, 'show'])->name('buku.show');
+Route::get('/buku/{id}', [HomepageController::class, 'show'])->name('buku.show');
 
 
     // LOGOUT
@@ -53,3 +54,20 @@ Route::get('/homepage_admin', [HomePageAdminController::class, 'index'])->name('
 Route::post('/homepage_admin/tambah', [HomePageAdminController::class, 'store'])->name('homepage_admin.store');
 
 Route::delete('/homepage_admin/hapus/{id}', [HomePageAdminController::class, 'destroy'])->name('homepage_admin.destroy');
+
+//ROUTE PROFIL
+Route::get('/profil_user', function () {
+    return view('profil_user'); // halaman awal sebelum login
+});
+//ROUTE SWAPBOOK
+// use App\Http\Controllers\SwapbookController;
+
+// Route::get('/swapbook', [SwapbookController::class, 'index']);
+
+Route::get('/request_swap', function () {
+    return view('request_swap'); // halaman awal sebelum login
+});
+
+Route::get('/manajemen_admin', function () {
+    return view('manajemen_admin'); // halaman awal sebelum login
+});
