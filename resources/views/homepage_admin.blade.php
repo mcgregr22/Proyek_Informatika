@@ -73,6 +73,44 @@
     .navbar-icon:hover {
       color: #0d6efd;
     }
+
+    /* --- Logout CTA (bawah) --- */
+        .logout-cta {
+            margin-top: 48px;
+        }
+        .btn-logout-pro {
+            border: none;
+            padding: 12px 18px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ff4d4f, #d9363e);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(217,54,62,0.25);
+            transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+        }
+        .btn-logout-pro:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px rgba(217,54,62,0.35);
+            filter: brightness(1.05);
+            color: #fff;
+        }
+        .btn-logout-pro:active {
+            transform: translateY(0);
+            box-shadow: 0 6px 16px rgba(217,54,62,0.25);
+        }
+        .btn-logout-pro i {
+            margin-right: 8px;
+        }
+        .logout-card {
+            border: 1px solid rgba(0,0,0,.06);
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 6px 18px rgba(0,0,0,.06);
+        }
+        .logout-subtext {
+            color:#6c757d;
+            font-size:.925rem;
+        }
+
   </style>
 </head>
 <body>
@@ -92,7 +130,7 @@
     </form>
 
     <ul class="navbar-nav align-items-center">
-      <li class="nav-item"><a class="nav-link fw-semibold" href="/request_swap">Swapbook</a></li>
+      <li class="nav-item"><a class="nav-link fw-semibold" href="/request_swap">Tukar Buku</a></li>
       <li class="nav-item"><a class="nav-link fw-semibold" href="/manajemen_admin">Akun & Role</a></li>
     </ul>
 
@@ -201,6 +239,22 @@
     </div>
   </div>
 </div>
+
+  <!-- Logout -->
+    <div class="container logout-cta">
+        <div class="logout-card p-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+            <div>
+                <div class="fw-semibold">Selesai berkunjung?</div>
+                <div class="logout-subtext">Klik tombol di kanan untuk keluar dengan aman.</div>
+            </div>
+            <form action="{{ route('logout') }}" method="POST" class="m-0">
+                @csrf
+                <button type="submit" class="btn btn-logout-pro">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+            </form>
+        </div>
+    </div>
 
 <!-- Footer -->
 <div class="footer">

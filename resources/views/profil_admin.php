@@ -69,10 +69,10 @@
 </head>
 <body>
 
-    <!-- Navbar -->
+  <!-- Navbar -->
 <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
   <div class="container">
-    <a class="navbar-brand fw-bold" href="dashboard_admin">
+    <a class="navbar-brand fw-bold" href="{{ route('homepage_admin') }}">
       Library-<span>Hub</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -84,13 +84,14 @@
     </form>
 
     <ul class="navbar-nav align-items-center">
-      <li class="nav-item"><a class="nav-link fw-semibold" href="/manajemen_admin">Pengaturan</a></li>
+      <li class="nav-item"><a class="nav-link fw-semibold" href="/request_swap">Tukar Buku</a></li>
+      <li class="nav-item"><a class="nav-link fw-semibold" href="/manajemen_admin">Akun & Role</a></li>
     </ul>
 
     <div class="d-flex align-items-center ms-3">
       <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
       <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
-      <a href="/admin" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
+      <a href="/profil_admin" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
     </div>
   </div>
 </nav>

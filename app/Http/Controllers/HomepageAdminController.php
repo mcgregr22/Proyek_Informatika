@@ -54,7 +54,7 @@ class HomePageAdminController extends Controller
         $book = Buku::findOrFail($id);
 
         if ($book->cover_image) {
-            \Storage::disk('public')->delete($book->cover_image);
+            Storage::disk('public')->delete($book->cover_image);
         }
 
         $book->delete();
