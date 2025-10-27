@@ -199,7 +199,7 @@
 
     <!-- + Pengelolaan -->
     <div class="text-end mb-3">
-      <button class="btn-manage">Pengelolaan</button>
+      <button class="btn-manage"><i class="bi bi-plus-lg"></i> Pengelolaan</button>
     </div>
 
     <!-- Humor & Comedy -->
