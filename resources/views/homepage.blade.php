@@ -1,16 +1,19 @@
+{{-- resources/views/homepage.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Library-Hub</title>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
   <style>
     body { background-color: #f8f9fa; font-family: 'Poppins', sans-serif; }
     .navbar-brand span { color: #0d6efd; font-weight: 700; }
 
-    /* --- Navbar --- */
+    /* Navbar */
     .navbar { padding: 0.8rem 0; }
     .search-form {
       flex: 1;
@@ -32,7 +35,7 @@
       border: 1px solid #ccc;
     }
 
-    /* --- Banner --- */
+    /* Banner */
     .banner {
       background: linear-gradient(90deg, #0d1b4c, #2d4db0);
       color: white;
@@ -58,7 +61,7 @@
       background: transparent;
     }
 
-    /* --- Section Header --- */
+    /* Section Header */
     .section-header {
       display: flex;
       justify-content: space-between;
@@ -67,7 +70,7 @@
       margin-bottom: .75rem;
     }
 
-    /* --- Tombol Pengelolaan --- */
+    /* Tombol Pengelolaan */
     .btn-manage {
       background: #000;
       color: #fff;
@@ -79,7 +82,7 @@
     }
     .btn-manage:hover { background: #0d6efd; }
 
-    /* --- Buku Card --- */
+    /* Buku Card */
     .book-card {
       border: none;
       border-radius: 10px;
@@ -109,59 +112,53 @@
       .search-form input { width: 70%; }
     }
 
-     /* --- Logout CTA (bawah) --- */
-        .logout-cta {
-            margin-top: 48px;
-        }
-        .btn-logout-pro {
-            border: none;
-            padding: 12px 18px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #ff4d4f, #d9363e);
-            color: #fff;
-            box-shadow: 0 8px 20px rgba(217,54,62,0.25);
-            transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
-        }
-        .btn-logout-pro:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 26px rgba(217,54,62,0.35);
-            filter: brightness(1.05);
-            color: #fff;
-        }
-        .btn-logout-pro:active {
-            transform: translateY(0);
-            box-shadow: 0 6px 16px rgba(217,54,62,0.25);
-        }
-        .btn-logout-pro i {
-            margin-right: 8px;
-        }
-        .logout-card {
-            border: 1px solid rgba(0,0,0,.06);
-            border-radius: 16px;
-            background: #fff;
-            box-shadow: 0 6px 18px rgba(0,0,0,.06);
-        }
-        .logout-subtext {
-            color:#6c757d;
-            font-size:.925rem;
-        }
-
+    /* Logout CTA */
+    .logout-cta { margin-top: 48px; }
+    .btn-logout-pro {
+      border: none;
+      padding: 12px 18px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #ff4d4f, #d9363e);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(217,54,62,0.25);
+      transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+    }
+    .btn-logout-pro:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(217,54,62,0.35);
+      filter: brightness(1.05);
+      color: #fff;
+    }
+    .btn-logout-pro:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 16px rgba(217,54,62,0.25);
+    }
+    .btn-logout-pro i { margin-right: 8px; }
+    .logout-card {
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 6px 18px rgba(0,0,0,.06);
+    }
+    .logout-subtext {
+      color:#6c757d;
+      font-size:.925rem;
+    }
   </style>
 </head>
-<body>
 
+<body>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
     <div class="container">
-      <!-- Logo kiri -->
-      <a class="navbar-brand fw-bold" href="/homepage">Library-<span>Hub</span></a>
+      <a class="navbar-brand fw-bold" href="{{ route('homepage') }}">Library-<span>Hub</span></a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
-        <!-- Kategori + Cari Buku di tengah -->
+        <!-- Search Form -->
         <form class="search-form mx-auto" role="search" action="{{ route('homepage') }}" method="GET">
           <select name="kategori">
             <option value="">Kategori</option>
@@ -175,10 +172,7 @@
         <!-- Ikon kanan -->
         <div class="d-flex align-items-center ms-3">
           <a href="/forumdiscuss" class="text-dark me-3"><i class="bi bi-chat-dots fs-5"></i></a>
-                <a href="{{ route('profil_user') }}" class="text-dark">
-        <i class="bi bi-person-circle fs-5"></i>
-      </a>
-
+          <a href="{{ route('profil_user') }}" class="text-dark"><i class="bi bi-person-circle fs-5"></i></a>
         </div>
       </div>
     </div>
@@ -194,19 +188,17 @@
     </div>
   </div>
 
-  <!-- Sections -->
+  <!-- Buku Section -->
   <div class="container mt-4">
-
-    <!-- + Pengelolaan -->
+    <!-- Pengelolaan -->
     <div class="text-end mb-3">
-      <button class="btn-manage"><i class="bi bi-plus-lg"></i> Pengelolaan</button>
+      <a href="{{ route('pengelolaan') }}" class="btn-manage"><i class="bi bi-plus-lg"></i> Pengelolaan</a>
     </div>
 
     <!-- Humor & Comedy -->
     <div class="section-header">
       <h5 class="fw-semibold">Humor & Comedy</h5>
     </div>
-
     <div class="row g-3">
       @forelse ($booksHumor as $b)
         <div class="col-6 col-md-4 col-lg-2">
@@ -234,7 +226,6 @@
     <div class="section-header mt-5">
       <h5 class="fw-semibold">History</h5>
     </div>
-
     <div class="row g-3">
       @forelse ($booksHistory as $b)
         <div class="col-6 col-md-4 col-lg-2">
@@ -263,7 +254,6 @@
       <h5 class="fw-semibold">Recommendations</h5>
       <a href="#" class="text-decoration-none small text-primary">Lihat Selengkapnya...</a>
     </div>
-
     <div class="row g-3">
       @forelse ($booksRecs as $b)
         <div class="col-6 col-md-4 col-lg-2">
@@ -288,21 +278,21 @@
     </div>
   </div>
 
-<!-- Logout -->
-    <div class="container logout-cta">
-        <div class="logout-card p-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
-            <div>
-                <div class="fw-semibold">Selesai berkunjung?</div>
-                <div class="logout-subtext">Klik tombol di kanan untuk keluar dengan aman.</div>
-            </div>
-            <form action="{{ route('logout') }}" method="POST" class="m-0">
-                @csrf
-                <button type="submit" class="btn btn-logout-pro">
-                    <i class="bi bi-box-arrow-right"></i> Logout
-                </button>
-            </form>
-        </div>
-    </div>
+  <!-- Logout CTA -->
+  <div class="container logout-cta">
+    <div class="logout-card p-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+      <div>
+        <div class="fw-semibold">Selesai berkunjung?</div>
+        <div class="logout-subtext">Klik tombol di kanan untuk keluar dengan aman.</div>
+      </div>
+      <form action="{{ route('logout') }}" method="POST" class="m-0">
+        @csrf
+        <button type="submit" class="btn btn-logout-pro">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+      </form>
+    </div>
+  </div>
 
   <!-- Footer -->
   <div class="footer">
