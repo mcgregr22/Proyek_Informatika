@@ -15,6 +15,20 @@
       color: #0d6efd;
       font-weight: 700;
     }
+    .search-form {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 400px;
+    }
+    .search-form select {
+      border: 1px solid #ced4da;
+      border-radius: 6px;
+      padding: 6px 10px;
+    }
+    .search-form input {
+      flex: 1;
+    }
     .profile-card {
       background-color: #fff;
       border-radius: 12px;
@@ -69,91 +83,122 @@
   </style>
 </head>
 <body>
-
-  <!-- Konten Profil -->
+    
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
   <div class="container">
-    <div class="profile-card mt-5">
-      <button class="btn-logout" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Keluar</button>
+    <!-- Logo kiri -->
+    <a class="navbar-brand fw-bold" href="/homepage">Library-<span>Hub</span></a>
 
-      <div class="profile-header">
-        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile Picture">
-        <h4>{{ $user->name }}</h4>
-      </div>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-      <div class="form-section">
-        <h5>Profil</h5>
-        <form>
-          <div class="mb-3">
-            <label class="form-label">Nama Lengkap</label>
-            <input type="text" class="form-control" value="{{ $user->name }}" readonly>
-          </div>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Form kategori dan cari buku -->
+      <form class="search-form mx-auto" role="search" action="{{ route('homepage') }}" method="GET">
+        <select name="kategori">
+          <option value="">Kategori</option>
+          <option value="humor">Humor & Comedy</option>
+          <option value="history">History</option>
+          <option value="romance">Romance</option>
+        </select>
+        <input class="form-control" type="search" name="q" value="{{ $q ?? '' }}" placeholder="Cari Buku...">
+      </form>
 
-          <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" value="{{ $user->email }}" readonly>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Nomor Telepon</label>
-            <input type="text" class="form-control" value="{{ $user->telepon ?? '-' }}" readonly>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Role</label>
-            <input type="text" class="form-control" value="{{ $user->role ?? 'pengguna' }}" readonly>
-          </div>
-
-          <hr>
-
-          <h5>Account</h5>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Email</label>
-              <input type="email" class="form-control" value="{{ $user->email }}" readonly>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Password</label>
-              <div class="input-group">
-                <input id="passwordInput" type="password" class="form-control" value="{{ $user->password }}" readonly>
-                <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                  <i id="toggleIcon" class="bi bi-eye"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="text-center mt-4">
-            <button type="submit" class="btn-save">Simpan</button>
-          </div>
-        </form>
+      <!-- Ikon kanan -->
+      <div class="d-flex align-items-center ms-3">
+        <a href="/forumdiscuss" class="text-dark me-3"><i class="bi bi-chat-dots fs-5"></i></a>
+        <a href="{{ route('profil_user') }}" class="text-dark"><i class="bi bi-person-circle fs-5"></i></a>
       </div>
     </div>
   </div>
+</nav>
 
-  <!-- Script -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const pwd = document.getElementById('passwordInput');
-      const btn = document.getElementById('togglePassword');
-      const icon = document.getElementById('toggleIcon');
-      btn.addEventListener('click', function () {
-        if (pwd.type === 'password') {
-          pwd.type = 'text';
-          icon.classList.replace('bi-eye', 'bi-eye-slash');
-        } else {
-          pwd.type = 'password';
-          icon.classList.replace('bi-eye-slash', 'bi-eye');
-        }
-      });
-      const logoutBtn = document.getElementById('logoutBtn');
-      logoutBtn.addEventListener('click', function () {
-        if (confirm('Apakah Anda yakin ingin keluar dari akun ini?')) {
-          window.location.href = "/login";
-        }
-      });
+<!-- Konten Profil -->
+<div class="container">
+  <div class="profile-card mt-5">
+    <button class="btn-logout" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Keluar</button>
+
+    <div class="profile-header">
+      <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile Picture">
+      <h4>{{ $user->name }}</h4>
+    </div>
+
+    <div class="form-section">
+      <h5>Profil</h5>
+      <form>
+        <div class="mb-3">
+          <label class="form-label">Nama Lengkap</label>
+          <input type="text" class="form-control" value="{{ $user->name }}" readonly>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" value="{{ $user->email }}" readonly>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Nomor Telepon</label>
+          <input type="text" class="form-control" value="{{ $user->telepon ?? '-' }}" readonly>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Role</label>
+          <input type="text" class="form-control" value="{{ $user->role ?? 'pengguna' }}" readonly>
+        </div>
+
+        <hr>
+
+        <h5>Account</h5>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" value="{{ $user->email }}" readonly>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Password</label>
+            <div class="input-group">
+              <input id="passwordInput" type="password" class="form-control" value="{{ $user->password }}" readonly>
+              <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                <i id="toggleIcon" class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <button type="submit" class="btn-save">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Script -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const pwd = document.getElementById('passwordInput');
+    const btn = document.getElementById('togglePassword');
+    const icon = document.getElementById('toggleIcon');
+    btn.addEventListener('click', function () {
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        icon.classList.replace('bi-eye', 'bi-eye-slash');
+      } else {
+        pwd.type = 'password';
+        icon.classList.replace('bi-eye-slash', 'bi-eye');
+      }
     });
-  </script>
+    const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.addEventListener('click', function () {
+      if (confirm('Apakah Anda yakin ingin keluar dari akun ini?')) {
+        window.location.href = "/login";
+      }
+    });
+  });
+</script>
 
 </body>
 </html>
