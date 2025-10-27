@@ -7,28 +7,32 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
-    body {
-      background-color: #f8f9fa;
-      font-family: 'Poppins', sans-serif;
-    }
-    .navbar-brand span {
-      color: #0d6efd;
-      font-weight: 700;
-    }
+    body { background-color: #f8f9fa; font-family: 'Poppins', sans-serif; }
+    .navbar-brand span { color: #0d6efd; font-weight: 700; }
+
+    /* --- Navbar --- */
+    .navbar { padding: 0.8rem 0; }
     .search-form {
+      flex: 1;
       display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 8px;
-      width: 400px;
+      gap: 10px;
     }
     .search-form select {
-      border: 1px solid #ced4da;
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 6px 10px;
+      border: 1px solid #ccc;
+      background-color: #f8f8f8;
     }
     .search-form input {
-      flex: 1;
+      width: 50%;
+      border-radius: 20px;
+      padding: 6px 14px;
+      border: 1px solid #ccc;
     }
+
+    /* --- Profil --- */
     .profile-card {
       background-color: #fff;
       border-radius: 12px;
@@ -80,11 +84,12 @@
       background-color: #dc3545;
       color: white;
     }
+
   </style>
 </head>
 <body>
-    
-<!-- Navbar -->
+
+  <!-- Navbar -->
 <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
   <div class="container">
     <!-- Logo kiri -->
@@ -94,111 +99,104 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- Form kategori dan cari buku -->
-      <form class="search-form mx-auto" role="search" action="{{ route('homepage') }}" method="GET">
-        <select name="kategori">
-          <option value="">Kategori</option>
-          <option value="humor">Humor & Comedy</option>
-          <option value="history">History</option>
-          <option value="romance">Romance</option>
-        </select>
-        <input class="form-control" type="search" name="q" value="{{ $q ?? '' }}" placeholder="Cari Buku...">
-      </form>
-
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <!-- Ikon kanan -->
-      <div class="d-flex align-items-center ms-3">
-        <a href="/forumdiscuss" class="text-dark me-3"><i class="bi bi-chat-dots fs-5"></i></a>
-        <a href="{{ route('profil_user') }}" class="text-dark"><i class="bi bi-person-circle fs-5"></i></a>
+      <div class="d-flex align-items-center">
+        <a href="/forumdiscuss" class="text-dark me-3">
+          <i class="bi bi-chat-dots fs-5"></i>
+        </a>
+        <a href="{{ route('profil_user') }}" class="text-dark">
+          <i class="bi bi-person-circle fs-5"></i>
+        </a>
       </div>
     </div>
   </div>
 </nav>
 
-<!-- Konten Profil -->
-<div class="container">
-  <div class="profile-card mt-5">
-    <button class="btn-logout" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Keluar</button>
 
-    <div class="profile-header">
-      <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile Picture">
-      <h4>{{ $user->name }}</h4>
-    </div>
+  <!-- Konten Profil -->
+  <div class="container">
+    <div class="profile-card mt-5">
+      <button class="btn-logout" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Keluar</button>
 
-    <div class="form-section">
-      <h5>Profil</h5>
-      <form>
-        <div class="mb-3">
-          <label class="form-label">Nama Lengkap</label>
-          <input type="text" class="form-control" value="{{ $user->name }}" readonly>
-        </div>
+      <div class="profile-header">
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile Picture">
+        <h4>{{ $user->name }}</h4>
+      </div>
 
-        <div class="mb-3">
-          <label class="form-label">Email</label>
-          <input type="email" class="form-control" value="{{ $user->email }}" readonly>
-        </div>
+      <div class="form-section">
+        <h5>Profil</h5>
+        <form>
+          <div class="mb-3">
+            <label class="form-label">Nama Lengkap</label>
+            <input type="text" class="form-control" value="{{ $user->name }}" readonly>
+          </div>
 
-        <div class="mb-3">
-          <label class="form-label">Nomor Telepon</label>
-          <input type="text" class="form-control" value="{{ $user->telepon ?? '-' }}" readonly>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Role</label>
-          <input type="text" class="form-control" value="{{ $user->role ?? 'pengguna' }}" readonly>
-        </div>
-
-        <hr>
-
-        <h5>Account</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
+          <div class="mb-3">
             <label class="form-label">Email</label>
             <input type="email" class="form-control" value="{{ $user->email }}" readonly>
           </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Password</label>
-            <div class="input-group">
-              <input id="passwordInput" type="password" class="form-control" value="{{ $user->password }}" readonly>
-              <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                <i id="toggleIcon" class="bi bi-eye"></i>
-              </button>
+
+          <div class="mb-3">
+            <label class="form-label">Nomor Telepon</label>
+            <input type="text" class="form-control" value="{{ $user->telepon ?? '-' }}" readonly>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Role</label>
+            <input type="text" class="form-control" value="{{ $user->role ?? 'pengguna' }}" readonly>
+          </div>
+
+          <hr>
+
+          <h5>Account</h5>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" value="{{ $user->email }}" readonly>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Password</label>
+              <div class="input-group">
+                <input id="passwordInput" type="password" class="form-control" value="{{ $user->password }}" readonly>
+                <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                  <i id="toggleIcon" class="bi bi-eye"></i>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="text-center mt-4">
-          <button type="submit" class="btn-save">Simpan</button>
-        </div>
-      </form>
+          <div class="text-center mt-4">
+            <button type="submit" class="btn-save">Simpan</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Script -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const pwd = document.getElementById('passwordInput');
-    const btn = document.getElementById('togglePassword');
-    const icon = document.getElementById('toggleIcon');
-    btn.addEventListener('click', function () {
-      if (pwd.type === 'password') {
-        pwd.type = 'text';
-        icon.classList.replace('bi-eye', 'bi-eye-slash');
-      } else {
-        pwd.type = 'password';
-        icon.classList.replace('bi-eye-slash', 'bi-eye');
-      }
+  <!-- Script -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const pwd = document.getElementById('passwordInput');
+      const btn = document.getElementById('togglePassword');
+      const icon = document.getElementById('toggleIcon');
+      btn.addEventListener('click', function () {
+        if (pwd.type === 'password') {
+          pwd.type = 'text';
+          icon.classList.replace('bi-eye', 'bi-eye-slash');
+        } else {
+          pwd.type = 'password';
+          icon.classList.replace('bi-eye-slash', 'bi-eye');
+        }
+      });
+      const logoutBtn = document.getElementById('logoutBtn');
+      logoutBtn.addEventListener('click', function () {
+        if (confirm('Apakah Anda yakin ingin keluar dari akun ini?')) {
+          window.location.href = "/login";
+        }
+      });
     });
-    const logoutBtn = document.getElementById('logoutBtn');
-    logoutBtn.addEventListener('click', function () {
-      if (confirm('Apakah Anda yakin ingin keluar dari akun ini?')) {
-        window.location.href = "/login";
-      }
-    });
-  });
-</script>
-
+  </script>
 </body>
 </html>
