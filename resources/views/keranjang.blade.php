@@ -1,3 +1,7 @@
+{{-- resources/views/keranjang.blade.php --}}
+@php
+
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -124,41 +128,119 @@
                 <div class="d-flex align-items-center ms-3">
                     <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
                     <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
-                    <a href="/profil_user" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
+                    <a href="#" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Halaman Keranjang Kosong -->
-    <div class="container">
-        <div class="empty-cart">
-            <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" alt="Empty Cart">
-            <h5>Keranjang Belanja Kosong</h5>
-            <p>Yuk, temukan buku favoritmu dan tambahkan ke keranjang!</p>
-            <a href="{{ url('/homepage') }}" class="btn btn-shop mt-3">
-    <i class="bi bi-arrow-left"></i> Beranda
-</a>
+    @if(empty($items))
+      <!-- Halaman Keranjang Kosong (tetap seperti aslinya) -->
+      <div class="container">
+          <div class="empty-cart">
+              <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" alt="Empty Cart">
+              <h5>Keranjang Belanja Kosong</h5>
+              <p>Yuk, temukan buku favoritmu dan tambahkan ke keranjang!</p>
+              <a href="{{ url('/homepage') }}" class="btn btn-shop mt-3">
+                  <i class="bi bi-arrow-left"></i> Beranda
+              </a>
+          </div>
 
+          <!-- Ringkasan Pesanan kosong (tetap seperti aslinya) -->
+          <div class="summary-card col-md-6 mx-auto mt-5">
+              <h6 class="mb-3">Ringkasan Pesanan</h6>
+              <div class="d-flex justify-content-between">
+                  <span>Subtotal (item):</span>
+                  <strong>Rp0</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                  <span>Pajak (10%):</span>
+                  <strong>Rp0</strong>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                  <span>Pengiriman:</span>
+                  <strong>Rp0</strong>
+              </div>
+              <hr>
+              <div class="d-flex justify-content-between mb-3">
+                  <h6>Total:</h6>
+                  <h6 class="text-primary fw-bold">Rp0</h6>
+              </div>
+              <button class="btn-checkout">
+                  Lanjutkan ke Checkout
+              </button>
+          </div>
+      </div>
+    @else
+      <!-- Keranjang ADA isi: tampilkan daftar buku + ringkasan di BAWAH (tetap rapi) -->
+      <div class="container">
+        @if(session('success'))
+          <div class="alert alert-success mt-4">{{ session('success') }}</div>
+        @endif
+
+        <!-- Daftar Item -->
+        <div class="card mt-4 p-3" style="border:none;border-radius:12px;box-shadow:0 3px 10px rgba(0,0,0,.06);background:#fff">
+          <h5 class="mb-3">Keranjang Kamu</h5>
+
+          @foreach($items as $it)
+            <div class="d-flex align-items-center py-3 border-bottom">
+              <img
+                src="{{ !empty($it['cover']) ? Storage::url(str_replace('\\','/',$it['cover'])) : asset('images/placeholder-cover.png') }}"
+                alt="{{ $it['title'] ?? 'Buku' }}"
+                style="width:72px;height:104px;object-fit:cover;border-radius:8px"
+                class="me-3"
+              >
+              <div class="flex-grow-1">
+                <div class="fw-semibold">{{ $it['title'] ?? '-' }}</div>
+                <div class="text-muted small">{{ $it['author'] ?? '-' }}</div>
+                @if(!empty($it['isbn']))
+                  <div class="text-muted small">ISBN: {{ $it['isbn'] }}</div>
+                @endif
+                <div class="mt-1">Rp {{ number_format((int)($it['price'] ?? 0),0,',','.') }} × {{ (int)($it['qty'] ?? 1) }}</div>
+              </div>
+
+              <div class="fw-semibold me-3">
+                Rp {{ number_format((int)($it['subtotal'] ?? 0),0,',','.') }}
+              </div>
+
+              @if(!empty($it['id_buku']))
+              <form action="{{ route('cart.remove', $it['id_buku']) }}" method="POST">
+                @csrf @method('DELETE')
+                <button class="btn btn-sm btn-light border" title="Hapus">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </form>
+              @endif
+            </div>
+          @endforeach
         </div>
 
-        <!-- Ringkasan Pesanan -->
+        <!-- Ringkasan Pesanan (di BAWAH, tampilan sama) -->
         <div class="summary-card col-md-6 mx-auto mt-5">
             <h6 class="mb-3">Ringkasan Pesanan</h6>
             <div class="d-flex justify-content-between">
                 <span>Subtotal (item):</span>
-                <strong>Rp0</strong>
+                <strong>Rp {{ number_format((int)$subtotal,0,',','.') }}</strong>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span>Pajak (10%):</span>
+                <strong>Rp {{ number_format((int)$tax,0,',','.') }}</strong>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+                <span>Pengiriman:</span>
+                <strong>Rp {{ number_format((int)$shipping,0,',','.') }}</strong>
             </div>
             <hr>
             <div class="d-flex justify-content-between mb-3">
                 <h6>Total:</h6>
-                <h6 class="text-primary fw-bold">Rp0</h6>
+                <h6 class="text-primary fw-bold">Rp {{ number_format((int)$total,0,',','.') }}</h6>
             </div>
             <button class="btn-checkout">
                 Lanjutkan ke Checkout
             </button>
         </div>
-    </div>
+      </div>
+    @endif
 
     <!-- Footer -->
     <div class="footer">
