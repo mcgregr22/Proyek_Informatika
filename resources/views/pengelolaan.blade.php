@@ -1,4 +1,4 @@
-{{-- resources/views/pengelolaan.blade.php --}}
+<!-- {{-- resources/views/pengelolaan.blade.php --}} -->
 <!DOCTYPE html>
 <html lang="id" x-data="{ openSidebar: true }">
 <head>
@@ -16,11 +16,11 @@
 </head>
 <body class="bg-zinc-50 text-zinc-800">
 
-  {{-- HEADER: brand kiri + hamburger kanan --}}
+  <!-- {{-- HEADER: brand kiri + hamburger kanan --}} -->
   <header class="sticky top-0 z-40 bg-white border-b border-zinc-200">
     <div class="flex items-center justify-between px-6 h-16">
 
-      {{-- KIRI: Brand + hamburger --}}
+      <!-- {{-- KIRI: Brand + hamburger --}} -->
       <div class="flex items-center gap-3">
         <span class="text-2xl font-extrabold tracking-tight">
           <span class="text-indigo-600">Library-</span>
@@ -36,7 +36,7 @@
         </button>
       </div>
 
-      {{-- KANAN: Chat + Profil --}}
+      <!-- {{-- KANAN: Chat + Profil --}} -->
       <div class="flex items-center gap-4">
         <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-zinc-100 text-zinc-500" aria-label="Chat">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" class="w-6 h-6">
@@ -54,7 +54,7 @@
 
   <div class="flex min-h-screen">
 
-    {{-- SIDEBAR penuh kiri --}}
+    <!-- {{-- SIDEBAR penuh kiri --}} -->
     <aside class="w-72 bg-white border-r border-zinc-200 shadow-sm flex flex-col"
            x-show="openSidebar"
            x-transition.duration.200ms>
@@ -114,7 +114,7 @@
         </a>
       </nav>
 
-      {{-- LOGOUT sticky bawah --}}
+      <!-- {{-- LOGOUT sticky bawah --}} -->
       <div class="px-4 py-4 border-t border-zinc-100">
         <a href="#logout" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
           <span class="w-6 h-6">
@@ -128,12 +128,12 @@
       </div>
     </aside>
 
-    {{-- MAIN --}}
+    <!-- {{-- MAIN --}} -->
     <main class="flex-1 p-8">
       <h2 class="text-2xl font-semibold mb-2">My Books</h2>
       <p class="text-sm text-zinc-500 mb-6">Manage your book collection and listings</p>
 
-      {{-- isi utama nanti di sini --}}
+      <!-- {{-- isi utama nanti di sini --}} -->
       <div class="rounded-2xl border border-zinc-200 bg-white shadow-sm p-10 text-center text-zinc-500">
         Belum ada buku yang ditambahkan.
       </div>

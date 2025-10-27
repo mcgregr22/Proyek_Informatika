@@ -73,13 +73,13 @@
 <body>
 
 <!-- ================= NAVBAR ================= -->
-<nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
-  <div class="container">
+<!-- <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+  <div class="container"> -->
 
     <!-- Brand -->
-    <a class="navbar-brand fw-bold" href="/homepage" style="font-size: 1.25rem;">
+    <!-- <a class="navbar-brand fw-bold" href="/homepage" style="font-size: 1.25rem;">
       Library-<span style="color: #2b52ff;">Hub</span>
-    </a>
+    </a> -->
 
     <!-- Toggler (mobile) -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

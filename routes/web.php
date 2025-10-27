@@ -67,9 +67,14 @@ Route::middleware('auth')->group(function () {
     // NOTE: ini ganti /swapbook lama
     Route::view('/pengelolaan/swapbook', 'bookswap')->name('pengelolaan.swapbook');
 
-   
-     Route::view('/swapbook', 'swapbook');
+
+    Route::get('/swapbook', function () {
+    return view('swapbook');
+});
+
 
     // Logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
+
+Route::get('/profil_user', [App\Http\Controllers\ProfilUserController::class, 'index'])->name('profil_user');
