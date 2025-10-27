@@ -63,4 +63,11 @@ class HomePageAdminController extends Controller
 
         return redirect()->route('homepage_admin')->with('success', '🗑️ Buku berhasil dihapus!');
     }
+    // 👤 Menampilkan profil admin yang sedang login
+public function profil()
+{
+    $admin = auth()->user();
+    return view('profil_admin', compact('admin'));
+}
+
 }
