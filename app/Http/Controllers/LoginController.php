@@ -25,6 +25,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
+<<<<<<< HEAD
             $user = Auth::user(); // Ambil data user yang login
 
             // Cek role dan redirect ke halaman sesuai role
@@ -33,6 +34,16 @@ class LoginController extends Controller
             } else {
                 return redirect()->intended('/homepage')->with('success', 'Login berhasil!');
             }
+=======
+            $user = Auth::user();
+
+            // Redirect berdasarkan role
+            if ($user->role === 'admin') {
+                return redirect()->route('homepage_admin');
+            }
+
+            return redirect()->route('homepage');
+>>>>>>> 50cb22ed0ce8d30be1974ec7aa8867a37e645c50
         }
 
         // Jika gagal login

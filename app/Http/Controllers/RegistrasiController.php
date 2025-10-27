@@ -8,39 +8,38 @@ use Illuminate\Support\Facades\Hash;
 
 class RegistrasiController extends Controller
 {
-    // Tampilkan halaman register
+    // ✅ Tampilkan halaman register
     public function show()
     {
-        return view('register'); 
+        return view('register');
     }
 
+    // ✅ Proses penyimpanan data registrasi
     public function store(Request $request)
-{
-    // 1) Validasi input
-    $data = $request->validate([
-        'nama_lengkap'    => ['required', 'string', 'max:255'],
-        'nomor_telepon'   => ['nullable', 'string', 'max:30'],
-        'email'           => ['required', 'email', 'max:255', 'unique:users,email'],
-        'role'            => ['nullable', 'string', 'max:50'],
-        'kata_sandi'      => ['required', 'string', 'min:6'],
-        // kalau kamu punya field konfirmasi: aktifkan baris di bawah
-        // 'kata_sandi_konfirmasi' => ['same:kata_sandi'],
-    ], [
-        'email.unique'     => 'Email sudah terdaftar.',
-        'kata_sandi.min'   => 'Kata sandi minimal 6 karakter.',
-        // tambahkan pesan lain kalau perlu
-    ]);
+    {
+        // 1️⃣ Validasi input
+        $data = $request->validate([
+            'nama_lengkap'       => ['required', 'string', 'max:255'],
+            'nomor_telepon'      => ['nullable', 'string', 'max:30'],
+            'email'              => ['required', 'email', 'max:255', 'unique:users,email'],
+            'role'               => ['required', 'in:pengguna,admin'],
+            'kata_sandi'         => ['required', 'string', 'min:6', 'confirmed'],
+        ], [
+            'email.unique'       => 'Email sudah terdaftar. Gunakan email lain.',
+            'kata_sandi.min'     => 'Kata sandi minimal 6 karakter.',
+            'kata_sandi.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
+        ]);
 
-    // 2) Simpan user (password di-hash!)
-    User::create([
-        'name'     => $data['nama_lengkap'],
-        'phone'    => $data['nomor_telepon'] ?? null,
-        'email'    => $data['email'],
-        'role'     => $data['role'] ?? 'user',
-        'password' => Hash::make($data['kata_sandi']),
-    ]);
+        // 2️⃣ Simpan user (password di-hash!)
+        User::create([
+            'name'     => $data['nama_lengkap'],
+            'phone'    => $data['nomor_telepon'] ?? null,
+            'email'    => $data['email'],
+            'role'     => $data['role'],
+            'password' => Hash::make($data['kata_sandi']),
+        ]);
 
-    // 3) Arahkan ke halaman login + pesan sukses
-    return redirect('/login')->with('success', 'Registrasi berhasil! Silakan login.');
-}
+        // 3️⃣ Arahkan ke halaman login dengan pesan sukses
+        return redirect()->route('login.show')->with('success', 'Registrasi berhasil! Silakan login.');
+    }
 }

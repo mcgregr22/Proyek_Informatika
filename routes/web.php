@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/homepage_admin/hapus/{id}', [HomePageAdminController::class, 'destroy'])->name('homepage_admin.destroy');
 
     // PROFIL ADMIN
-    Route::get('/profil_admin', [AppProfilAdminController::class, 'index'])->name('profil_admin');
+    Route::get('/profil_admin', [ProfilAdminController::class, 'index'])->name('profil_admin');
 
     // PROFIL USER
     // PROFIL USER
