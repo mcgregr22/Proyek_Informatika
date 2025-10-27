@@ -1,152 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library-Hub</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Poppins', sans-serif;
-        }
-        .navbar-brand span {
-            color: #0d6efd;
-            font-weight: 700;
-        }
-        .banner {
-            background: linear-gradient(90deg, #001f54, #003f88);
-            color: white;
-            border-radius: 12px;
-            padding: 40px 20px;
-            margin-top: 30px;
-        }
-        .banner h2 {
-            font-weight: 700;
-        }
-        .book-card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease;
-        }
-        .book-card:hover {
-            transform: translateY(-5px);
-        }
-        .footer {
-            margin-top: 60px;
-            text-align: center;
-            padding: 20px 0;
-            border-top: 1px solid #ddd;
-            color: #777;
-        }
-        .navbar-icon {
-            font-size: 1.2rem;
-            margin-left: 15px;
-            color: #333;
-            transition: color 0.2s;
-        }
-        .navbar-icon:hover {
-            color: #0d6efd;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Swaps - Library-Hub</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* === NAVBAR === */
+    .navbar {
+      background-color: #fff;
+      border-bottom: 1px solid #e6e6e6;
+      padding: 0.8rem 2rem;
+    }
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+    .navbar-brand span:first-child {
+      color: #000;
+    }
+    .navbar-brand span:last-child {
+      color: #2b52ff;
+      font-style: italic;
+    }
+    .form-control-search {
+      background-color: #f1f2f4;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      width: 250px;
+    }
+    .form-control-search:focus {
+      box-shadow: none;
+      background-color: #f1f2f4;
+    }
+    .nav-link {
+      color: #444 !important;
+      font-weight: 500;
+      margin-right: 12px;
+    }
+    .nav-link:hover {
+      color: #000 !important;
+    }
+
+    /* === PAGE BODY === */
+    .tab-button {
+      border: none;
+      background-color: transparent;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+    }
+    .tab-button.active {
+      border-bottom: 3px solid #000;
+    }
+    .empty-box {
+      border: 1px dashed #ccc;
+      border-radius: 10px;
+      padding: 60px 20px;
+      text-align: center;
+      color: #6c757d;
+      background: #fff;
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="homepage">
-                Library-<span>Hub</span>
-            </a>
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+  <div class="container">
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold" href="/homepage" style="font-size: 1.25rem;">
+      Library-<span style="color: #2b52ff;">Hub</span>
+    </a>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Dropdown Kategori -->
-                <ul class="navbar-nav ms-4">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-semibold" href="#" role="button" data-bs-toggle="dropdown">
-                            Kategori
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Humor & Comedy</a></li>
-                            <li><a class="dropdown-item" href="#">History</a></li>
-                            <li><a class="dropdown-item" href="#">Fiction</a></li>
-                            <li><a class="dropdown-item" href="#">Romance</a></li>
-                        </ul>
-                    </li>
-                </ul>
+    <!-- Toggler (mobile) -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-                <!-- Search -->
-                <form class="d-flex ms-auto me-3 search-bar" role="search">
-                    <input class="form-control" type="search" placeholder="Cari Buku">
+    <!-- Navbar Content -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+
+      <!-- Dropdown Kategori -->
+      <ul class="navbar-nav ms-4">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle fw-semibold text-secondary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Kategori
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Fiksi</a></li>
+            <li><a class="dropdown-item" href="#">Non-Fiksi</a></li>
+            <li><a class="dropdown-item" href="#">Edukasi</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <!-- Search -->
+      <!-- Search ke controller -->
+      <form class="d-flex ms-auto me-3" role="search" action="{{ route('swapbook') }}" method="GET">
+                    <input class="form-control" type="search" name="q" value="" placeholder="Cari Buku">
                 </form>
+      </form>
 
-                <!-- Menu kanan -->
-                <ul class="navbar-nav align-items-center">
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="swapbook">Swapbook</a></li>
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="mycollection">My Collection</a></li>
-                </ul>
+      <!-- Menu Kanan -->
+      <ul class="navbar-nav align-items-center">
+        <li class="nav-item"><a class="nav-link fw-semibold text-secondary" href="/swapbook">Swapbook</a></li>
+        <li class="nav-item"><a class="nav-link fw-semibold text-secondary" href="/mycollection">My Collection</a></li>
+      </ul>
 
-                <!-- 3 Icon Kanan -->
-                <div class="d-flex align-items-center ms-3">
-                    <!-- tombol keranjang -->
-                    <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
-                    <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
-                    <a href="/profil_user" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
-                </div>
-            </div>
-        </div>
-    </nav>
+      <!-- Icons -->
+      <div class="d-flex align-items-center ms-3">
+        <a href="/keranjang" class="text-dark mx-2"><i class="bi bi-cart3 fs-5"></i></a>
+        <a href="/forumdiscuss" class="text-dark mx-2"><i class="bi bi-chat-dots fs-5"></i></a>
+        <a href="/profil_user" class="text-dark mx-2"><i class="bi bi-person-circle fs-5"></i></a>
+      </div>
 
-    <!-- Main Content -->
-    <div class="container my-5">
-        <div class="text-center mb-4">
-            <h3 class="fw-bold text-primary">Swapbook Collection</h3>
-            <p class="text-muted">Find books from other users and request a swap!</p>
-        </div>
-
-        <!-- Book Grid -->
-        <div class="row g-4">
-            <?php
-            // Contoh data dummy buku
-            $books = [
-                ["title" => "Book Title", "author" => "Author Name", "img" => "https://picsum.photos/200/300?random=1"],
-                ["title" => "The Silent Library", "author" => "John Doe", "img" => "https://picsum.photos/200/300?random=2"],
-                ["title" => "History of Time", "author" => "Stephen Hawking", "img" => "https://picsum.photos/200/300?random=3"],
-                ["title" => "Ocean Tales", "author" => "Jane Austen", "img" => "https://picsum.photos/200/300?random=4"],
-                ["title" => "Modern Myths", "author" => "Neil Gaiman", "img" => "https://picsum.photos/200/300?random=5"],
-                ["title" => "Romance in Paris", "author" => "Emma Love", "img" => "https://picsum.photos/200/300?random=6"],
-                ["title" => "The Lost Library", "author" => "Arthur Lee", "img" => "https://picsum.photos/200/300?random=7"],
-                ["title" => "Mind of a Genius", "author" => "Isaac Newton", "img" => "https://picsum.photos/200/300?random=8"],
-            ];
-
-            foreach ($books as $book) {
-                echo '
-                <div class="col-md-3 col-sm-6">
-                    <div class="card book-card">
-                        <img src="'.$book['img'].'" class="book-img" alt="Book Cover">
-                        <div class="card-body text-center">
-                            <h6 class="fw-semibold">'.$book['title'].'</h6>
-                            <p class="text-muted mb-1">'.$book['author'].'</p>
-                            <button class="btn btn-swap btn-sm">Request Swap</button>
-                        </div>
-                    </div>
-                </div>';
-            }
-            ?>
-        </div>
     </div>
+  </div>
+</nav>
 
-    <!-- Footer -->
-    <div class="footer">
-        <p>© 2025 Library-Hub</p>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<!-- ============ PAGE CONTENT ============ -->
+<div class="container mt-5">
+  <h2 class="fw-bold">Book Swaps</h2>
+  <p class="text-muted">Manage your book swap requests</p>
+
+  <!-- Tabs -->
+  <div class="d-flex mb-4">
+    <button id="incomingBtn" class="tab-button active">Incoming Requests</button>
+    <button id="outgoingBtn" class="tab-button">Outgoing Requests</button>
+  </div>
+
+  <!-- Content box -->
+  <div id="incoming" class="empty-box">
+    <i class="bi bi-arrow-repeat display-4"></i>
+    <h5 class="mt-3 fw-semibold">No incoming swap requests</h5>
+    <p>When someone requests to swap with one of your books, it will appear here.</p>
+    <a href="/homepage" class="btn btn-dark px-4">Browse Books</a>
+  </div>
+
+  <div id="outgoing" class="empty-box d-none">
+    <i class="bi bi-book display-4"></i>
+    <h5 class="mt-3 fw-semibold">No outgoing swap requests</h5>
+    <p>You haven’t requested any swaps yet. Browse and request a book swap.</p>
+    <a href="/homepage" class="btn btn-dark px-4">Browse Books</a>
+  </div>
+</div>
+
+<!-- Script -->
+<script>
+  const incomingBtn = document.getElementById('incomingBtn');
+  const outgoingBtn = document.getElementById('outgoingBtn');
+  const incoming = document.getElementById('incoming');
+  const outgoing = document.getElementById('outgoing');
+
+  incomingBtn.onclick = () => {
+    incomingBtn.classList.add('active');
+    outgoingBtn.classList.remove('active');
+    incoming.classList.remove('d-none');
+    outgoing.classList.add('d-none');
+  };
+
+  outgoingBtn.onclick = () => {
+    outgoingBtn.classList.add('active');
+    incomingBtn.classList.remove('active');
+    outgoing.classList.remove('d-none');
+    incoming.classList.add('d-none');
+  };
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
