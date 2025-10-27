@@ -15,14 +15,21 @@
             color: #0d6efd;
             font-weight: 700;
         }
+        .navbar {
+            padding: 10px 0;
+        }
         .navbar-icon {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin-left: 15px;
             color: #333;
             transition: color 0.2s;
         }
         .navbar-icon:hover {
             color: #0d6efd;
+        }
+        .search-bar {
+            width: 45%;
+            margin: 0 auto; /* agar di tengah */
         }
         .profile-card {
             background-color: #fff;
@@ -66,7 +73,6 @@
         .btn-save:hover {
             background-color: #004aad;
         }
-        /* Tombol keluar di kanan atas kartu */
         .btn-logout {
             position: absolute;
             top: 20px;
@@ -90,6 +96,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
         <div class="container">
+            <!-- Logo kiri -->
             <a class="navbar-brand fw-bold" href="/homepage">
                 Library-<span>Hub</span>
             </a>
@@ -98,38 +105,16 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Dropdown Kategori -->
-                <ul class="navbar-nav ms-4">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-semibold" href="#" role="button" data-bs-toggle="dropdown">
-                            Kategori
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Humor & Comedy</a></li>
-                            <li><a class="dropdown-item" href="#">History</a></li>
-                            <li><a class="dropdown-item" href="#">Fiction</a></li>
-                            <li><a class="dropdown-item" href="#">Romance</a></li>
-                        </ul>
-                    </li>
-                </ul>
-
-                <!-- Search -->
-                <form class="d-flex ms-auto me-3 search-bar" role="search">
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                <!-- Search di tengah -->
+                <form class="d-flex search-bar" role="search">
                     <input class="form-control" type="search" placeholder="Cari Buku">
                 </form>
 
-                <!-- Menu kanan -->
-                <ul class="navbar-nav align-items-center">
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="/swapbook">Swapbook</a></li>
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="/mycollection">My Collection</a></li>
-                </ul>
-
-                <!-- 3 Icon Kanan -->
-                <div class="d-flex align-items-center ms-3">
-                    <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
+                <!-- Icon kanan -->
+                <div class="d-flex align-items-center">
                     <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
-                    <a href="/profileadmin" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
+                    <a href="/profil_user" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
                 </div>
             </div>
         </div>
@@ -138,12 +123,16 @@
     <!-- Konten Profil -->
     <div class="container">
         <div class="profile-card mt-5">
-            <!-- Tombol keluar -->
             <button class="btn-logout" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Keluar</button>
 
             <div class="profile-header">
                 <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile Picture">
-                <h4>{{ $user['nama'] }}</h4>
+                <h4>{{ $user->name }}</h4>
+
+                <input type="text" class="form-control" value="{{ $user->name }}" readonly>
+                <input type="email" class="form-control" value="{{ $user->email }}" readonly>
+                <input type="text" class="form-control" value="{{ $user->telepon ?? '-' }}" readonly>
+                <input type="text" class="form-control" value="{{ $user->role ?? 'User' }}" readonly>
             </div>
 
             <div class="form-section">
@@ -151,22 +140,22 @@
                 <form>
                     <div class="mb-3">
                         <label class="form-label">Nama Lengkap</label>
-                        <input type="text" class="form-control" value="{{ $user['nama'] }}" readonly>
+                        <input type="text" class="form-control" value="{{ $user->name }}" readonly>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" value="{{ $user['email'] }}" readonly>
+                        <input type="email" class="form-control" value="{{ $user->email }}" readonly>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Nomor Telepon</label>
-                        <input type="text" class="form-control" value="{{ $user['telepon'] }}" readonly>
+                        <input type="text" class="form-control" value="{{ $user->telepon ?? '-' }}" readonly>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Role</label>
-                        <input type="text" class="form-control" value="{{ $user['role'] }}" readonly>
+                        <input type="text" class="form-control" value="{{ $user->role ?? 'User' }}" readonly>
                     </div>
 
                     <hr>
@@ -175,12 +164,12 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Email</label>
-                            <input type="email" class="form-control" value="{{ $user['email'] }}" readonly>
+                            <input type="email" class="form-control" value="{{ $user->email }}" readonly>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Password</label>
                             <div class="input-group">
-                                <input id="passwordInput" type="password" class="form-control" value="{{ $user['password'] }}" readonly>
+                                <input id="passwordInput" type="password" class="form-control" value="{{ $user->password }}" readonly>
                                 <button type="button" class="btn btn-outline-secondary" id="togglePassword">
                                     <i id="toggleIcon" class="bi bi-eye"></i>
                                 </button>
@@ -198,32 +187,23 @@
 
     <!-- Script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
-        // Toggle tampil/sembunyi password
         document.addEventListener('DOMContentLoaded', function () {
             const pwd = document.getElementById('passwordInput');
             const btn = document.getElementById('togglePassword');
             const icon = document.getElementById('toggleIcon');
-
             btn.addEventListener('click', function () {
                 if (pwd.type === 'password') {
                     pwd.type = 'text';
-                    icon.classList.remove('bi-eye');
-                    icon.classList.add('bi-eye-slash');
+                    icon.classList.replace('bi-eye', 'bi-eye-slash');
                 } else {
                     pwd.type = 'password';
-                    icon.classList.remove('bi-eye-slash');
-                    icon.classList.add('bi-eye');
+                    icon.classList.replace('bi-eye-slash', 'bi-eye');
                 }
             });
-
-            // Tombol Logout dengan konfirmasi
             const logoutBtn = document.getElementById('logoutBtn');
             logoutBtn.addEventListener('click', function () {
-                const confirmLogout = confirm('Apakah Anda yakin ingin keluar dari akun ini?');
-                if (confirmLogout) {
-                    // Arahkan ke halaman logout (ganti URL sesuai backend)
+                if (confirm('Apakah Anda yakin ingin keluar dari akun ini?')) {
                     window.location.href = "/login";
                 }
             });

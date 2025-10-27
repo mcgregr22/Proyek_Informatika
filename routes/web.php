@@ -41,6 +41,11 @@ Route::middleware('auth')->group(function () {
     // PROFIL ADMIN
     Route::get('/profil_admin', [ProfilAdminController::class, 'index'])->name('profil_admin');
 
+    // PROFIL USER
+    // PROFIL USER
+    Route::get('/profil_user', [App\Http\Controllers\ProfilUserController::class, 'index'])->name('profil_user');
+
+
     // HALAMAN LAIN
     Route::get('/swapbook', fn() => view('swapbook'));
     Route::get('/keranjang', fn() => view('keranjang'));
