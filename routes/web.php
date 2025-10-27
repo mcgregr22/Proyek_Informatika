@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\HomePageAdminController;
 use App\Http\Controllers\KeranjangController;
+use App\Http\Controllers\ProfilUserController;
 
 // ----------------------
 // HALAMAN AWAL (PUBLIC)
