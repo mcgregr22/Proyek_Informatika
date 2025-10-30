@@ -199,7 +199,9 @@
 
     <!-- + Pengelolaan -->
     <div class="text-end mb-3">
-      <button class="btn-manage"><i class="bi bi-plus-lg"></i> Pengelolaan</button>
+      <a href="/pengelolaan" class="flex-end mb-3">
+      <button class="btn-manage"> Pengelolaan</button>
+      </a>
     </div>
 
     <!-- Humor & Comedy -->
