@@ -17,7 +17,7 @@
 
   <div id="outgoing" class="rounded-2xl border border-zinc-200 bg-white shadow-sm p-10 text-center text-zinc-500 hidden">
     <h5 class="text-lg font-semibold">Tidak ada Permintaan tukar Buku</h5>
-    <p class="text-sm">Anda belum meminta tukar buku apa pun. Caro dan minta tukar buku.</p>
+    <p class="text-sm">Anda belum meminta tukar buku apa pun. Cari dan minta tukar buku.</p>
     <a href="/homepage" class="btn btn-dark mt-3 inline-block px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Cari Buku</a>
   </div>
 
