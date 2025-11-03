@@ -70,15 +70,14 @@ Route::middleware('auth')->group(function () {
     Route::view('/forumdiscuss', 'forumdiscuss')->name('forumdiscuss');
 
     // =========================
-    // PENGELOLAAN & SWAPBOOK
+    // PENGELOLAAN 
     // =========================
     // Layout utama pengelolaan (sidebar dan header)
     Route::view('/pengelolaan', 'pengelolaan')->name('pengelolaan');
 
-    // Halaman Book Swap di dalam pengelolaan
-Route::view('/pengelolaan', 'pengelolaan')->name('pengelolaan');
-Route::view('/pengelolaan/swapbook', 'swapbook')->name('pengelolaan.swapbook');
-
+    // fitur yang ada di pengelolaan
+    Route::view('/pengelolaan/swapbook', 'swapbook')->name('pengelolaan.swapbook');
+    Route::view('/pengelolaan/keranjang', 'keranjang')->name('pengelolaan.keranjang');
 
     // =========================
     // LOGOUT
