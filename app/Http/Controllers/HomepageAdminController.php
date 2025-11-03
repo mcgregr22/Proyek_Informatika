@@ -45,9 +45,8 @@ class HomePageAdminController extends Controller
             'harga' => $request->harga,
         ]);
 
-        return redirect()->route('homepage_admin')->with('success', '📚 Buku berhasil ditambahkan!');
-    }
-
+       return redirect()->route('pengelolaan')->with('success', '📚 Buku berhasil ditambahkan!');
+}
     // ❌ Menghapus buku berdasarkan ID
     public function destroy($id)
     {

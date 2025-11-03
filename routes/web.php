@@ -8,6 +8,7 @@ use App\Http\Controllers\HomePageAdminController;
 use App\Http\Controllers\ProfilAdminController;
 use App\Http\Controllers\ProfilUserController;
 
+
 // ----------------------
 // HALAMAN AWAL
 // ----------------------
@@ -64,6 +65,13 @@ Route::middleware('auth')->group(function () {
     // DETAIL BUKU
     // ----------------------
     Route::get('/buku/{id}', [HomepageController::class, 'show'])->name('buku.show');
+
+
+       // Halaman Book Swap di dalam pengelolaan
+    Route::view('/pengelolaan', 'pengelolaan')->name('pengelolaan');
+    Route::view('/pengelolaan/swapbook', 'swapbook')->name('pengelolaan.swapbook');
+    Route::view('/pengelolaan/tambahbuku', 'tambahbuku')->name('pengelolaan.tambahbuku');
+    Route::view('/pengelolaan/keranjang', 'keranjang')->name('pengelolaan.keranjang');
 
     // ----------------------
     // LOGOUT
