@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//HOME SEBELUM LOGIN ATAU REGISTER
+Route::get('/home', function () {
+    return view('home');
+})->name('home');
 // ----------------------
 // TAMU (BELUM LOGIN)
 // ----------------------
