@@ -192,7 +192,13 @@
   <div class="container mt-4">
     <!-- Pengelolaan -->
     <div class="text-end mb-3">
+<<<<<<< HEAD
       <a href="{{ route('pengelolaan') }}" class="btn-manage"><i class="bi bi-plus-lg"></i> Pengelolaan</a>
+=======
+      <a href="/pengelolaan" class="flex-end mb-3">
+      <button class="btn-manage"> Pengelolaan</button>
+      </a>
+>>>>>>> Joe
     </div>
 
     <!-- Humor & Comedy -->
@@ -300,5 +306,10 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<<<<<<< HEAD
 </body>
 </html>
+=======
+  </body>
+</html>
+>>>>>>> Joe

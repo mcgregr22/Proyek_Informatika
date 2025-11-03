@@ -93,18 +93,7 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- Form kategori dan cari buku -->
-      <form class="search-form mx-auto" role="search" action="{{ route('homepage') }}" method="GET">
-        <select name="kategori">
-          <option value="">Kategori</option>
-          <option value="humor">Humor & Comedy</option>
-          <option value="history">History</option>
-          <option value="romance">Romance</option>
-        </select>
-        <input class="form-control" type="search" name="q" value="{{ $q ?? '' }}" placeholder="Cari Buku...">
-      </form>
+    
 
       <!-- Ikon kanan -->
       <div class="d-flex align-items-center ms-3">

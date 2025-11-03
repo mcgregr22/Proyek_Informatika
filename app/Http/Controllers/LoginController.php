@@ -7,11 +7,13 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    // Tampilkan halaman login
     public function show()
     {
         return view('login');
     }
 
+    // Proses autentikasi
     public function authenticate(Request $request)
     {
         $credentials = $request->validate([
@@ -19,6 +21,7 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
+        // Coba login
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
@@ -32,11 +35,13 @@ class LoginController extends Controller
             return redirect()->route('homepage');
         }
 
+        // Jika gagal login
         return back()->withErrors([
             'email' => 'Email atau kata sandi salah!',
-        ]);
+        ])->onlyInput('email');
     }
 
+    // Proses logout
     public function logout(Request $request)
     {
         Auth::logout();

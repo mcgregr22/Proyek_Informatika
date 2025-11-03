@@ -6,7 +6,6 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\HomePageAdminController;
 use App\Http\Controllers\KeranjangController;
-use App\Http\Controllers\ProfilAdminController;
 use App\Http\Controllers\ProfilUserController;
 
 // ----------------------
@@ -73,11 +72,13 @@ Route::middleware('auth')->group(function () {
   Route::get('/pengelolaan', fn() => view('pengelolaan'))->name('pengelolaan');
   
     // Halaman Book Swap di dalam pengelolaan
-   Route::view('/pengelolaan', 'pengelolaan')->name('pengelolaan');
+Route::view('/pengelolaan', 'pengelolaan')->name('pengelolaan');
 Route::view('/pengelolaan/swapbook', 'swapbook')->name('pengelolaan.swapbook');
+
 
     // =========================
     // LOGOUT
     // =========================
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
+

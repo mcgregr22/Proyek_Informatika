@@ -92,8 +92,8 @@
             </form>
 
             <ul class="navbar-nav align-items-center">
-                <li class="nav-item"><a class="nav-link fw-semibold" href="/swapbook">Swapbook</a></li>
-                <li class="nav-item"><a class="nav-link fw-semibold" href="/mycollection">My Collection</a></li>
+                <li class="nav-item"><a class="nav-link fw-semibold" href="/swapbook">Tukar Buku</a></li>
+                <li class="nav-item"><a class="nav-link fw-semibold" href="/mycollection">Koleksi Saya</a></li>
             </ul>
 
             <div class="d-flex align-items-center ms-3">

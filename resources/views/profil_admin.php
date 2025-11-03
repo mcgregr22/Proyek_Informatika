@@ -69,7 +69,11 @@
 </head>
 <body>
 
+<<<<<<< HEAD
+  <!-- Navbar -->
+=======
 <!-- Navbar -->
+>>>>>>> 50cb22ed0ce8d30be1974ec7aa8867a37e645c50
 <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
   <div class="container">
     <a class="navbar-brand fw-bold" href="{{ route('homepage_admin') }}">
@@ -88,6 +92,14 @@
       <li class="nav-item"><a class="nav-link fw-semibold" href="/manajemen_admin">Akun & Role</a></li>
     </ul>
 
+<<<<<<< HEAD
+    <div class="d-flex align-items-center ms-3">
+      <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
+      <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
+      <a href="/profil_admin" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
+    </div>
+  </div>
+=======
    <div class="d-flex align-items-center ms-3">
    <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
    <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
@@ -95,6 +107,7 @@
       <i class="bi bi-person-circle"></i>
    </a>
 </div>
+>>>>>>> 50cb22ed0ce8d30be1974ec7aa8867a37e645c50
 </nav>
 
 <!-- Konten Profil -->
