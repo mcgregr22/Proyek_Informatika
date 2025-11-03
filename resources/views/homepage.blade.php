@@ -206,7 +206,7 @@
 
     <!-- Humor & Comedy -->
     <div class="section-header">
-      <h5 class="fw-semibold">Humor & Comedy</h5>
+      <h5 class="fw-semibold">Humor & Komedi</h5>
     </div>
 
     <div class="row g-3">
@@ -234,7 +234,7 @@
 
     <!-- History -->
     <div class="section-header mt-5">
-      <h5 class="fw-semibold">History</h5>
+      <h5 class="fw-semibold">Sejarah</h5>
     </div>
 
     <div class="row g-3">
@@ -262,7 +262,7 @@
 
     <!-- Recommendations -->
     <div class="section-header mt-5">
-      <h5 class="fw-semibold">Recommendations</h5>
+      <h5 class="fw-semibold">Rekomendasi</h5>
       <a href="#" class="text-decoration-none small text-primary">Lihat Selengkapnya...</a>
     </div>
 
@@ -300,11 +300,11 @@
             <form action="{{ route('logout') }}" method="POST" class="m-0">
                 @csrf
                 <button type="submit" class="btn btn-logout-pro">
-                    <i class="bi bi-box-arrow-right"></i> Logout
+                    <i class="bi bi-box-arrow-right"></i>Keluar
                 </button>
             </form>
         </div>
-    </div>
+      </div>
 
   <!-- Footer -->
   <div class="footer">

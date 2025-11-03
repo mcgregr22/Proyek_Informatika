@@ -64,22 +64,6 @@
     .btn-save:hover {
       background-color: #004aad;
     }
-    .btn-logout {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      border: none;
-      background-color: #f8f9fa;
-      color: #dc3545;
-      font-weight: 600;
-      padding: 8px 16px;
-      border-radius: 6px;
-      transition: all 0.3s;
-    }
-    .btn-logout:hover {
-      background-color: #dc3545;
-      color: white;
-    }
   </style>
 </head>
 <body>
@@ -107,7 +91,6 @@
 <!-- Konten Profil -->
 <div class="container">
   <div class="profile-card mt-5">
-    <button class="btn-logout" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Keluar</button>
 
     <div class="profile-header">
       <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile Picture">
@@ -139,7 +122,7 @@
 
         <hr>
 
-        <h5>Account</h5>
+        <h5>Akun</h5>
         <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label">Email</label>
@@ -163,31 +146,6 @@
     </div>
   </div>
 </div>
-
-<!-- Script -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const pwd = document.getElementById('passwordInput');
-    const btn = document.getElementById('togglePassword');
-    const icon = document.getElementById('toggleIcon');
-    btn.addEventListener('click', function () {
-      if (pwd.type === 'password') {
-        pwd.type = 'text';
-        icon.classList.replace('bi-eye', 'bi-eye-slash');
-      } else {
-        pwd.type = 'password';
-        icon.classList.replace('bi-eye-slash', 'bi-eye');
-      }
-    });
-    const logoutBtn = document.getElementById('logoutBtn');
-    logoutBtn.addEventListener('click', function () {
-      if (confirm('Apakah Anda yakin ingin keluar dari akun ini?')) {
-        window.location.href = "/login";
-      }
-    });
-  });
-</script>
 
 </body>
 </html>
