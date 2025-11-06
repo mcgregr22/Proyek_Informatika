@@ -26,10 +26,10 @@ return new class extends Migration
         });
 
         // lalu tambahkan FK setelah tabel terbentuk.
-        DB::statement('ALTER TABLE `swap_requests` MODIFY `book_id` INT NOT NULL');
-        DB::statement('ALTER TABLE `swap_requests`
-            ADD CONSTRAINT `swap_requests_book_id_foreign`
-            FOREIGN KEY (`book_id`) REFERENCES `_buku`(`id_buku`)
+        DB::statement('ALTER TABLE swap_requests MODIFY book_id INT NOT NULL');
+        DB::statement('ALTER TABLE swap_requests
+            ADD CONSTRAINT swap_requests_book_id_foreign
+            FOREIGN KEY (book_id) REFERENCES _buku(id_buku)
             ON DELETE CASCADE');
     }
 
