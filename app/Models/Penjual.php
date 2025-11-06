@@ -20,3 +20,4 @@ class Penjual extends Model
         'KTP',
     ];
 }
+    
