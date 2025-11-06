@@ -153,7 +153,6 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
     <div class="container">
-      <!-- Logo kiri -->
       <a class="navbar-brand fw-bold" href="/homepage">Library-<span>Hub</span></a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -161,7 +160,6 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
-        <!-- Kategori + Cari Buku di tengah -->
         <form class="search-form mx-auto" role="search" action="{{ route('homepage') }}" method="GET">
           <select name="kategori">
             <option value="">Kategori</option>
@@ -172,13 +170,11 @@
           <input class="form-control" type="search" name="q" value="{{ $q ?? '' }}" placeholder="Cari Buku...">
         </form>
 
-        <!-- Ikon kanan -->
         <div class="d-flex align-items-center ms-3">
           <a href="/forumdiscuss" class="text-dark me-3"><i class="bi bi-chat-dots fs-5"></i></a>
-                <a href="{{ route('profil_user') }}" class="text-dark">
-        <i class="bi bi-person-circle fs-5"></i>
-      </a>
-
+          <a href="{{ route('profil_user') }}" class="text-dark">
+            <i class="bi bi-person-circle fs-5"></i>
+          </a>
         </div>
       </div>
     </div>
@@ -200,7 +196,7 @@
     <!-- + Pengelolaan -->
     <div class="text-end mb-3">
       <a href="/pengelolaan" class="flex-end mb-3">
-      <button class="btn-manage"> Pengelolaan</button>
+        <button class="btn-manage"> Pengelolaan</button>
       </a>
     </div>
 
@@ -216,7 +212,7 @@
             <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
               <div class="card-body text-center">
                 @if($b->cover_image)
-                  <img src="{{ asset($b->cover_image) }}" alt="cover" class="book-thumb mb-2">
+                  <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
                 @else
                   <div class="py-5 bg-light rounded mb-2">📘</div>
                 @endif
@@ -244,7 +240,7 @@
             <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
               <div class="card-body text-center">
                 @if($b->cover_image)
-                  <img src="{{ asset($b->cover_image) }}" alt="cover" class="book-thumb mb-2">
+                  <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
                 @else
                   <div class="py-5 bg-light rounded mb-2">📘</div>
                 @endif
@@ -273,7 +269,7 @@
             <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
               <div class="card-body text-center">
                 @if($b->cover_image)
-                  <img src="{{ asset($b->cover_image) }}" alt="cover" class="book-thumb mb-2">
+                  <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
                 @else
                   <div class="py-5 bg-light rounded mb-2">📕</div>
                 @endif
@@ -290,21 +286,21 @@
     </div>
   </div>
 
-<!-- Logout -->
-    <div class="container logout-cta">
-        <div class="logout-card p-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
-            <div>
-                <div class="fw-semibold">Selesai berkunjung?</div>
-                <div class="logout-subtext">Klik tombol di kanan untuk keluar dengan aman.</div>
-            </div>
-            <form action="{{ route('logout') }}" method="POST" class="m-0">
-                @csrf
-                <button type="submit" class="btn btn-logout-pro">
-                    <i class="bi bi-box-arrow-right"></i>Keluar
-                </button>
-            </form>
-        </div>
+  <!-- Logout -->
+  <div class="container logout-cta">
+    <div class="logout-card p-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+      <div>
+        <div class="fw-semibold">Selesai berkunjung?</div>
+        <div class="logout-subtext">Klik tombol di kanan untuk keluar dengan aman.</div>
       </div>
+      <form action="{{ route('logout') }}" method="POST" class="m-0">
+        @csrf
+        <button type="submit" class="btn btn-logout-pro">
+          <i class="bi bi-box-arrow-right"></i>Keluar
+        </button>
+      </form>
+    </div>
+  </div>
 
   <!-- Footer -->
   <div class="footer">
@@ -312,5 +308,5 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+</body>
 </html>
