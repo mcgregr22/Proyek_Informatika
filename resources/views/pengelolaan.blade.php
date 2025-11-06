@@ -69,7 +69,7 @@
         </a>
         
 
-        <a href="#" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
+        <a href="/pengelolaan/tambahbuku" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
           <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6c-1.5-1-3.5-2-6-2-1.657 0-3 .895-3 2v12c0-1.105 1.343-2 3-2 2.5 0 4.5 1 6 2m0-12c1.5-1 3.5-2 6-2 1.657 0 3 .895 3 2v12c0-1.105-1.343-2-3-2-2.5 0-4.5 1-6 2M12 10h6M15 7v6"/>
@@ -78,7 +78,7 @@
           <span class="font-semibold">Tambah Buku</span>
         </a>
 
-        <a href="pengelolaan/keranjang" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
+        <a href="/pengelolaan/keranjang" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
           <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h3.586a2 2 0 011.414.586l6.828 6.828a2 2 0 010 2.828l-2.586 2.586a2 2 0 01-2.828 0L6.586 13A2 2 0 016 11.586V8a1 1 0 011-1z"/><circle cx="9" cy="9" r="1.25"/>
@@ -98,7 +98,7 @@
           <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Tukar Buku</span>
         </a>
 
-        <a href="#" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
+        <a href="/pengelolaan/request_swap" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
           <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M20 12v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8m16 0H4m16 0h-5a3 3 0 100-6c-2 0-3 2-3 3 0-1-1-3-3-3a3 3 0 100 6H4"/>

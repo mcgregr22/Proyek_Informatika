@@ -52,8 +52,8 @@
 
     {{-- SIDEBAR --}}
     <aside class="w-72 bg-white border-r border-zinc-200 shadow-sm flex flex-col"
-           x-show="openSidebar"
-           x-transition.duration.200ms>
+        x-show="openSidebar"
+        x-transition.duration.200ms>
       <nav class="flex-1 px-4 py-5 space-y-1 text-[1.05rem]">
 
         {{-- Koleksi Buku --}}
@@ -99,7 +99,7 @@
         </a>
 
         {{-- Book Requests --}}
-        <a href="/pengelolaan/keranjang" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
+        <a href="/pengelolaan/request_swap" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
           <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M20 12v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8m16 0H4m16 0h-5a3 3 0 100-6c-2 0-3 2-3 3 0-1-1-3-3-3a3 3 0 100 6H4"/>
