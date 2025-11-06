@@ -21,6 +21,7 @@
   <header class="sticky top-0 z-40 bg-white border-b border-zinc-200">
     <div class="flex items-center justify-between px-6 h-16">
       <div class="flex items-center gap-3">
+        <a href="/homepage" class="flex items-center gap-3">
         <span class="text-2xl font-extrabold tracking-tight">
           <span class="text-indigo-600">Library-</span>
           <span class="italic text-zinc-900">Hub</span>
