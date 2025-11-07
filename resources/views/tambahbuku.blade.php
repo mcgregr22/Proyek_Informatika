@@ -13,11 +13,12 @@
     </div>
   @endif
 
-  <form action="{{ route('admin.books.store') }}" method="POST" enctype="multipart/form-data">
+  <form action="{{ route('homepage_admin.store') }}" method="POST" enctype="multipart/form-data">
+
     @csrf
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {{-- ID Buku (opsional – hapus kalau PK auto-increment) --}}
+      {{-- ID Buku (opsional) --}}
       <div>
         <label class="block text-sm font-medium mb-1">ID Buku (opsional)</label>
         <input type="text" name="id_buku"
@@ -26,6 +27,7 @@
         @error('id_buku') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
+      {{-- ID Kategori --}}
       <div>
         <label class="block text-sm font-medium mb-1">ID Kategori</label>
         <input type="number" name="id_kategori"
@@ -34,6 +36,7 @@
         @error('id_kategori') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
+      {{-- Judul --}}
       <div>
         <label class="block text-sm font-medium mb-1">Judul Buku</label>
         <input type="text" name="title"
@@ -42,6 +45,7 @@
         @error('title') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
+      {{-- Penulis --}}
       <div>
         <label class="block text-sm font-medium mb-1">Penulis</label>
         <input type="text" name="author"
@@ -50,7 +54,8 @@
         @error('author') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
-      <div>
+      {{-- ISBN --}}
+      <div class="md:col-span-2">
         <label class="block text-sm font-medium mb-1">ISBN</label>
         <input type="text" name="isbn"
                class="w-full border rounded-lg px-3 py-2 @error('isbn') border-red-400 @enderror"
@@ -58,14 +63,37 @@
         @error('isbn') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
-      <div>
+      {{-- 🔹 Listing Type (checkbox, bisa pilih lebih dari 1) --}}
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium mb-1">Listing Type</label>
+        <div class="flex gap-4 mt-1">
+          <label class="flex items-center gap-2 border rounded-lg px-4 py-2 cursor-pointer hover:bg-zinc-50">
+            <input type="checkbox" name="listing_type[]" value="exchange"
+                   class="text-indigo-600 focus:ring-indigo-500"
+                   {{ (is_array(old('listing_type')) && in_array('exchange', old('listing_type'))) ? 'checked' : '' }}>
+            <span class="text-sm font-medium text-gray-700">Exchange</span>
+          </label>
+          <label class="flex items-center gap-2 border rounded-lg px-4 py-2 cursor-pointer hover:bg-zinc-50">
+            <input type="checkbox" name="listing_type[]" value="sell"
+                   class="text-indigo-600 focus:ring-indigo-500"
+                   {{ (is_array(old('listing_type')) && in_array('sell', old('listing_type'))) ? 'checked' : '' }}>
+            <span class="text-sm font-medium text-gray-700">Sell</span>
+          </label>
+        </div>
+        @error('listing_type') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+      </div>
+
+      {{-- 🔹 Harga (selalu muncul) --}}
+      <div class="md:col-span-2" id="harga-wrapper">
         <label class="block text-sm font-medium mb-1">Harga</label>
         <input type="number" name="harga" min="0" step="1"
                class="w-full border rounded-lg px-3 py-2 @error('harga') border-red-400 @enderror"
-               placeholder="Rp. 0" value="{{ old('harga') }}" required>
+               placeholder="Masukkan harga buku (Rp)" value="{{ old('harga') }}">
+        <p class="text-gray-500 text-xs mt-1">Isi harga meskipun tipe Exchange agar buku bisa dijual juga.</p>
         @error('harga') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
+      {{-- Deskripsi --}}
       <div class="md:col-span-2">
         <label class="block text-sm font-medium mb-1">Deskripsi</label>
         <textarea name="deskripsi" rows="4"
@@ -74,6 +102,7 @@
         @error('deskripsi') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
+      {{-- Cover Buku --}}
       <div class="md:col-span-2">
         <label class="block text-sm font-medium mb-1">Cover Buku (opsional)</label>
         <input type="file" name="cover_image"

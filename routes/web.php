@@ -15,6 +15,9 @@ Route::get('/', fn () => view('welcome'));
 
 Route::get('/home', fn () => view('home'))->name('home');
 
+
+
+
 // ----------------------
 // TAMU (BELUM LOGIN)
 // ----------------------
@@ -126,3 +129,9 @@ Route::middleware(['auth'])->prefix('forumdiscuss')->group(function () {
     // URI: /forumdiscuss/{id_post}/comment
     Route::post('/{id_post}/comment', [ForumController::class, 'storeComment'])->name('forum.comment');
 });
+// =========================
+// PURCHASE DETAIL ROUTES
+use App\Http\Controllers\PurchaseController;
+
+Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase.index');
+Route::get('/purchase/{id}', [PurchaseController::class, 'show'])->name('purchase.detail');

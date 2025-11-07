@@ -87,16 +87,6 @@
               <input type="number" min="1" value="1" class="form-control text-center" id="qty">
               <button class="btn btn-outline-secondary" type="button" id="plus">+</button>
             </div>
-
-            {{-- 🛒 ICON TAMBAH KE KERANJANG (BARU) --}}
-            <form id="addCartInline" action="{{ route('cart.add') }}" method="POST" class="ms-2">
-              @csrf
-              <input type="hidden" name="book_id" value="{{ $book->id_buku }}">
-              <input type="hidden" name="qty" id="qtyInline" value="1">
-              <button type="submit" class="btn btn-outline-success" title="Tambah ke Keranjang">
-                <i class="bi bi-cart-plus"></i>
-              </button>
-            </form>
           </div>
 
           <div class="d-flex flex-wrap gap-2">
@@ -139,7 +129,8 @@
             <span class="label">Penerbit:</span><span class="val">—</span>
           </div>
           <div class="col d-flex justify-content-between">
-            <span class="label">Halaman:</span><span class="val">—</span>
+         <span class="label">Terdaftar Oleh:</span>
+        <span class="val">{{ $book->user->name ?? '—' }}</span>
           </div>
           <div class="col d-flex justify-content-between">
             <span class="label">Tanggal Rilis:</span><span class="val">—</span>
@@ -159,7 +150,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // qty control (kode asli kamu)
+    // qty control
     const qty   = document.getElementById('qty');
     const plus  = document.getElementById('plus');
     const minus = document.getElementById('minus');
@@ -168,26 +159,6 @@
     plus?.addEventListener('click', ()=>{ qty.value = (+qty.value||1)+1; qtyField.value = qty.value; });
     minus?.addEventListener('click', ()=>{ qty.value = Math.max(1,(+qty.value||1)-1); qtyField.value = qty.value; });
     qty?.addEventListener('input', ()=>{ if(qty.value<1) qty.value=1; qtyField.value = qty.value; });
-
-    // ====== Tambahan untuk ikon keranjang (OPS B: sinkronisasi hidden qtyInline) ======
-    const qtyInline   = document.getElementById('qtyInline');
-    const addCartForm = document.getElementById('addCartInline');
-
-    function syncQtyInline() {
-      qtyInline.value = Math.max(1, parseInt(qty.value || '1', 10));
-    }
-
-    // sinkron saat user interaksi
-    plus?.addEventListener('click', syncQtyInline);
-    minus?.addEventListener('click', syncQtyInline);
-    qty?.addEventListener('input', syncQtyInline);
-
-    // pastikan tersinkron tepat sebelum submit
-    addCartForm?.addEventListener('submit', syncQtyInline);
-
-    // set nilai awal saat halaman selesai dimuat
-    document.addEventListener('DOMContentLoaded', syncQtyInline);
-   
   </script>
 </body>
 </html>
