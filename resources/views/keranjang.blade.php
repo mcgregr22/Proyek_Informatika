@@ -1,123 +1,178 @@
-{{-- resources/views/pengelolaan/keranjang.blade.php --}}
-@extends('layouts.pengelolaan')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keranjang | Library-Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+        }
+        .navbar-brand span {
+            color: #0d6efd;
+            font-weight: 700;
+        }
+        .navbar-icon {
+            font-size: 1.2rem;
+            margin-left: 15px;
+            color: #333;
+            transition: color 0.2s;
+        }
+        .navbar-icon:hover {
+            color: #0d6efd;
+        }
+        .empty-cart {
+            text-align: center;
+            margin-top: 80px;
+        }
+        .empty-cart img {
+            max-width: 280px;
+            opacity: 0.9;
+        }
+        .empty-cart h5 {
+            margin-top: 25px;
+            font-weight: 600;
+            color: #333;
+        }
+        .empty-cart p {
+            color: #777;
+        }
+        .btn-shop {
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 8px;
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
+        .btn-shop:hover {
+            background-color: #003f88;
+            color: white;
+        }
+        .summary-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-top: 40px;
+            background: white;
+            padding: 25px;
+        }
+        .summary-card h6 {
+            font-weight: 600;
+        }
+        .footer {
+            margin-top: 70px;
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid #ddd;
+            color: #777;
+        }
+        .btn-checkout {
+            width: 100%;
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-checkout:hover {
+            background-color: #003f88;
+        }
+    </style>
+</head>
+<body>
 
-@section('content')
-  <h2 class="text-2xl font-semibold mb-2">Keranjang</h2>
-  <p class="text-sm text-zinc-500 mb-6">Buku-buku yang kamu tambahkan ke keranjang</p>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/homepage">
+                Library-<span>Hub</span>
+            </a>
 
-  @if(empty($items))
-    <!-- EMPTY STATE -->
-    <div class="rounded-2xl border border-zinc-200 bg-white shadow-sm p-8 text-center">
-      <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" alt="Empty"
-           class="mx-auto w-40 opacity-90 mb-4">
-      <h5 class="text-lg font-semibold text-zinc-700">Keranjang Belanja Kosong</h5>
-      <p class="text-sm text-zinc-500">Yuk, temukan buku favoritmu dan tambahkan ke keranjang!</p>
-      <a href="{{ url('/homepage') }}"
-         class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-        </svg>
-        Beranda
-      </a>
-    </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-    <!-- Ringkasan -->
-    <div class="summary-card rounded-2xl border border-zinc-200 bg-white shadow-sm p-6 mt-6 max-w-xl">
-      <h6 class="font-semibold mb-3">Ringkasan Pesanan</h6>
-      <div class="flex justify-between text-sm">
-        <span>Subtotal (item):</span><strong>Rp0</strong>
-      </div>
-      <div class="flex justify-between text-sm">
-        <span>Pajak (10%):</span><strong>Rp0</strong>
-      </div>
-      <div class="flex justify-between text-sm mb-2">
-        <span>Pengiriman:</span><strong>Rp0</strong>
-      </div>
-      <hr class="my-3">
-      <div class="flex justify-between items-center">
-        <span class="font-semibold">Total:</span>
-        <span class="text-indigo-600 font-bold">Rp0</span>
-      </div>
-      <button class="w-full mt-4 px-4 py-2 rounded-lg bg-zinc-200 text-zinc-500 cursor-not-allowed">Checkout</button>
-    </div>
-  @else
-    <!-- LIST ITEM -->
-    @if(session('success'))
-      <div class="rounded-xl border border-green-200 bg-green-50 text-green-700 p-3 mb-4">{{ session('success') }}</div>
-    @endif
-    @if(session('error'))
-      <div class="rounded-xl border border-red-200 bg-red-50 text-red-700 p-3 mb-4">{{ session('error') }}</div>
-    @endif
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-4">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-semibold" href="#" role="button" data-bs-toggle="dropdown">
+                            Kategori
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Humor & Comedy</a></li>
+                            <li><a class="dropdown-item" href="#">History</a></li>
+                            <li><a class="dropdown-item" href="#">Science & Tech</a></li>
+                            <li><a class="dropdown-item" href="#">Fiction</a></li>
+                            <li><a class="dropdown-item" href="#">Romance</a></li>
+                        </ul>
+                    </li>
+                </ul>
 
-    <div class="rounded-2xl border border-zinc-200 bg-white shadow-sm p-4">
-      <h5 class="font-semibold mb-3">Keranjang Kamu</h5>
+                <form class="d-flex ms-auto me-3" role="search">
+                    <input class="form-control" type="search" placeholder="Cari Buku">
+                </form>
 
-      @foreach($items as $it)
-        <div class="flex items-center gap-4 py-4 border-b border-zinc-100 last:border-0 flex-wrap">
-          <img
-            src="{{ !empty($it['cover']) ? Storage::url(str_replace('\\','/',$it['cover'])) : asset('images/placeholder-cover.png') }}"
-            alt="{{ $it['title'] ?? 'Buku' }}"
-            class="w-[72px] h-[104px] object-cover rounded-lg"
-          />
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="/swapbook">Swapbook</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="mycollection">My Collection</a></li>
+                </ul>
 
-          <div class="flex-1 min-w-[220px]">
-            <div class="font-medium">{{ $it['title'] ?? '-' }}</div>
-            <div class="text-sm text-zinc-500">{{ $it['author'] ?? '-' }}</div>
-            @if(!empty($it['isbn']))
-              <div class="text-xs text-zinc-400">ISBN: {{ $it['isbn'] }}</div>
-            @endif
-            <div class="mt-1 text-sm">Rp {{ number_format((int)($it['price'] ?? 0),0,',','.') }} <span class="text-zinc-400">/ buku</span></div>
-          </div>
-
-          <div class="text-right min-w-[120px]">
-            <div class="font-semibold">Rp {{ number_format((int)($it['subtotal'] ?? 0),0,',','.') }}</div>
-            <form action="{{ route('cart.remove', $it['id_buku']) }}" method="POST" class="mt-2">
-              @csrf @method('DELETE')
-              <button class="px-3 py-1.5 text-sm rounded-lg border border-zinc-200 hover:bg-zinc-50">
-                Hapus
-              </button>
-            </form>
-          </div>
+                <div class="d-flex align-items-center ms-3">
+                    <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
+                    <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
+                    <a href="#" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
+                </div>
+            </div>
         </div>
-      @endforeach
+    </nav>
+
+    <!-- Halaman Keranjang Kosong -->
+    <div class="container">
+        <div class="empty-cart">
+            <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" alt="Empty Cart">
+            <h5>Keranjang Belanja Kosong</h5>
+            <p>Yuk, temukan buku favoritmu dan tambahkan ke keranjang!</p>
+            <a href="{{ url('/homepage') }}" class="btn btn-shop mt-3">
+    <i class="bi bi-arrow-left"></i> Beranda
+</a>
+
+        </div>
+
+        <!-- Ringkasan Pesanan -->
+        <div class="summary-card col-md-6 mx-auto mt-5">
+            <h6 class="mb-3">Ringkasan Pesanan</h6>
+            <div class="d-flex justify-content-between">
+                <span>Subtotal (item):</span>
+                <strong>Rp0</strong>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span>Pajak (10%):</span>
+                <strong>Rp0</strong>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+                <span>Pengiriman:</span>
+                <strong>Rp0</strong>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between mb-3">
+                <h6>Total:</h6>
+                <h6 class="text-primary fw-bold">Rp0</h6>
+            </div>
+            <button class="btn-checkout">
+                Lanjutkan ke Checkout
+            </button>
+        </div>
     </div>
 
-    <!-- RINGKASAN -->
-    <div class="rounded-2xl border border-zinc-200 bg-white shadow-sm p-6 mt-6 max-w-xl">
-      <h6 class="font-semibold mb-3">Ringkasan Pesanan</h6>
-      <div class="flex justify-between text-sm">
-        <span>Subtotal (item):</span>
-        <strong>Rp {{ number_format((int)$subtotal,0,',','.') }}</strong>
-      </div>
-      <div class="flex justify-between text-sm">
-        <span>Pajak (10%):</span>
-        <strong>Rp {{ number_format((int)$tax,0,',','.') }}</strong>
-      </div>
-      <div class="flex justify-between text-sm mb-2">
-        <span>Pengiriman:</span>
-        <strong>Rp {{ number_format((int)$shipping,0,',','.') }}</strong>
-      </div>
-      <hr class="my-3">
-      <div class="flex justify-between items-center">
-        <span class="font-semibold">Total:</span>
-        <span class="text-indigo-600 font-bold">Rp {{ number_format((int)$total,0,',','.') }}</span>
-      </div>
-      <button class="w-full mt-4 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">
-        Lanjutkan ke Checkout
-      </button>
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2025 Library-Hub</p>
     </div>
-  @endif
 
-  {{-- Tandai item sidebar "Keranjang" sebagai aktif, tanpa ubah layout --}}
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const active = ['bg-indigo-50','text-indigo-700','ring-1','ring-indigo-200'];
-      document.querySelectorAll('aside nav a').forEach(a => a.classList.remove(...active));
-      const link = document.querySelector('a[href="/pengelolaan/keranjang"], a[href="pengelolaan/keranjang"], a[href="{{ url('/pengelolaan/keranjang') }}"]');
-      if (link) {
-        link.classList.add(...active);
-        link.querySelector('span.w-6')?.classList.add('text-indigo-600');
-      }
-    });
-  </script>
-@endsection
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
