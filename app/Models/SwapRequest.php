@@ -6,47 +6,72 @@ use Illuminate\Database\Eloquent\Model;
 
 class SwapRequest extends Model
 {
-    protected $table = 'swap_requests';   // nama tabel
-    protected $primaryKey = 'id';         // ubah jika PK kamu bukan 'id'
+    protected $table = 'swap_requests';
+    protected $primaryKey = 'id';
     public $incrementing = true;
     protected $keyType = 'int';
-
-    // set true kalau tabel punya created_at/updated_at (biasanya iya)
     public $timestamps = true;
 
-    // kolom yang boleh diisi mass assignment (sesuaikan dengan tabelmu)
+    // Kolom yang bisa diisi lewat mass assignment
     protected $fillable = [
-        'user_id',        // peminta tukar
-        'book_id',        // refer ke _buku.id_buku
-        'target_user_id', // opsional: pemilik buku yang dituju (kalau ada)
-        'status',         // pending/accepted/rejected/cancelled (sesuaikan)
-        'message',        // pesan opsional
-        'requested_at',   // opsional kalau kamu punya kolom ini
+        'requested_book_id',   // buku yang ingin ditukar (punya orang lain)
+        'offered_book_id',     // buku yang ditawarkan (punya requester)
+        'requester_id',        // user yang mengajukan tukar
+        'owner_id',            // pemilik buku yang diminta
+        'status',              // pending, accepted, rejected, cancelled
+        'is_read',             // notifikasi dibaca/belum
+        'message',             // pesan opsional
     ];
 
     protected $casts = [
-        'requested_at' => 'datetime',
+        'is_read' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     /* ====================== RELATIONSHIPS ====================== */
 
-    // buku yang diminta tukar
-    public function buku()
+    // 📘 Buku yang diminta
+    public function requestedBook()
     {
-        // foreignKey di swap_requests = book_id
-        // ownerKey di parent (_buku)    = id_buku
-        return $this->belongsTo(Buku::class, 'book_id', 'id_buku');
+        return $this->belongsTo(Buku::class, 'requested_book_id', 'id_buku');
     }
 
-    // user yang mengajukan permintaan (asumsi pakai model bawaan User)
+    // 📗 Buku yang ditawarkan
+    public function offeredBook()
+    {
+        return $this->belongsTo(Buku::class, 'offered_book_id', 'id_buku');
+    }
+
+    // 👤 User yang meminta tukar
     public function requester()
     {
-        return $this->belongsTo(\App\Models\User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'requester_id', 'id');
     }
 
-    // (opsional) user pemilik buku yang dituju
-    public function targetUser()
+    // 👤 Pemilik buku yang diminta
+    public function owner()
     {
-        return $this->belongsTo(\App\Models\User::class, 'target_user_id', 'id');
+        return $this->belongsTo(User::class, 'owner_id', 'id');
+    }
+
+    /* ====================== SCOPES / HELPERS ====================== */
+
+    // 🔍 Scope untuk status tertentu
+    public function scopeStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
+
+    // 💬 Helper kecil buat tampilan status (misal untuk badge di UI)
+    public function getStatusLabelAttribute(): string
+    {
+        return match ($this->status) {
+            'pending'  => 'Menunggu Konfirmasi',
+            'accepted' => 'Diterima',
+            'rejected' => 'Ditolak',
+            'cancelled'=> 'Dibatalkan',
+            default    => ucfirst($this->status),
+        };
     }
 }

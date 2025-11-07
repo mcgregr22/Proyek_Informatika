@@ -7,101 +7,71 @@ use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\ProfilUserController;
 use App\Http\Controllers\HomePageAdminController;
+use App\Http\Controllers\SwapbookController;
+use App\Http\Controllers\MyCollectionController;
+use App\Http\Controllers\RequestSwapController;    
 
-// ----------------------
-// HALAMAN AWAL (PUBLIC)
-// ----------------------
+/* ----------------------
+|  PUBLIC
+|-----------------------*/
 Route::get('/', fn () => view('welcome'));
+Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
 
-// ----------------------
-// TAMU (BELUM LOGIN)
-// ----------------------
+/* ----------------------
+|  GUEST (belum login)
+|-----------------------*/
 Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'show'])->name('login');
+    Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
+
     Route::get('/register', [RegistrasiController::class, 'show'])->name('register.show');
     Route::post('/register', [RegistrasiController::class, 'store'])->name('register.store');
-
-    Route::get('/login', [LoginController::class, 'show'])->name('login.show');
-    Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
 });
-Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
-Route::get('/admin', [HomePageAdminController::class, 'index'])->name('homepage_admin');
 
-// ----------------------
-// SUDAH LOGIN (AUTH)
-// ----------------------
+/* ----------------------
+|  AUTH (sudah login)
+|-----------------------*/
 Route::middleware('auth')->group(function () {
-
-    // =========================
-    // HOMEPAGE USER
-    // =========================
-    Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
+    // Detail buku
     Route::get('/buku/{id}', [HomepageController::class, 'show'])->name('buku.show');
 
-    // =========================
-    // PENGELOLAAN (LAYOUT + MENU)
-    // =========================
+    // Layout Pengelolaan
     Route::view('/pengelolaan', 'pengelolaan')->name('pengelolaan');
 
-    // Keranjang DI DALAM layout pengelolaan
-    Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])
-        ->name('pengelolaan.keranjang'); // <- sesuai dengan yang dipanggil di layout
-       
-
-        Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
-        Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
-        Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
-
-
-    // Tambah Buku (view placeholder, sesuaikan file view-mu)
-    Route::view('/pengelolaan/tambahbuku', 'tambahbuku')->name('pengelolaan.tambahbuku');
-
-    // Tukar Buku
-    // Jika view kamu di resources/views/swapbook.blade.php -> pakai 'swapbook'
-    // Jika view-nya di resources/views/pengelolaan/swapbook.blade.php -> ganti ke 'pengelolaan.swapbook'
-    Route::view('/pengelolaan/swapbook', 'swapbook')->name('pengelolaan.swapbook');
-
-    // =========================
-    // KERANJANG (AKSI)
-    // =========================
+    // Keranjang
+    Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])->name('pengelolaan.keranjang');
+    Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
     Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
     Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
 
-    // =========================
-    // PROFIL USER
-    // =========================
-    Route::get('/profil_user', [ProfilUserController::class, 'index'])->name('profil_user');
+    // Tambah buku (form)
+    Route::view('/pengelolaan/tambahbuku', 'tambahbuku')->name('pengelolaan.tambahbuku');
 
-    // =========================
-    // HALAMAN TAMBAHAN
-    // =========================
-    Route::view('/pengelolaan/mycollection', 'pengelolaan')
-    ->name('pengelolaan.mycollection');
+    // Tukar Buku (dashboard swap)
+    Route::get('/pengelolaan/swapbook', [SwapbookController::class, 'index'])->name('pengelolaan.swapbook');
+
+    // My Collection (pilih buku milik sendiri untuk ditukar)
+    Route::get('/pengelolaan/mycollection', [MyCollectionController::class, 'index'])->name('mycollection.index');
+    Route::get('/mycollection', fn () => redirect()->route('mycollection.index'))->name('mycollection.alias');
+
+    // Kirim permintaan tukar
+    Route::post('/swap/requests', [\App\Http\Controllers\SwapbookController::class, 'store'])
+    ->name('swap.store');
+
+    // Profil user & Forum
+    Route::get('/profil_user', [ProfilUserController::class, 'index'])->name('profil_user');
     Route::view('/forumdiscuss', 'forumdiscuss')->name('forumdiscuss');
 
-    // =========================
-    // ADMIN (HomePageAdminController)
-    // =========================
-    // Dashboard admin (dipakai oleh controller saat redirect ->route('homepage_admin'))
+    // ADMIN
     Route::get('/admin', [HomePageAdminController::class, 'index'])->name('homepage_admin');
-
-    // Simpan buku baru (form tambah buku admin)
     Route::post('/admin/buku', [HomePageAdminController::class, 'store'])->name('admin.books.store');
-
-    // Hapus buku (pakai route model binding; jika PK tabelmu 'id_buku', pakai {book:id_buku})
     Route::delete('/admin/buku/{book:id_buku}', [HomePageAdminController::class, 'destroy'])->name('admin.books.destroy');
-
-    // (opsional) Profil admin
     Route::get('/admin/profil', [HomePageAdminController::class, 'profil'])->name('admin.profil');
 
-    // ----------------------
-    // HOMEPAGE ADMIN
-    // ----------------------
-    Route::get('/homepage_admin', [HomePageAdminController::class, 'index'])->name('homepage_admin');
-    Route::post('/homepage_admin/tambah', [HomePageAdminController::class, 'store'])->name('homepage_admin.store');
-    Route::delete('/homepage_admin/hapus/{id}', [HomePageAdminController::class, 'destroy'])->name('homepage_admin.destroy');
+    Route::get('/pengelolaan/request_swap', [RequestSwapController::class, 'index'])->name('request_swap.index');
+    Route::put('/swap/{id}/accept', [RequestSwapController::class, 'accept'])->name('swap.accept');
+    Route::put('/swap/{id}/reject', [RequestSwapController::class, 'reject'])->name('swap.reject');
 
-    // =========================
-    // LOGOUT
-    // =========================
+    // Logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

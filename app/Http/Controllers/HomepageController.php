@@ -61,10 +61,47 @@ class HomepageController extends Controller
         return view('homepage', compact('booksHumor', 'booksHistory', 'booksRecs', 'q'));
     }
 
-    public function show($id)
+   public function show($id)
+{
+    $book = Buku::with('user')->findOrFail($id);
+    return view('detailbuku', compact('book'));
+}
+
+        // -------------------------------
+    // ➕ TAMBAH BUKU (fungsi store)
+    // -------------------------------
+    public function store(Request $request)
     {
-        // tanpa tabel clicks, cukup tampilkan detail
-        $book = Buku::findOrFail($id);
-        return view('detailbuku', compact('book'));
+        $validated = $request->validate([
+            'id_buku' => 'nullable|string',
+            'id_kategori' => 'required|integer',
+            'title' => 'required|string',
+            'author' => 'required|string',
+            'isbn' => 'required|string',
+            'deskripsi' => 'required|string',
+            'harga' => 'nullable|numeric',
+            'listing_type' => 'required|array|min:1',
+            'listing_type.*' => 'in:sell,exchange',
+            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
+        ]);
+
+        // Upload cover kalau ada
+        if ($request->hasFile('cover_image')) {
+            $filename = time().'_'.$request->file('cover_image')->getClientOriginalName();
+            $request->file('cover_image')->move(public_path('covers'), $filename);
+            $validated['cover_image'] = $filename;
+        }
+
+        // Gabungkan array listing_type menjadi string
+        $validated['listing_type'] = implode(',', $validated['listing_type']);
+
+        // Simpan ke database
+        Buku::create($validated);
+
+        return redirect()->back()->with('success', 'Buku berhasil ditambahkan!');
     }
 }
+
+
+

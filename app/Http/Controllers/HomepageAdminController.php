@@ -17,43 +17,42 @@ class HomePageAdminController extends Controller
     }
 
     /** ➕ Simpan buku baru */
-    public function store(Request $request)
-    {
-        // VALIDASI: cover_image hanya divalidasi kalau ada filenya
-        $validated = $request->validate([
-            // 'id_buku' => 'required|integer', // aktifkan kalau PK manual
-            'id_kategori' => 'required|integer',
-            'title'       => 'required|string|max:255',
-            'author'      => 'required|string|max:255',
-            'isbn'        => 'required|string|max:50',
-            'deskripsi'   => 'required|string',
-            'cover_image' => 'sometimes|file|mimes:jpeg,png,jpg|max:2048', // <-- perbaikan
-            'harga'       => 'required|numeric|min:0',
-        ]);
+ public function store(Request $request)
+{
+    $request->validate([
+        'id_buku' => 'nullable',
+        'id_kategori' => 'required',
+        'title' => 'required',
+        'author' => 'required',
+        'isbn' => 'required',
+        'deskripsi' => 'required',
+        'cover_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        'harga' => 'required|numeric',
+        'listing_type' => 'required|array|min:1',
+        'listing_type.*' => 'in:sell,exchange',
+    ]);
 
-        // UPLOAD cover (opsional)
-        $imagePath = null;
-        if ($request->hasFile('cover_image')) {
-            $imagePath = $request->file('cover_image')->store('buku', 'public');
-        }
-
-        // SIMPAN data
-        Buku::create([
-            // 'id_buku'    => $request->id_buku, // pakai kalau PK manual
-            'id_kategori' => $validated['id_kategori'],
-            'title'       => $validated['title'],
-            'author'      => $validated['author'],
-            'isbn'        => $validated['isbn'],
-            'deskripsi'   => $validated['deskripsi'],
-            'cover_image' => $imagePath,
-            'harga'       => $validated['harga'],
-        ]);
-
-        // REDIRECT ke homepage user
-        return redirect()
-            ->route('homepage')   // pastikan route('homepage') ada
-            ->with('success', '📚 Buku berhasil ditambahkan!');
+    $imagePath = null;
+    if ($request->hasFile('cover_image')) {
+        $imagePath = $request->file('cover_image')->store('buku', 'public');
     }
+
+    Buku::create([
+       // 'id_buku' => $request->id_buku,
+        'id_kategori' => $request->id_kategori,
+        'title' => $request->title,
+        'author' => $request->author,
+        'isbn' => $request->isbn,
+        'deskripsi' => $request->deskripsi,
+        'cover_image' => $imagePath,
+        'harga' => $request->harga,
+        // 🔹 simpan sebagai string dipisahkan koma
+        'listing_type' => implode(',', $request->listing_type),
+        'user_id' => Auth::id(),
+    ]);
+
+    return redirect()->route('homepage')->with('success', '📚 Buku berhasil ditambahkan!');
+}
 
     /** ❌ Hapus buku + cover (jika ada) */
     public function destroy(Buku $book)
@@ -73,5 +72,5 @@ class HomePageAdminController extends Controller
     {
         $admin = Auth::user();
         return view('profil_admin', compact('admin'));
-    }
+}
 }

@@ -86,6 +86,7 @@
       background-color: #fff;
       box-shadow: 0 2px 6px rgba(0,0,0,.05);
       transition: transform 0.2s ease;
+      position: relative;
     }
     .book-card:hover { transform: translateY(-4px); }
     .book-thumb {
@@ -95,6 +96,22 @@
       border-radius: 8px;
     }
     .price { color:#0d6efd; font-weight:600; }
+
+    /* --- Label Listing Type --- */
+    .listing-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: #0d6efd;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .listing-badge.sell { background: #198754; }
+    .listing-badge.exchange { background: #0d6efd; }
 
     .footer {
       margin-top: 60px;
@@ -110,42 +127,34 @@
     }
 
      /* --- Logout CTA (bawah) --- */
-        .logout-cta {
-            margin-top: 48px;
-        }
-        .btn-logout-pro {
-            border: none;
-            padding: 12px 18px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #ff4d4f, #d9363e);
-            color: #fff;
-            box-shadow: 0 8px 20px rgba(217,54,62,0.25);
-            transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
-        }
-        .btn-logout-pro:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 26px rgba(217,54,62,0.35);
-            filter: brightness(1.05);
-            color: #fff;
-        }
-        .btn-logout-pro:active {
-            transform: translateY(0);
-            box-shadow: 0 6px 16px rgba(217,54,62,0.25);
-        }
-        .btn-logout-pro i {
-            margin-right: 8px;
-        }
-        .logout-card {
-            border: 1px solid rgba(0,0,0,.06);
-            border-radius: 16px;
-            background: #fff;
-            box-shadow: 0 6px 18px rgba(0,0,0,.06);
-        }
-        .logout-subtext {
-            color:#6c757d;
-            font-size:.925rem;
-        }
-
+    .logout-cta { margin-top: 48px; }
+    .btn-logout-pro {
+      border: none;
+      padding: 12px 18px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #ff4d4f, #d9363e);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(217,54,62,0.25);
+      transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+    }
+    .btn-logout-pro:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(217,54,62,0.35);
+      filter: brightness(1.05);
+      color: #fff;
+    }
+    .btn-logout-pro:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 16px rgba(217,54,62,0.25);
+    }
+    .btn-logout-pro i { margin-right: 8px; }
+    .logout-card {
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 6px 18px rgba(0,0,0,.06);
+    }
+    .logout-subtext { color:#6c757d; font-size:.925rem; }
   </style>
 </head>
 <body>
@@ -208,8 +217,21 @@
     <div class="row g-3">
       @forelse ($booksHumor as $b)
         <div class="col-6 col-md-4 col-lg-2">
-          <div class="card book-card h-100">
+          <div class="card book-card h-100 position-relative">
             <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
+              
+              {{-- 🔹 Label Listing Type --}}
+              @php $types = explode(',', $b->listing_type ?? ''); @endphp
+              <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
+                @foreach ($types as $type)
+                  @if (trim($type) === 'sell')
+                    <span class="listing-badge sell">Sell</span>
+                  @elseif (trim($type) === 'exchange')
+                    <span class="listing-badge exchange">Exchange</span>
+                  @endif
+                @endforeach
+              </div>
+
               <div class="card-body text-center">
                 @if($b->cover_image)
                   <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
@@ -236,8 +258,21 @@
     <div class="row g-3">
       @forelse ($booksHistory as $b)
         <div class="col-6 col-md-4 col-lg-2">
-          <div class="card book-card h-100">
+          <div class="card book-card h-100 position-relative">
             <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
+
+              {{-- 🔹 Label Listing Type --}}
+              @php $types = explode(',', $b->listing_type ?? ''); @endphp
+              <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
+                @foreach ($types as $type)
+                  @if (trim($type) === 'sell')
+                    <span class="listing-badge sell">Sell</span>
+                  @elseif (trim($type) === 'exchange')
+                    <span class="listing-badge exchange">Exchange</span>
+                  @endif
+                @endforeach
+              </div>
+
               <div class="card-body text-center">
                 @if($b->cover_image)
                   <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
@@ -265,8 +300,21 @@
     <div class="row g-3">
       @forelse ($booksRecs as $b)
         <div class="col-6 col-md-4 col-lg-2">
-          <div class="card book-card h-100">
+          <div class="card book-card h-100 position-relative">
             <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
+
+              {{-- 🔹 Label Listing Type --}}
+              @php $types = explode(',', $b->listing_type ?? ''); @endphp
+              <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
+                @foreach ($types as $type)
+                  @if (trim($type) === 'sell')
+                    <span class="listing-badge sell">Sell</span>
+                  @elseif (trim($type) === 'exchange')
+                    <span class="listing-badge exchange">Exchange</span>
+                  @endif
+                @endforeach
+              </div>
+
               <div class="card-body text-center">
                 @if($b->cover_image)
                   <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">

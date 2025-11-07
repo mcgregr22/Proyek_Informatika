@@ -13,7 +13,7 @@
     </div>
   @endif
 
-  <form action="{{ route('admin.books.store') }}" method="POST" enctype="multipart/form-data">
+  <<form action="{{ route('admin.books.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -62,33 +62,34 @@
         @error('isbn') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
-      {{-- 🔹 Listing Type --}}
+      {{-- 🔹 Listing Type (checkbox, bisa pilih lebih dari 1) --}}
       <div class="md:col-span-2">
         <label class="block text-sm font-medium mb-1">Listing Type</label>
         <div class="flex gap-4 mt-1">
           <label class="flex items-center gap-2 border rounded-lg px-4 py-2 cursor-pointer hover:bg-zinc-50">
-            <input type="radio" name="listing_type" value="exchange"
+            <input type="checkbox" name="listing_type[]" value="exchange"
                    class="text-indigo-600 focus:ring-indigo-500"
-                   {{ old('listing_type') == 'exchange' ? 'checked' : '' }} required>
+                   {{ (is_array(old('listing_type')) && in_array('exchange', old('listing_type'))) ? 'checked' : '' }}>
             <span class="text-sm font-medium text-gray-700">Exchange</span>
           </label>
           <label class="flex items-center gap-2 border rounded-lg px-4 py-2 cursor-pointer hover:bg-zinc-50">
-            <input type="radio" name="listing_type" value="sell"
+            <input type="checkbox" name="listing_type[]" value="sell"
                    class="text-indigo-600 focus:ring-indigo-500"
-                   {{ old('listing_type') == 'sell' ? 'checked' : '' }}>
+                   {{ (is_array(old('listing_type')) && in_array('sell', old('listing_type'))) ? 'checked' : '' }}>
             <span class="text-sm font-medium text-gray-700">Sell</span>
           </label>
         </div>
         @error('listing_type') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
-      {{-- 🔹 Harga muncul hanya saat Sell --}}
-      <div class="md:col-span-2" id="harga-sell-wrapper" style="display:none;">
+      {{-- 🔹 Harga (selalu muncul) --}}
+      <div class="md:col-span-2" id="harga-wrapper">
         <label class="block text-sm font-medium mb-1">Harga</label>
         <input type="number" name="harga" min="0" step="1"
-               class="w-full border rounded-lg px-3 py-2"
-               placeholder="Masukkan harga buku (Rp)">
-        <p class="text-gray-500 text-xs mt-1">Hanya diisi jika Listing Type = Sell</p>
+               class="w-full border rounded-lg px-3 py-2 @error('harga') border-red-400 @enderror"
+               placeholder="Masukkan harga buku (Rp)" value="{{ old('harga') }}">
+        <p class="text-gray-500 text-xs mt-1">Isi harga meskipun tipe Exchange agar buku bisa dijual juga.</p>
+        @error('harga') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
       {{-- Deskripsi --}}
@@ -117,20 +118,4 @@
     </div>
   </form>
 </div>
-
-{{-- 🔧 Script untuk menampilkan harga hanya saat "Sell" --}}
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const radios = document.querySelectorAll('input[name="listing_type"]');
-    const hargaSell = document.getElementById('harga-sell-wrapper');
-
-    function toggleHargaSell() {
-      const selected = document.querySelector('input[name="listing_type"]:checked');
-      hargaSell.style.display = (selected && selected.value === 'sell') ? 'block' : 'none';
-    }
-
-    radios.forEach(radio => radio.addEventListener('change', toggleHargaSell));
-    toggleHargaSell();
-  });
-</script>
 @endsection

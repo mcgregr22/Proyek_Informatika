@@ -100,13 +100,12 @@
           </div>
 
           <div class="d-flex flex-wrap gap-2">
-            <form action="/mycollection" method="POST">
-              @csrf
-              <input type="hidden" name="book_id" value="{{ $book->id_buku }}">
-              <button class="btn btn-primary">
-                <i class="bi bi-plus-circle me-2"></i>Tukar Buku
-              </button>
-            </form>
+            <form action="{{ route('mycollection.index') }}" method="GET">
+  <input type="hidden" name="requested" value="{{ $book->id_buku }}">
+  <button type="submit" class="btn btn-primary">
+    <i class="bi bi-plus-circle me-2"></i>Tukar Buku
+  </button>
+</form>
 
             <form action="/keranjang" method="POST" class="ms-1">
               @csrf
@@ -139,7 +138,8 @@
             <span class="label">Penerbit:</span><span class="val">—</span>
           </div>
           <div class="col d-flex justify-content-between">
-            <span class="label">Halaman:</span><span class="val">—</span>
+            <span class="label">Terdaftar oleh:</span><span class="val">—</span>
+            <span class="val">{{ $book->user->name ?? '—' }}</span>
           </div>
           <div class="col d-flex justify-content-between">
             <span class="label">Tanggal Rilis:</span><span class="val">—</span>

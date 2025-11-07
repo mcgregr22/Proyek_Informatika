@@ -27,6 +27,8 @@ class Buku extends Model
         'deskripsi',
         'cover_image',
         'harga',
+        'listing_type',
+        'user_id',
     ];
 
     /** ================== RELATIONS ================== */
@@ -81,4 +83,8 @@ class Buku extends Model
     {
         return $q->whereNotNull('cover_image')->where('cover_image', '!=', '');
     }
+    public function user()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
 }
