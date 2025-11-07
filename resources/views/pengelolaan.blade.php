@@ -96,16 +96,14 @@
 
 
           {{-- Book Swaps --}}
-          <a href="{{ route('pengelolaan.swapbook') }}" id="bookSwapsLink" 
-   class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
-    <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 7l2.5-2.5L9 7M20 17l-2.5 2.5L15 17M6.5 4.5A7.5 7.5 0 112 12"/>
-      </svg>
-    </span>
-    <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Tukar Buku</span>
-</a>
-
+          <a href="/pengelolaan/swapbook" id="bookSwapsLink" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
+            <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 7l2.5-2.5L9 7M20 17l-2.5 2.5L15 17M6.5 4.5A7.5 7.5 0 112 12"/>
+              </svg>
+            </span>
+            <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Tukar Buku</span>
+          </a>
 
           <a href="#" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
             <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">

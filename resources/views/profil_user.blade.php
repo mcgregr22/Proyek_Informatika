@@ -181,6 +181,7 @@
       const pwd = document.getElementById('passwordInput');
       const btn = document.getElementById('togglePassword');
       const icon = document.getElementById('toggleIcon');
+      
       btn.addEventListener('click', function () {
         if (pwd.type === 'password') {
           pwd.type = 'text';

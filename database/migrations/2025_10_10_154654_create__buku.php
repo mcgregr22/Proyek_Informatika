@@ -6,27 +6,36 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('_buku', function (Blueprint $table) {
-            $table->integer('id_buku');
-            $table->integer('id_kategori');
-         $table->String('title');
-          $table->string('author');
-            $table->string('isbn');
-            $table->text('deskripsi');
-            $table->string('cover_image');
-            $table->decimal('harga');
+            // ID Buku (INT biasa)
+          $table->id('id_buku'); // otomatis auto increment primary key
 
+
+            // Relasi ke kategori (jika ada)
+            $table->integer('id_kategori')->nullable();
+
+            // Pemilik buku (user)
+            $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
+
+            // Informasi utama buku
+            $table->string('title');
+            $table->string('author');
+            $table->string('isbn')->nullable();
+            $table->text('deskripsi')->nullable();
+            $table->string('cover_image')->nullable();
+            $table->decimal('harga', 10, 2)->nullable();
+
+            // Kolom tambahan untuk fitur swap book
+            $table->boolean('is_available_for_swap')->default(false);
+            $table->enum('status_buku', ['available', 'pending', 'swapped'])->default('available');
+
+            // Waktu pembuatan
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('_buku');

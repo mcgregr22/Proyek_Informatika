@@ -1,19 +1,16 @@
-{{-- resources/views/homepage.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Library-Hub</title>
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
   <style>
     body { background-color: #f8f9fa; font-family: 'Poppins', sans-serif; }
     .navbar-brand span { color: #0d6efd; font-weight: 700; }
 
-    /* Navbar */
+    /* --- Navbar --- */
     .navbar { padding: 0.8rem 0; }
     .search-form {
       flex: 1;
@@ -35,7 +32,7 @@
       border: 1px solid #ccc;
     }
 
-    /* Banner */
+    /* --- Banner --- */
     .banner {
       background: linear-gradient(90deg, #0d1b4c, #2d4db0);
       color: white;
@@ -61,7 +58,7 @@
       background: transparent;
     }
 
-    /* Section Header */
+    /* --- Section Header --- */
     .section-header {
       display: flex;
       justify-content: space-between;
@@ -70,7 +67,7 @@
       margin-bottom: .75rem;
     }
 
-    /* Tombol Pengelolaan */
+    /* --- Tombol Pengelolaan --- */
     .btn-manage {
       background: #000;
       color: #fff;
@@ -82,13 +79,14 @@
     }
     .btn-manage:hover { background: #0d6efd; }
 
-    /* Buku Card */
+    /* --- Buku Card --- */
     .book-card {
       border: none;
       border-radius: 10px;
       background-color: #fff;
       box-shadow: 0 2px 6px rgba(0,0,0,.05);
       transition: transform 0.2s ease;
+      position: relative;
     }
     .book-card:hover { transform: translateY(-4px); }
     .book-thumb {
@@ -98,6 +96,22 @@
       border-radius: 8px;
     }
     .price { color:#0d6efd; font-weight:600; }
+
+    /* --- Label Listing Type --- */
+    .listing-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: #0d6efd;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .listing-badge.sell { background: #198754; }
+    .listing-badge.exchange { background: #0d6efd; }
 
     .footer {
       margin-top: 60px;
@@ -112,7 +126,7 @@
       .search-form input { width: 70%; }
     }
 
-    /* Logout CTA */
+     /* --- Logout CTA (bawah) --- */
     .logout-cta { margin-top: 48px; }
     .btn-logout-pro {
       border: none;
@@ -140,25 +154,21 @@
       background: #fff;
       box-shadow: 0 6px 18px rgba(0,0,0,.06);
     }
-    .logout-subtext {
-      color:#6c757d;
-      font-size:.925rem;
-    }
+    .logout-subtext { color:#6c757d; font-size:.925rem; }
   </style>
 </head>
-
 <body>
+
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="{{ route('homepage') }}">Library-<span>Hub</span></a>
+      <a class="navbar-brand fw-bold" href="/homepage">Library-<span>Hub</span></a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
-        <!-- Search Form -->
         <form class="search-form mx-auto" role="search" action="{{ route('homepage') }}" method="GET">
           <select name="kategori">
             <option value="">Kategori</option>
@@ -169,10 +179,11 @@
           <input class="form-control" type="search" name="q" value="{{ $q ?? '' }}" placeholder="Cari Buku...">
         </form>
 
-        <!-- Ikon kanan -->
         <div class="d-flex align-items-center ms-3">
           <a href="/forumdiscuss" class="text-dark me-3"><i class="bi bi-chat-dots fs-5"></i></a>
-          <a href="{{ route('profil_user') }}" class="text-dark"><i class="bi bi-person-circle fs-5"></i></a>
+          <a href="{{ route('profil_user') }}" class="text-dark">
+            <i class="bi bi-person-circle fs-5"></i>
+          </a>
         </div>
       </div>
     </div>
@@ -188,25 +199,42 @@
     </div>
   </div>
 
-  <!-- Buku Section -->
+  <!-- Sections -->
   <div class="container mt-4">
-    <!-- Pengelolaan -->
+
+    <!-- + Pengelolaan -->
     <div class="text-end mb-3">
-      <a href="{{ route('pengelolaan') }}" class="btn-manage"><i class="bi bi-plus-lg"></i> Pengelolaan</a>
+      <a href="/pengelolaan" class="flex-end mb-3">
+        <button class="btn-manage"> Pengelolaan</button>
+      </a>
     </div>
 
     <!-- Humor & Comedy -->
     <div class="section-header">
-      <h5 class="fw-semibold">Humor & Comedy</h5>
+      <h5 class="fw-semibold">Humor & Komedi</h5>
     </div>
+
     <div class="row g-3">
       @forelse ($booksHumor as $b)
         <div class="col-6 col-md-4 col-lg-2">
-          <div class="card book-card h-100">
+          <div class="card book-card h-100 position-relative">
             <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
+              
+              {{-- 🔹 Label Listing Type --}}
+              @php $types = explode(',', $b->listing_type ?? ''); @endphp
+              <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
+                @foreach ($types as $type)
+                  @if (trim($type) === 'sell')
+                    <span class="listing-badge sell">Sell</span>
+                  @elseif (trim($type) === 'exchange')
+                    <span class="listing-badge exchange">Exchange</span>
+                  @endif
+                @endforeach
+              </div>
+
               <div class="card-body text-center">
                 @if($b->cover_image)
-                  <img src="{{ asset($b->cover_image) }}" alt="cover" class="book-thumb mb-2">
+                  <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
                 @else
                   <div class="py-5 bg-light rounded mb-2">📘</div>
                 @endif
@@ -224,16 +252,30 @@
 
     <!-- History -->
     <div class="section-header mt-5">
-      <h5 class="fw-semibold">History</h5>
+      <h5 class="fw-semibold">Sejarah</h5>
     </div>
+
     <div class="row g-3">
       @forelse ($booksHistory as $b)
         <div class="col-6 col-md-4 col-lg-2">
-          <div class="card book-card h-100">
+          <div class="card book-card h-100 position-relative">
             <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
+
+              {{-- 🔹 Label Listing Type --}}
+              @php $types = explode(',', $b->listing_type ?? ''); @endphp
+              <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
+                @foreach ($types as $type)
+                  @if (trim($type) === 'sell')
+                    <span class="listing-badge sell">Sell</span>
+                  @elseif (trim($type) === 'exchange')
+                    <span class="listing-badge exchange">Exchange</span>
+                  @endif
+                @endforeach
+              </div>
+
               <div class="card-body text-center">
                 @if($b->cover_image)
-                  <img src="{{ asset($b->cover_image) }}" alt="cover" class="book-thumb mb-2">
+                  <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
                 @else
                   <div class="py-5 bg-light rounded mb-2">📘</div>
                 @endif
@@ -251,17 +293,31 @@
 
     <!-- Recommendations -->
     <div class="section-header mt-5">
-      <h5 class="fw-semibold">Recommendations</h5>
+      <h5 class="fw-semibold">Rekomendasi</h5>
       <a href="#" class="text-decoration-none small text-primary">Lihat Selengkapnya...</a>
     </div>
+
     <div class="row g-3">
       @forelse ($booksRecs as $b)
         <div class="col-6 col-md-4 col-lg-2">
-          <div class="card book-card h-100">
+          <div class="card book-card h-100 position-relative">
             <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
+
+              {{-- 🔹 Label Listing Type --}}
+              @php $types = explode(',', $b->listing_type ?? ''); @endphp
+              <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
+                @foreach ($types as $type)
+                  @if (trim($type) === 'sell')
+                    <span class="listing-badge sell">Sell</span>
+                  @elseif (trim($type) === 'exchange')
+                    <span class="listing-badge exchange">Exchange</span>
+                  @endif
+                @endforeach
+              </div>
+
               <div class="card-body text-center">
                 @if($b->cover_image)
-                  <img src="{{ asset($b->cover_image) }}" alt="cover" class="book-thumb mb-2">
+                  <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
                 @else
                   <div class="py-5 bg-light rounded mb-2">📕</div>
                 @endif
@@ -278,7 +334,7 @@
     </div>
   </div>
 
-  <!-- Logout CTA -->
+  <!-- Logout -->
   <div class="container logout-cta">
     <div class="logout-card p-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
       <div>
@@ -288,7 +344,7 @@
       <form action="{{ route('logout') }}" method="POST" class="m-0">
         @csrf
         <button type="submit" class="btn btn-logout-pro">
-          <i class="bi bi-box-arrow-right"></i> Logout
+          <i class="bi bi-box-arrow-right"></i>Keluar
         </button>
       </form>
     </div>

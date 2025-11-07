@@ -129,7 +129,8 @@
             <span class="label">Penerbit:</span><span class="val">—</span>
           </div>
           <div class="col d-flex justify-content-between">
-            <span class="label">Halaman:</span><span class="val">—</span>
+         <span class="label">Terdaftar Oleh:</span>
+        <span class="val">{{ $book->user->name ?? '—' }}</span>
           </div>
           <div class="col d-flex justify-content-between">
             <span class="label">Tanggal Rilis:</span><span class="val">—</span>
