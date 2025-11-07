@@ -112,50 +112,66 @@
 <div class="container forum-container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold">Forum Diskusi</h3>
-        <button class="add-post-btn">Tambahkan Komentar</button>
+        <button class="add-post-btn" data-bs-toggle="modal" data-bs-target="#createPostModal">Buat Post Baru</button>
     </div>
 
-    {{-- Simulasi data post --}}
-    @php
-        $posts = [
-            [
-                "user" => "davidbeckham",
-                "date" => "14/2/2025",
-                "content" => "Buku apa yaa yang cocok untuk orang yang pertama kali pengen baca buku tentang romance?",
-                "comments" => [
-                    ["user" => "davidbeckham", "text" => "Buku pergi pulang bagus sih!!"],
-                    ["user" => "donaiandro", "text" => "Iyeeaa pergi pulang bagus tuh!!"]
-                ]
-            ],
-            [
-                "user" => "davidbeckham",
-                "date" => "14/2/2025",
-                "content" => "Buku apa yaa yang cocok untuk orang yang pertama kali pengen baca buku tentang romance?",
-                "comments" => [
-                    ["user" => "davidbeckham", "text" => "Buku pergi pulang bagus sih!!"],
-                    ["user" => "donaiandro", "text" => "Iyeeaa pergi pulang bagus tuh!!"]
-                ]
-            ]
-        ];
-    @endphp
+    <!-- Modal buat post baru -->
+    <div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('forum.post.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createPostModalLabel">Buat Post Baru</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{-- PERBAIKAN: Input field untuk 'title' ditambahkan --}}
+                        <div class="mb-3">
+                            <label for="postTitle" class="form-label">Judul</label>
+                            <input type="text" name="title" id="postTitle" class="form-control" placeholder="Judul Postingan..." required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="postContent" class="form-label">Isi Post</label>
+                            <textarea name="content" id="postContent" class="form-control" rows="5" placeholder="Tulis topik atau pertanyaan kamu di sini..." required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Kirim</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
+    <!-- Menampilkan semua postingan -->
     @foreach ($posts as $post)
         <div class="forum-card">
-            <strong>{{ $post['user'] }}</strong> • <small>{{ $post['date'] }}</small>
-            <p class="mt-2">{{ $post['content'] }}</p>
+            <strong>{{ $post->user->name ?? 'Anonim' }}</strong>
+            <small class="text-muted"> • {{ $post->created_at->format('d M Y, H:i') }}</small>
+            
+            {{-- Menampilkan Judul Post --}}
+            <h5 class="mt-2 fw-bold">{{ $post->title }}</h5> 
+            
+            <p class="mt-2">{{ $post->content }}</p>
 
             <div class="comment-box">
-                <p class="mb-1"><strong>Komentar ...</strong></p>
-                @foreach ($post['comments'] as $comment)
-                    <p><strong>{{ $comment['user'] }} :</strong> {{ $comment['text'] }}</p>
-                @endforeach
+                <p class="mb-1"><strong>Komentar ({{ $post->comments_count ?? $post->comments->count() }}):</strong></p>
+                @forelse ($post->comments as $comment)
+                    <p><strong>{{ $comment->user->name ?? 'Anonim' }}:</strong> {{ $comment->komentar }}</p>
+                @empty
+                    <p class="text-muted">Belum ada komentar.</p>
+                @endforelse
             </div>
 
-            <div class="d-flex align-items-center mt-3">
-                <strong class="me-2">{{ $post['user'] }}</strong>
-                <input type="text" class="input-comment" placeholder="Tulis Disini ....">
-                <button class="btn-send"><i class="bi bi-send"></i></button>
-            </div>
+            {{-- Form untuk Komentar --}}
+            {{-- PERBAIKAN: Mengganti $post->id menjadi $post->id_post --}}
+            <form action="{{ route('forum.comment', $post->id_post) }}" method="POST" class="d-flex align-items-center mt-3">
+                @csrf
+                <input type="text" name="komentar" class="input-comment form-control me-2" placeholder="Tulis komentar..." required>
+                <button type="submit" class="btn-send"><i class="bi bi-send"></i></button>
+            </form>
         </div>
     @endforeach
 </div>

@@ -108,4 +108,21 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
+// Forum Post
+use App\Http\Controllers\ForumController;
 
+// Grup Rute Forum yang memerlukan otentikasi
+Route::middleware(['auth'])->prefix('forumdiscuss')->group(function () {
+    // Rute Tampilan (GET)
+    // URI: /forumdiscuss
+    Route::get('/', [ForumController::class, 'index'])->name('forum.index');
+    
+    // Rute Simpan Post Baru (POST)
+    // URI: /forumdiscuss/post
+    Route::post('/post', [ForumController::class, 'store'])->name('forum.post.store');
+
+    // Rute Menyimpan Komentar Baru (POST)
+    // PERBAIKAN: Nama rute diubah dari 'forum.comment.store' menjadi 'forum.comment'
+    // URI: /forumdiscuss/{id_post}/comment
+    Route::post('/{id_post}/comment', [ForumController::class, 'storeComment'])->name('forum.comment');
+});
