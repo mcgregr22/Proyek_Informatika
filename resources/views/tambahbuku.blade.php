@@ -17,7 +17,7 @@
     @csrf
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {{-- ID Buku (opsional – hapus kalau PK auto-increment) --}}
+      {{-- ID Buku (opsional) --}}
       <div>
         <label class="block text-sm font-medium mb-1">ID Buku (opsional)</label>
         <input type="text" name="id_buku"
@@ -26,6 +26,7 @@
         @error('id_buku') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
+      {{-- ID Kategori --}}
       <div>
         <label class="block text-sm font-medium mb-1">ID Kategori</label>
         <input type="number" name="id_kategori"
@@ -34,6 +35,7 @@
         @error('id_kategori') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
+      {{-- Judul --}}
       <div>
         <label class="block text-sm font-medium mb-1">Judul Buku</label>
         <input type="text" name="title"
@@ -42,6 +44,7 @@
         @error('title') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
+      {{-- Penulis --}}
       <div>
         <label class="block text-sm font-medium mb-1">Penulis</label>
         <input type="text" name="author"
@@ -50,7 +53,8 @@
         @error('author') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
-      <div>
+      {{-- ISBN --}}
+      <div class="md:col-span-2">
         <label class="block text-sm font-medium mb-1">ISBN</label>
         <input type="text" name="isbn"
                class="w-full border rounded-lg px-3 py-2 @error('isbn') border-red-400 @enderror"
@@ -58,14 +62,36 @@
         @error('isbn') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
-      <div>
-        <label class="block text-sm font-medium mb-1">Harga</label>
-        <input type="number" name="harga" min="0" step="1"
-               class="w-full border rounded-lg px-3 py-2 @error('harga') border-red-400 @enderror"
-               placeholder="Rp. 0" value="{{ old('harga') }}" required>
-        @error('harga') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+      {{-- 🔹 Listing Type --}}
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium mb-1">Listing Type</label>
+        <div class="flex gap-4 mt-1">
+          <label class="flex items-center gap-2 border rounded-lg px-4 py-2 cursor-pointer hover:bg-zinc-50">
+            <input type="radio" name="listing_type" value="exchange"
+                   class="text-indigo-600 focus:ring-indigo-500"
+                   {{ old('listing_type') == 'exchange' ? 'checked' : '' }} required>
+            <span class="text-sm font-medium text-gray-700">Exchange</span>
+          </label>
+          <label class="flex items-center gap-2 border rounded-lg px-4 py-2 cursor-pointer hover:bg-zinc-50">
+            <input type="radio" name="listing_type" value="sell"
+                   class="text-indigo-600 focus:ring-indigo-500"
+                   {{ old('listing_type') == 'sell' ? 'checked' : '' }}>
+            <span class="text-sm font-medium text-gray-700">Sell</span>
+          </label>
+        </div>
+        @error('listing_type') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
+      {{-- 🔹 Harga muncul hanya saat Sell --}}
+      <div class="md:col-span-2" id="harga-sell-wrapper" style="display:none;">
+        <label class="block text-sm font-medium mb-1">Harga</label>
+        <input type="number" name="harga" min="0" step="1"
+               class="w-full border rounded-lg px-3 py-2"
+               placeholder="Masukkan harga buku (Rp)">
+        <p class="text-gray-500 text-xs mt-1">Hanya diisi jika Listing Type = Sell</p>
+      </div>
+
+      {{-- Deskripsi --}}
       <div class="md:col-span-2">
         <label class="block text-sm font-medium mb-1">Deskripsi</label>
         <textarea name="deskripsi" rows="4"
@@ -74,6 +100,7 @@
         @error('deskripsi') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
+      {{-- Cover Buku --}}
       <div class="md:col-span-2">
         <label class="block text-sm font-medium mb-1">Cover Buku (opsional)</label>
         <input type="file" name="cover_image"
@@ -90,4 +117,20 @@
     </div>
   </form>
 </div>
+
+{{-- 🔧 Script untuk menampilkan harga hanya saat "Sell" --}}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const radios = document.querySelectorAll('input[name="listing_type"]');
+    const hargaSell = document.getElementById('harga-sell-wrapper');
+
+    function toggleHargaSell() {
+      const selected = document.querySelector('input[name="listing_type"]:checked');
+      hargaSell.style.display = (selected && selected.value === 'sell') ? 'block' : 'none';
+    }
+
+    radios.forEach(radio => radio.addEventListener('change', toggleHargaSell));
+    toggleHargaSell();
+  });
+</script>
 @endsection

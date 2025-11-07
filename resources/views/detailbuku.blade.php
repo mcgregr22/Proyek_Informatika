@@ -104,7 +104,7 @@
               @csrf
               <input type="hidden" name="book_id" value="{{ $book->id_buku }}">
               <button class="btn btn-primary">
-                <i class="bi bi-plus-circle me-2"></i>Tambah ke Koleksi
+                <i class="bi bi-plus-circle me-2"></i>Tukar Buku
               </button>
             </form>
 
