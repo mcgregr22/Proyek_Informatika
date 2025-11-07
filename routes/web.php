@@ -108,7 +108,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
-// Forum Post
+// FORUM DISCUSS ROUTES
 use App\Http\Controllers\ForumController;
 
 // Grup Rute Forum yang memerlukan otentikasi
