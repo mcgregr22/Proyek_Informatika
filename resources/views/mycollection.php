@@ -2,37 +2,70 @@
 
 @section('content')
 <div class="p-6">
-    <h1 class="text-2xl font-bold text-gray-800 mb-4">Koleksi Buku Saya</h1>
-    <p class="text-gray-500 mb-6">Kelola koleksi buku Anda di sini.</p>
+  <h1 class="text-2xl font-bold text-gray-800 mb-2">Koleksi Buku Saya</h1>
+  <p class="text-gray-500 mb-6">
+    Pilih buku milik Anda untuk ditawarkan pada tukar buku.
+  </p>
 
-    @php
-        $books = [
-            ['title' => 'Bumi', 'author' => 'Tere Liye', 'cover' => 'https://picsum.photos/id/1015/400/600'],
-            ['title' => 'Filosofi Teras', 'author' => 'Henry Manampiring', 'cover' => 'https://picsum.photos/id/1016/400/600'],
-            ['title' => 'Laut Bercerita', 'author' => 'Leila S. Chudori', 'cover' => 'https://picsum.photos/id/1018/400/600'],
-            ['title' => 'Hujan', 'author' => 'Tere Liye', 'cover' => 'https://picsum.photos/id/1024/400/600'],
-            ['title' => 'Atomic Habits', 'author' => 'James Clear', 'cover' => 'https://picsum.photos/id/1027/400/600'],
-            ['title' => 'The Alchemist', 'author' => 'Paulo Coelho', 'cover' => 'https://picsum.photos/id/1035/400/600'],
-            ['title' => 'A Promised Land', 'author' => 'Barack Obama', 'cover' => 'https://picsum.photos/id/1049/400/600'],
-            ['title' => 'Big Magic', 'author' => 'Elizabeth Gilbert', 'cover' => 'https://picsum.photos/id/1041/400/600'],
-        ];
-    @endphp
+  {{-- Flash messages --}}
+  @if(session('success'))
+    <div class="p-3 mb-4 rounded bg-green-50 text-green-700">{{ session('success') }}</div>
+  @endif
+  @if(session('error'))
+    <div class="p-3 mb-4 rounded bg-red-50 text-red-700">{{ session('error') }}</div>
+  @endif
 
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        @foreach ($books as $book)
-            <div class="relative bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition">
-                <img src="{{ $book['cover'] }}" alt="{{ $book['title'] }}" class="w-full h-60 object-cover">
-                <div class="p-4 text-center">
-                    <h2 class="text-lg font-semibold text-gray-800">{{ $book['title'] }}</h2>
-                    <p class="text-gray-500 text-sm">{{ $book['author'] }}</p>
-                </div>
-                <button class="absolute top-3 right-3 bg-red-500 text-white rounded-full p-2 hover:bg-red-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        @endforeach
+  {{-- Peringatan jika belum ada target buku yang ingin ditukar --}}
+  @if(empty($requestedId))
+    <div class="p-3 mb-6 rounded bg-amber-50 text-amber-800 text-sm">
+      Anda belum memilih buku target untuk ditukar. Silakan kembali ke halaman detail buku dan klik
+      <span class="font-semibold">“Tukar Buku”</span> untuk memilih target.
     </div>
+  @endif
+
+  @if($myBooks->isEmpty())
+    <div class="rounded-2xl border border-zinc-200 bg-white shadow-sm p-10 text-center text-zinc-500">
+      <h5 class="text-lg font-semibold mb-1">Koleksi Anda masih kosong</h5>
+      <p class="text-sm">Tambahkan buku terlebih dahulu sebelum melakukan tukar buku.</p>
+    </div>
+  @else
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      @foreach ($myBooks as $b)
+        <div class="relative bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition">
+          {{-- Cover --}}
+          @php
+            $cover = $b->cover_image
+              ? asset('storage/'.$b->cover_image)
+              : 'https://picsum.photos/seed/'.$b->id_buku.'/400/600';
+          @endphp
+          <img src="{{ $cover }}" alt="{{ $b->title }}" class="w-full h-60 object-cover">
+
+          {{-- Info --}}
+          <div class="p-4 text-center">
+            <h2 class="text-lg font-semibold text-gray-800 truncate" title="{{ $b->title }}">
+              {{ $b->title }}
+            </h2>
+            <p class="text-gray-500 text-sm">{{ $b->author }}</p>
+          </div>
+
+          {{-- Aksi: pilih buku ini untuk ditukar --}}
+          <div class="p-4 pt-0">
+            <form action="{{ route('swap.store') }}" method="POST">
+              @csrf
+              <input type="hidden" name="requested_book_id" value="{{ $requestedId }}">
+              <input type="hidden" name="offered_book_id"   value="{{ $b->id_buku }}">
+
+              <button type="submit"
+                      class="w-full px-3 py-2 rounded-lg text-white
+                             {{ empty($requestedId) ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700' }}"
+                      {{ empty($requestedId) ? 'disabled' : '' }}>
+                Tukar dengan buku ini
+              </button>
+            </form>
+          </div>
+        </div>
+      @endforeach
+    </div>
+  @endif
 </div>
 @endsection

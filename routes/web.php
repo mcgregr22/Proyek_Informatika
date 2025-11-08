@@ -47,14 +47,17 @@ Route::middleware('auth')->group(function () {
     // =========================
     Route::view('/pengelolaan', 'pengelolaan')->name('pengelolaan');
 
-    // Keranjang DI DALAM layout pengelolaan
-    Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])
-        ->name('pengelolaan.keranjang'); // <- sesuai dengan yang dipanggil di layout
+    // // Keranjang DI DALAM layout pengelolaan
+    // Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])
+    //     ->name('pengelolaan.keranjang'); // <- sesuai dengan yang dipanggil di layout
        
 
-        Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
-        Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
-        Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
+         // Keranjang
+    Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])->name('pengelolaan.keranjang');
+    Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
+    Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
+    Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
+
 
 
     // Tambah Buku (view placeholder, sesuaikan file view-mu)
@@ -79,8 +82,13 @@ Route::middleware('auth')->group(function () {
     // =========================
     // HALAMAN TAMBAHAN
     // =========================
-    Route::view('/pengelolaan/mycollection', 'pengelolaan')
-    ->name('pengelolaan.mycollection');
+      // My Collection (pilih buku milik sendiri untuk ditukar)
+    Route::get('/pengelolaan/mycollection', [MyCollectionController::class, 'index'])->name('mycollection.index');
+    Route::get('/mycollection', fn () => redirect()->route('mycollection.index'))->name('mycollection.alias');
+
+
+
+
     Route::view('/forumdiscuss', 'forumdiscuss')->name('forumdiscuss');
 
     // =========================
@@ -90,7 +98,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin', [HomePageAdminController::class, 'index'])->name('homepage_admin');
 
     // Simpan buku baru (form tambah buku admin)
-    Route::post('/admin/buku', [HomePageAdminController::class, 'store'])->name('admin.books.store');
+    // Route::post('/admin/buku', [HomePageAdminController::class, 'store'])->name('admin.books.store');
 
     // Hapus buku (pakai route model binding; jika PK tabelmu 'id_buku', pakai {book:id_buku})
     Route::delete('/admin/buku/{book:id_buku}', [HomePageAdminController::class, 'destroy'])->name('admin.books.destroy');

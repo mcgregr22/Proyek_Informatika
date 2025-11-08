@@ -47,10 +47,6 @@
           <input class="form-control" type="search" name="q" placeholder="Cari Buku">
         </form>
 
-        <ul class="navbar-nav align-items-center">
-          <li class="nav-item"><a class="nav-link fw-semibold" href="/swapbook">Swapbook</a></li>
-          <li class="nav-item"><a class="nav-link fw-semibold" href="/mycollection">My Collection</a></li>
-        </ul>
 
         <div class="d-flex align-items-center ms-3">
           <a href="/keranjang" class="me-2 text-decoration-none text-dark"><i class="bi bi-cart"></i></a>
@@ -87,16 +83,25 @@
               <input type="number" min="1" value="1" class="form-control text-center" id="qty">
               <button class="btn btn-outline-secondary" type="button" id="plus">+</button>
             </div>
+
+            {{-- 🛒 ICON TAMBAH KE KERANJANG (BARU) --}}
+            <form id="addCartInline" action="{{ route('cart.add') }}" method="POST" class="ms-2">
+              @csrf
+              <input type="hidden" name="book_id" value="{{ $book->id_buku }}">
+              <input type="hidden" name="qty" id="qtyInline" value="1">
+              <button type="submit" class="btn btn-outline-success" title="Tambah ke Keranjang">
+                <i class="bi bi-cart-plus"></i>
+              </button>
+            </form>
           </div>
 
           <div class="d-flex flex-wrap gap-2">
-            <form action="/mycollection" method="POST">
-              @csrf
-              <input type="hidden" name="book_id" value="{{ $book->id_buku }}">
-              <button class="btn btn-primary">
-                <i class="bi bi-plus-circle me-2"></i>Tambah ke Koleksi
-              </button>
-            </form>
+            <form action="{{ route('mycollection.index') }}" method="GET">
+  <input type="hidden" name="requested" value="{{ $book->id_buku }}">
+  <button type="submit" class="btn btn-primary">
+    <i class=""></i>Tukar Buku
+  </button>
+</form>
 
             <form action="/keranjang" method="POST" class="ms-1">
               @csrf
@@ -123,17 +128,16 @@
         <h5 class="mb-3">Informasi Buku</h5>
         <div class="row row-cols-1 row-cols-md-2 g-3 info-grid">
           <div class="col d-flex justify-content-between">
-            <span class="label">Bahasa:</span><span class="val">Indonesia</span>
+            <span class="label">Bahasa:</span><span class="val">{{ $book->bahasa ?: '_'}}</span>
           </div>
           <div class="col d-flex justify-content-between">
-            <span class="label">Penerbit:</span><span class="val">—</span>
+            <span class="label">Penerbit:</span><span class="val">{{ $book->penerbit ?: '—' }}</span>
           </div>
           <div class="col d-flex justify-content-between">
-         <span class="label">Terdaftar Oleh:</span>
-        <span class="val">{{ $book->user->name ?? '—' }}</span>
+            <span class="label">Terdaftar oleh:</span><span class="val">{{ $book->user->name ?? '—' }}</span>
           </div>
           <div class="col d-flex justify-content-between">
-            <span class="label">Tanggal Rilis:</span><span class="val">—</span>
+            <span class="label">Tanggal Rilis:</span><span class="val">{{ $book->tanggal_rilis ?: '_'}}</span>
           </div>
           <div class="col d-flex justify-content-between">
             <span class="label">ISBN:</span><span class="val">{{ $book->isbn ?: '—' }}</span>
@@ -150,7 +154,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // qty control
+    // qty control (kode asli kamu)
     const qty   = document.getElementById('qty');
     const plus  = document.getElementById('plus');
     const minus = document.getElementById('minus');
@@ -159,6 +163,26 @@
     plus?.addEventListener('click', ()=>{ qty.value = (+qty.value||1)+1; qtyField.value = qty.value; });
     minus?.addEventListener('click', ()=>{ qty.value = Math.max(1,(+qty.value||1)-1); qtyField.value = qty.value; });
     qty?.addEventListener('input', ()=>{ if(qty.value<1) qty.value=1; qtyField.value = qty.value; });
+
+    // ====== Tambahan untuk ikon keranjang (OPS B: sinkronisasi hidden qtyInline) ======
+    const qtyInline   = document.getElementById('qtyInline');
+    const addCartForm = document.getElementById('addCartInline');
+
+    function syncQtyInline() {
+      qtyInline.value = Math.max(1, parseInt(qty.value || '1', 10));
+    }
+
+    // sinkron saat user interaksi
+    plus?.addEventListener('click', syncQtyInline);
+    minus?.addEventListener('click', syncQtyInline);
+    qty?.addEventListener('input', syncQtyInline);
+
+    // pastikan tersinkron tepat sebelum submit
+    addCartForm?.addEventListener('submit', syncQtyInline);
+
+    // set nilai awal saat halaman selesai dimuat
+    document.addEventListener('DOMContentLoaded', syncQtyInline);
+   
   </script>
 </body>
 </html>

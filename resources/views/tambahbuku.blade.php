@@ -63,6 +63,33 @@
         @error('isbn') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
+      {{-- tanggal rilis --}}
+      <div>
+        <label class="block text-sm font-medium mb-1">Tanggal Rilis</label>
+        <input type="date" name="tanggal_rilis"
+               class="w-full border rounded-lg px-3 py-2 @error('tanggal_rilis') border-red-400 @enderror"
+               value="{{ old('tanggal_rilis') }}" required>
+        @error('tanggal_rilis') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+      </div>
+
+      {{-- bahasa --}}
+      <div>
+        <label class="block text-sm font-medium mb-1">Bahasa</label>
+        <input type="text" name="bahasa"
+               class="w-full border rounded-lg px-3 py-2 @error('bahasa') border-red-400 @enderror"
+               placeholder="Masukkan Bahasa" value="{{ old('bahasa') }}">
+        @error('bahasa') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+      </div>
+
+      {{-- penerbit --}}
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium mb-1">Penerbit</label>
+        <input type="text" name="penerbit"
+               class="w-full border rounded-lg px-3 py-2 @error('penerbit') border-red-400 @enderror"
+               placeholder="Masukkan nama penerbit" value="{{ old('penerbit') }}" required>
+        @error('penerbit') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+      </div>
+
       {{-- 🔹 Listing Type (checkbox, bisa pilih lebih dari 1) --}}
       <div class="md:col-span-2">
         <label class="block text-sm font-medium mb-1">Listing Type</label>

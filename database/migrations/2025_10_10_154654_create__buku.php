@@ -24,6 +24,10 @@ return new class extends Migration
             $table->string('isbn')->nullable();
             $table->text('deskripsi')->nullable();
             $table->string('cover_image')->nullable();
+            $table->string('penerbit')->nullable();
+            $table->string('bahasa')->nullable();
+            $table->date('tanggal_rilis')->nullable();
+
             $table->decimal('harga', 10, 2)->nullable();
 
             // Kolom tambahan untuk fitur swap book
