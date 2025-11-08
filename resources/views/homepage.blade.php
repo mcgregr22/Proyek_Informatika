@@ -192,11 +192,11 @@
   <!-- Banner -->
   <div class="container">
     <div class="banner mt-4">
-      <h2>WELCOME TO LIBRARY-HUB</h2>
-      <p>"The only thing that you absolutely have to know, is the location of the library."</p>
-      <a href="#" class="btn btn-light">SHOP NOW</a>
+      <h2>Selamat Datang di Library-Hub</h2>
+      <!-- <p>"The only thing that you absolutely have to know, is the location of the library."</p> -->
+      <!-- <a href="#" class="btn btn-light">SHOP NOW</a>
       <a href="#" class="btn btn-outline ms-2">@LIBRARY-HUB</a>
-    </div>
+    </div> -->
   </div>
 
   <!-- Sections -->
