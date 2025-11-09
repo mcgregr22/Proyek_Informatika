@@ -86,7 +86,7 @@ Route::middleware('auth')->group(function () {
     // =========================
       // My Collection (pilih buku milik sendiri untuk ditukar)
     Route::get('/pengelolaan/mycollection', [MyCollectionController::class, 'index'])->name('mycollection.index');
-    Route::get('/mycollection', fn () => redirect()->route('mycollection.index'))->name('mycollection.alias');
+    // Route::get('/mycollection', fn () => redirect()->route('mycollection.index'))->name('mycollection.alias');
 
 
 
