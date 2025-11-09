@@ -3,43 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Purchase;
+use Illuminate\Support\Facades\Auth;
 
 class PurchaseController extends Controller
 {
-    // 🔹 MENAMPILKAN DAFTAR TRANSAKSI
-    public function index()
+    
+    public function store(Request $request, $bookId)
     {
-        // Data dummy sementara, nanti bisa diganti dengan query database
-        $transactions = [
-            (object)['id' => 'TXN001', 'user_name' => 'Andi Pratama', 'date' => '2023-10-26', 'total' => 150000, 'status' => 'Completed', 'avatar' => 'https://placehold.co/40x40/57b561/ffffff?text=AP'],
-            (object)['id' => 'TXN002', 'user_name' => 'Budi Santoso', 'date' => '2023-10-25', 'total' => 225000, 'status' => 'Pending', 'avatar' => 'https://placehold.co/40x40/737373/ffffff?text=BS'],
-            (object)['id' => 'TXN003', 'user_name' => 'Citra Dewi', 'date' => '2023-10-24', 'total' => 300000, 'status' => 'Completed', 'avatar' => 'https://placehold.co/40x40/f4b360/ffffff?text=CD'],
-        ];
+        $request->validate([
+            'qty' => 'required|integer|min:1',
+            'address' => 'required|string',
+            'payment_method' => 'required|string',
+        ]);
 
-        // Mengirim ke view resources/views/purchase.blade.php
-        return view('purchase', compact('transactions'));
-    }
+        Purchase::create([
+            'user_id' => Auth::id(),
+            'book_id' => $bookId,
+            'qty' => $request->qty,
+            'total' => $request->qty * 20000, // contoh, bisa ambil dari harga buku
+            'address' => $request->address,
+            'payment_method' => $request->payment_method,
+            'status' => 'pending',
+        ]);
+        
 
-    // 🔹 MENAMPILKAN DETAIL TRANSAKSI
-    public function show($id)
-    {
-        $transaction = (object)[
-            'id' => 'TXN001',
-            'user_name' => 'Andi Pratama',
-            'date' => '2023-10-26',
-            'status' => 'Completed',
-            'avatar' => 'https://placehold.co/40x40/57b561/ffffff?text=AP',
-            'total' => 150000,
-        ];
-
-        $books = [
-            (object)['title' => 'Pemrograman Laravel', 'author' => 'Budi Santoso', 'price' => 50000, 'quantity' => 2],
-            (object)['title' => 'Belajar PHP Modern', 'author' => 'Citra Dewi', 'price' => 50000, 'quantity' => 1],
-        ];
-
-        $subtotal = 150000;
-        $shipping = 15000;
-
-        return view('purchase-detail', compact('transaction', 'books', 'subtotal', 'shipping'));
+        return redirect()->back()->with('success', 'Pesanan berhasil dibuat! 🎉');
     }
 }

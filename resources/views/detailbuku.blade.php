@@ -107,9 +107,11 @@
               @csrf
               <input type="hidden" name="book_id" value="{{ $book->id_buku }}">
               <input type="hidden" name="qty" id="qtyField" value="1">
-              <button class="btn btn-outline">
+              <!-- Tombol Beli Sekarang -->
+              <button type="button" class="btn btn-outline" data-bs-toggle="modal" data-bs-target="#purchaseModal">
                 <i class="bi bi-bag me-2"></i>Beli Sekarang
               </button>
+
             </form>
           </div>
         </div>
@@ -153,36 +155,82 @@
   <footer class="text-center text-muted py-4">© 2025 Library-Hub</footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // qty control (kode asli kamu)
-    const qty   = document.getElementById('qty');
-    const plus  = document.getElementById('plus');
-    const minus = document.getElementById('minus');
-    const qtyField = document.getElementById('qtyField');
+  <!-- Modal Pembelian -->
+<div class="modal fade" id="purchaseModal" tabindex="-1" aria-labelledby="purchaseModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content rounded-4 shadow-lg border-0">
 
-    plus?.addEventListener('click', ()=>{ qty.value = (+qty.value||1)+1; qtyField.value = qty.value; });
-    minus?.addEventListener('click', ()=>{ qty.value = Math.max(1,(+qty.value||1)-1); qtyField.value = qty.value; });
-    qty?.addEventListener('input', ()=>{ if(qty.value<1) qty.value=1; qtyField.value = qty.value; });
+      <div class="modal-header bg-dark text-white rounded-top-4">
+        <h5 class="modal-title" id="purchaseModalLabel">🛒 Informasi Pembelian</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-    // ====== Tambahan untuk ikon keranjang (OPS B: sinkronisasi hidden qtyInline) ======
-    const qtyInline   = document.getElementById('qtyInline');
-    const addCartForm = document.getElementById('addCartInline');
+      <form action="{{ route('purchase.store', $book->id_buku) }}" method="POST">
+        @csrf
+        <div class="modal-body p-4">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nama Lengkap</label>
+            <input type="text" name="nama" class="form-control" value="{{ Auth::user()->name ?? '' }}" required>
+          </div>
 
-    function syncQtyInline() {
-      qtyInline.value = Math.max(1, parseInt(qty.value || '1', 10));
-    }
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Alamat Pengiriman</label>
+            <textarea name="address" class="form-control" rows="3" placeholder="Masukkan alamat lengkap" required></textarea>
+          </div>
 
-    // sinkron saat user interaksi
-    plus?.addEventListener('click', syncQtyInline);
-    minus?.addEventListener('click', syncQtyInline);
-    qty?.addEventListener('input', syncQtyInline);
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nomor Telepon</label>
+            <input type="text" name="phone" class="form-control" placeholder="Masukkan nomor HP aktif" required>
+          </div>
 
-    // pastikan tersinkron tepat sebelum submit
-    addCartForm?.addEventListener('submit', syncQtyInline);
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Jumlah</label>
+              <input type="number" name="qty" id="qtyModal" min="1" value="1" class="form-control" required>
+            </div>
 
-    // set nilai awal saat halaman selesai dimuat
-    document.addEventListener('DOMContentLoaded', syncQtyInline);
-   
-  </script>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Metode Pembayaran</label>
+              <select name="payment_method" class="form-select" required>
+                <option value="">Pilih Metode</option>
+                <option value="transfer">Transfer Bank</option>
+                <option value="cod">Bayar di Tempat (COD)</option>
+                <option value="ewallet">E-Wallet (GoPay/OVO/Dana)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mt-4 text-end">
+            <h5>Total: Rp <span id="totalPriceModal">{{ number_format($book->harga, 0, ',', '.') }}</span></h5>
+            <input type="hidden" name="total" id="totalHiddenModal" value="{{ $book->harga }}">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-circle me-2"></i>Konfirmasi Pembelian
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Script perhitungan total otomatis -->
+<script>
+  const qtyModal = document.getElementById('qtyModal');
+  const totalPriceModal = document.getElementById('totalPriceModal');
+  const totalHiddenModal = document.getElementById('totalHiddenModal');
+  const hargaBuku = {{ $book->harga }};
+
+  qtyModal.addEventListener('input', () => {
+    const qty = parseInt(qtyModal.value) || 1;
+    const total = hargaBuku * qty;
+    totalPriceModal.textContent = total.toLocaleString('id-ID');
+    totalHiddenModal.value = total;
+  });
+</script>
+
 </body>
 </html>

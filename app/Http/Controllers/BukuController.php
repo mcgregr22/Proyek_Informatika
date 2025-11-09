@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Buku;
 use App\Models\Koleksi;
+use App\Models\Purchase; // 🟢 Tambahkan ini
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,7 +34,7 @@ class BukuController extends Controller
             $imagePath = $request->file('cover_image')->store('buku', 'public');
         }
 
-        $buku =Buku::create([
+        $buku = Buku::create([
             'id_kategori' => $request->id_kategori,
             'title' => $request->title,
             'author' => $request->author,
@@ -49,34 +50,39 @@ class BukuController extends Controller
         ]);
 
         Koleksi::create([
-        'user_id' => Auth::id(),
-        'id_buku' => $buku->id_buku,
-        'qty' => 1,
-        'access_status' => 'private',
-        'koleksi_date' => now(),
-    ]);
+            'user_id' => Auth::id(),
+            'id_buku' => $buku->id_buku,
+            'qty' => 1,
+            'access_status' => 'private',
+            'koleksi_date' => now(),
+        ]);
 
         return redirect()->route('pengelolaan')->with('success', '📚 Buku berhasil ditambahkan!');
     }
 
-    
+    /** 🛒 Proses Pembelian Buku */
+    public function purchase(Request $request, $bookId)
+    {
+        $request->validate([
+            'qty' => 'required|integer|min:1',
+            'address' => 'required|string',
+            'payment_method' => 'required|string',
+        ]);
 
-    // /** ❌ Hapus buku + cover (jika ada) */
-    // public function destroy(Buku $book)
-    // {
-    //     // Cegah user lain menghapus buku bukan miliknya
-    //     if ($book->user_id !== Auth::id()) {
-    //         abort(403, 'Anda tidak memiliki izin untuk menghapus buku ini.');
-    //     }
+        $book = Buku::findOrFail($bookId);
+        $total = $book->harga * $request->qty;
 
-    //     if ($book->cover_image) {
-    //         Storage::disk('public')->delete($book->cover_image);
-    //     }
+        Purchase::create([
+            'user_id' => Auth::id(),
+            'book_id' => $book->id_buku,
+            'qty' => $request->qty,
+            'total' => $total,
+            'address' => $request->address,
+            'payment_method' => $request->payment_method,
+            'status' => 'pending',
+        ]);
 
-    //     $book->delete();
-
-    //     return redirect()
-    //         ->route('pengelolaan')
-    //         ->with('success', '🗑 Buku berhasil dihapus!');
-    // }
+        return redirect()->back()->with('success', '🛍️ Pembelian berhasil! Silakan tunggu konfirmasi.');
+    }
 }
+    

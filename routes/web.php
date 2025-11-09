@@ -146,6 +146,7 @@ Route::middleware(['auth'])->prefix('forumdiscuss')->group(function () {
 // =========================
 // PURCHASE DETAIL ROUTES
 use App\Http\Controllers\PurchaseController;
-
-Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase.index');
-Route::get('/purchase/{id}', [PurchaseController::class, 'show'])->name('purchase.detail');
+Route::post('/purchase', [PurchaseController::class, 'show'])->name('purchase.show');
+Route::post('/purchase/confirm', [PurchaseController::class, 'confirm'])->name('purchase.confirm');
+// Route::post('/purchase/{bookId}', [BukuController::class, 'purchase'])->name('purchase');
+Route::post('/purchase/{id}', [PurchaseController::class, 'store'])->name('purchase.store');
