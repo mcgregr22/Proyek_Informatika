@@ -88,15 +88,15 @@
               <button class="btn btn-outline-secondary" type="button" id="plus">+</button>
             </div>
 
-            {{-- 🛒 ICON TAMBAH KE KERANJANG (BARU) --}}
-            <form id="addCartInline" action="{{ route('cart.add') }}" method="POST" class="ms-2">
-              @csrf
-              <input type="hidden" name="book_id" value="{{ $book->id_buku }}">
-              <input type="hidden" name="qty" id="qtyInline" value="1">
-              <button type="submit" class="btn btn-outline-success" title="Tambah ke Keranjang">
-                <i class="bi bi-cart-plus"></i>
-              </button>
-            </form>
+           {{-- 🛒 ICON TAMBAH KE KERANJANG (FIX) --}}
+<form id="addCartInline" action="{{ route('cart.add') }}" method="POST" class="d-inline">
+  @csrf
+  <input type="hidden" name="id_buku" value="{{ $book->id_buku }}">
+  <input type="hidden" id="qtyInline" name="qty" value="1">
+  <button type="submit" class="btn btn-outline-success" title="Tambah ke Keranjang">
+    <i class="bi bi-cart-plus"></i>
+  </button>
+</form>
           </div>
 
           <div class="d-flex flex-wrap gap-2">
