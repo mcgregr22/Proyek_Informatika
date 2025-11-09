@@ -98,54 +98,72 @@
     </div>
 
     <div class="form-section">
-      <h5>Profil</h5>
-      <form>
-        <div class="mb-3">
-          <label class="form-label">Nama Lengkap</label>
-          <input type="text" class="form-control" value="{{ $user->name }}" readonly>
-        </div>
+    <h5>Profil</h5>
+    <form action="{{ route('profil_user.update') }}" method="POST">
+      @csrf
+      @method('PUT')
 
-        <div class="mb-3">
+      <div class="mb-3">
+        <label class="form-label">Nama Lengkap</label>
+        <input type="text" class="form-control" name="name" value="{{ $user->name }}">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" name="email" value="{{ $user->email }}">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Nomor Telepon</label>
+        <input type="text" class="form-control" name="phone" value="{{ $user->phone ?? '' }}">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Role</label>
+        <input type="text" class="form-control" name="role" value="{{ $user->role }}" readonly>
+      </div>
+
+      <hr>
+
+      <h5>Akun</h5>
+      <div class="row">
+        <div class="col-md-6 mb-3">
           <label class="form-label">Email</label>
-          <input type="email" class="form-control" value="{{ $user->email }}" readonly>
+          <input type="email" class="form-control" name="email_confirm" value="{{ $user->email }}">
         </div>
-
-        <div class="mb-3">
-          <label class="form-label">Nomor Telepon</label>
-          <input type="text" class="form-control" value="{{ $user->telepon ?? '-' }}" readonly>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Role</label>
-          <input type="text" class="form-control" value="{{ $user->role ?? 'pengguna' }}" readonly>
-        </div>
-
-        <hr>
-
-        <h5>Akun</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" value="{{ $user->email }}" readonly>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Password</label>
-            <div class="input-group">
-              <input id="passwordInput" type="password" class="form-control" value="{{ $user->password }}" readonly>
-              <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                <i id="toggleIcon" class="bi bi-eye"></i>
-              </button>
-            </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Password</label>
+          <div class="input-group">
+            <input id="passwordInput" type="password" class="form-control" name="password" placeholder="Kosongkan jika tidak ingin mengubah">
+            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+              <i id="toggleIcon" class="bi bi-eye"></i>
+            </button>
           </div>
         </div>
+      </div>
 
-        <div class="text-center mt-4">
-          <button type="submit" class="btn-save">Simpan</button>
-        </div>
-      </form>
+      <div class="text-center mt-4">
+        <button type="submit" class="btn-save">Simpan</button>
+      </div>
+    </form>
+  </div>
     </div>
   </div>
 </div>
+<script>
+  document.getElementById("togglePassword").addEventListener("click", function() {
+    const passwordInput = document.getElementById("passwordInput");
+    const toggleIcon = document.getElementById("toggleIcon");
 
+    // Ganti tipe input password <-> text
+    const isPassword = passwordInput.type === "password";
+    passwordInput.type = isPassword ? "text" : "password";
+
+    // Ganti ikon mata
+    toggleIcon.classList.toggle("bi-eye");
+    toggleIcon.classList.toggle("bi-eye-slash");
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

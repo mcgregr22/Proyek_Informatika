@@ -78,6 +78,8 @@ Route::middleware('auth')->group(function () {
     // PROFIL USER
     // =========================
     Route::get('/profil_user', [ProfilUserController::class, 'index'])->name('profil_user');
+    Route::put('/profil_user/update', [ProfilUserController::class, 'update'])->name('profil_user.update');
+
 
     // =========================
     // HALAMAN TAMBAHAN
