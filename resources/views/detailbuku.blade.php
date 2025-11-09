@@ -20,6 +20,16 @@
     .info-grid .val{font-weight:600;color:#111}
     .btn-outline{border-color:#c7d2fe;color:#3b5bdb}
     .btn-outline:hover{background:#eef2ff}
+    .toast {
+      opacity: 0;
+      transition: opacity 0.4s ease, transform 0.3s ease;
+      transform: scale(0.95);
+    }
+    .toast.show {
+      opacity: 1;
+      transform: scale(1);
+}
+
   </style>
 </head>
 <body>
@@ -232,17 +242,18 @@
     totalHiddenModal.value = total;
   });
 </script>
-<!-- ✅ Toast Notifikasi -->
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert">
+<!-- ✅ Toast di tengah layar -->
+<div class="toast-container position-fixed top-50 start-50 translate-middle">
+  <div id="cartToast" class="toast align-items-center text-bg-success border-0 shadow-lg" role="alert">
     <div class="d-flex">
-      <div class="toast-body">
+      <div class="toast-body text-center fs-6">
         🛒 Buku berhasil ditambahkan ke keranjang!
       </div>
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
     </div>
   </div>
 </div>
+
 
 <script>
 document.getElementById('addCartInline').addEventListener('submit', async function(e) {
