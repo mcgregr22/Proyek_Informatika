@@ -74,4 +74,28 @@ class HomePageAdminController extends Controller
         $admin = Auth::user();
         return view('profil_admin', compact('admin'));
     }
+   public function updateProfil(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email',
+        'phone' => 'nullable|string|max:20',
+        'password' => 'nullable|min:6',
+    ]);
+
+    $admin = auth()->user();
+
+    $admin->name = $request->name;
+    $admin->email = $request->email;
+    $admin->phone = $request->phone;
+
+    if ($request->password) {
+        $admin->password = bcrypt($request->password);
+    }
+
+    $admin->save();
+
+    return redirect()->route('admin.profil')->with('success', 'Profil berhasil diperbarui!');
+}
+
 }

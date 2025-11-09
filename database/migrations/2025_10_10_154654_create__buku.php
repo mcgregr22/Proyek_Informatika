@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('_buku', function (Blueprint $table) {
             // ID Buku (INT biasa)
-          $table->id('id_buku'); // otomatis auto increment primary key
+            $table->id('id_buku'); // otomatis auto increment primary key
 
 
             // Relasi ke kategori (jika ada)

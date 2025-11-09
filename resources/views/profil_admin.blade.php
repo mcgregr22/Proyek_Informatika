@@ -91,15 +91,24 @@
    <div class="d-flex align-items-center ms-3">
    <a href="/keranjang" class="navbar-icon"><i class="bi bi-cart"></i></a>
    <a href="/forumdiscuss" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
-   <a href="{{ route('profil_admin') }}" class="navbar-icon">
+   <a href="{{ route('admin.profil') }}" class="navbar-icon">
+
       <i class="bi bi-person-circle"></i>
    </a>
-</div>
+</div>  
 </nav>
 
 <!-- Konten Profil -->
 <div class="container">
     <div class="profile-card mt-5">
+
+        {{-- ✅ Alert sukses diletakkan di sini --}}
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="profile-header">
             <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile Picture">
             <h4>{{ $admin->name }}</h4>
@@ -107,50 +116,51 @@
 
         <div class="form-section">
             <h5>Profil</h5>
-            <form>
-                <div class="mb-3">
-                    <label class="form-label">Nama Lengkap</label>
-                    <input type="text" class="form-control" value="{{ $admin->name }}" readonly>
-                </div>
+           <form action="{{ route('admin.profil.update') }}" method="POST">
+    @csrf
+    @method('PUT')
 
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-control" value="{{ $admin->email }}" readonly>
-                </div>
+    <div class="mb-3">
+        <label class="form-label">Nama Lengkap</label>
+        <input type="text" name="name" class="form-control" value="{{ $admin->name }}">
+    </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Nomor Telepon</label>
-                    <input type="text" class="form-control" value="{{ $admin->phone ?? '-' }}" readonly>
-                </div>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" value="{{ $admin->email }}">
+    </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Role</label>
-                    <input type="text" class="form-control" value="{{ $admin->role ?? 'Admin' }}" readonly>
-                </div>
+    <div class="mb-3">
+        <label class="form-label">Nomor Telepon</label>
+        <input type="text" name="phone" class="form-control" value="{{ $admin->phone }}">
+    </div>
 
-                <hr>
+    <div class="mb-3">
+        <label class="form-label">Role</label>
+        <input type="text" class="form-control" value="{{ $admin->role ?? 'Admin' }}" readonly>
+    </div>
 
-                <h5>Account</h5>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" value="{{ $admin->email }}" readonly>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Password</label>
-                        <div class="input-group">
-                            <input id="passwordInput" type="password" class="form-control" value="{{ $admin->password }}" readonly>
-                            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                                <i id="toggleIcon" class="bi bi-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+    <hr>
 
-                <div class="text-center mt-4">
-                    <button type="button" class="btn-save" disabled>Simpan</button>
-                </div>
-            </form>
+    <h5>Account</h5>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Password Baru (Opsional)</label>
+            <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak ganti">
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Password Saat Ini</label>
+            <input type="text" class="form-control" value="Tersembunyi (terenkripsi)" readonly>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <button type="submit" class="btn-save">Simpan Perubahan</button>
+    </div>
+</form>
+
         </div>
     </div>
 </div>
