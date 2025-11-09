@@ -3,34 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Koleksi;
 
 class MyCollectionController extends Controller
 {
-    /**
-     * Tampilkan daftar koleksi buku milik user (halaman pilih saat tukar).
-     */
-    public function index(Request $request)
+    public function index()
     {
-        $userId      = Auth::id();
-        $requestedId = $request->query('requested'); // ID buku target yang ingin ditukar
+        $userId = Auth::id();
 
-        // Ambil koleksi milik user dengan join ke tabel _buku
-        $myBooks = DB::table('koleksi as k')
-            ->join('_buku as b', 'k.id_buku', '=', 'b.id_buku')
-            ->where('k.user_id', $userId)
-            ->select(
-                // kolom buku
-                'b.id_buku', 'b.title', 'b.author', 'b.isbn',
-                'b.deskripsi', 'b.cover_image', 'b.harga', 'b.user_id as owner_user_id',
-                // kolom koleksi
-                'k.id_koleksi as koleksi_id', 'k.qty', 'k.access_status',
-                'k.koleksi_date', 'k.purchased_at', 'k.created_at as koleksi_created_at'
-            )
-            ->orderBy('b.title', 'asc')
-            ->get();
+        // Ambil semua koleksi milik user yang sedang login, termasuk data buku
+        $myBooks = Koleksi::with('buku')
+            ->where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                return $item->buku; // ambil objek buku dari relasi
+            })
+            ->filter(); // buang null jika ada
 
-        return view('mycollection', compact('myBooks', 'requestedId'));
+        return view('mycollection', compact('myBooks'));
     }
 }

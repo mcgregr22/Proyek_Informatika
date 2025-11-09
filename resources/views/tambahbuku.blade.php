@@ -13,7 +13,7 @@
     </div>
   @endif
 
-  <form action="{{ route('homepage_admin.store') }}" method="POST" enctype="multipart/form-data">
+  <form action="{{ route('buku.store') }}" method="POST" enctype="multipart/form-data">
 
     @csrf
 

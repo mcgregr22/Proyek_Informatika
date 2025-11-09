@@ -7,6 +7,9 @@ use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\ProfilUserController;
 use App\Http\Controllers\HomePageAdminController;
+use App\Http\Controllers\BukuController;
+use App\Http\Controllers\MyCollectionController;
+
 
 // ----------------------
 // HALAMAN AWAL (PUBLIC)
@@ -86,10 +89,7 @@ Route::middleware('auth')->group(function () {
     // =========================
       // My Collection (pilih buku milik sendiri untuk ditukar)
     Route::get('/pengelolaan/mycollection', [MyCollectionController::class, 'index'])->name('mycollection.index');
-    // Route::get('/mycollection', fn () => redirect()->route('mycollection.index'))->name('mycollection.alias');
-
-
-
+    Route::get('/mycollection', [MyCollectionController::class, 'index'])->name('mycollection.index');
 
     Route::view('/forumdiscuss', 'forumdiscuss')->name('forumdiscuss');
 
@@ -108,12 +108,12 @@ Route::middleware('auth')->group(function () {
     // (opsional) Profil admin
     Route::get('/admin/profil', [HomePageAdminController::class, 'profil'])->name('admin.profil');
 
-    // ----------------------
-    // HOMEPAGE ADMIN
-    // ----------------------
-    Route::get('/homepage_admin', [HomePageAdminController::class, 'index'])->name('homepage_admin');
-    Route::post('/homepage_admin/tambah', [HomePageAdminController::class, 'store'])->name('homepage_admin.store');
-    Route::delete('/homepage_admin/hapus/{id}', [HomePageAdminController::class, 'destroy'])->name('homepage_admin.destroy');
+
+// =========================
+    // BUKU CONTROLLER
+    // =========================
+    Route::post('/buku/tambah', [BukuController::class, 'store'])->name('buku.store');
+    Route::delete('/buku/hapus/{book}', [BukuController::class, 'destroy'])->name('buku.destroy');
 
     // =========================
     // LOGOUT

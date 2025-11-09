@@ -39,8 +39,14 @@ class Buku extends Model
     }
 
     public function user()
-{
-    return $this->belongsTo(User::class, 'user_id');
-}
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function koleksi()
+    {
+        return $this->hasMany(Koleksi::class, 'id_buku', 'id_buku');
+    }
+
 
 }

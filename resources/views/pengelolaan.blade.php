@@ -59,7 +59,7 @@
             x-show="openSidebar"
             x-transition.duration.200ms>
         <nav class="flex-1 px-4 py-5 space-y-1 text-[1.05rem]">
-          <a href="/pengelolaan" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
+          <a href="/pengelolaan/mycollection" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
             <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6c-1.5-1-3.5-2-6-2-1.657 0-3 .895-3 2v12c0-1.105 1.343-2 3-2 2.5 0 4.5 1 6 2m0-12c1.5-1 3.5-2 6-2 1.657 0 3 .895 3 2v12c0-1.105-1.343-2-3-2-2.5 0-4.5 1-6 2"/>
