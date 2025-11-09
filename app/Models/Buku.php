@@ -3,39 +3,39 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Buku extends Model
 {
-    protected $table = '_buku';
+    protected $table      = '_buku';   // ganti ke 'buku' kalau tabelmu tanpa underscore
     protected $primaryKey = 'id_buku';
-
-    // di migration kamu tidak set auto-increment & timestamps
-    public $incrementing = true ; // ubah ke true kalau nanti kolom id_buku dibuat auto-increment
-    protected $keyType = 'int';
-    public $timestamps = false;
+    public $incrementing  = true;
+    protected $keyType    = 'int';
+    public $timestamps    = false;
 
     protected $fillable = [
-        'id_buku',
-    'id_kategori',
-    'title',
-    'author',
-    'isbn',
-    'deskripsi',
-    'cover_image',
-    'harga',
-    'listing_type',
-    'user_id',
-    'tanggal_rilis',
-    'penerbit',
-    'bahasa'
+        'id_kategori',
+        'title',
+        'author',
+        'isbn',
+        'deskripsi',
+        'cover_image',
+        'harga',
+        'listing_type',
+        'user_id',
     ];
 
-    
+    protected $casts = [
+        'id_buku'     => 'integer',
+        'id_kategori' => 'integer',
+        'user_id'     => 'integer',
+        'harga'       => 'integer',
+    ];
 
-    // helper kecil buat format harga (opsional dipakai di Blade)
-    public function getHargaRupiahAttribute()
+    /** Relations */
+    public function kategori()
     {
-        return 'Rp ' . number_format($this->harga, 0, ',', '.');
+        return $this->belongsTo(Kategori::class, 'id_kategori', 'id_kategori');
     }
 
     public function user()
@@ -43,10 +43,34 @@ class Buku extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function koleksi()
+    /** Accessors */
+    public function getHargaRupiahAttribute(): string
     {
-        return $this->hasMany(Koleksi::class, 'id_buku', 'id_buku');
+        return 'Rp ' . number_format((int) $this->harga, 0, ',', '.');
     }
 
+    public function getCoverUrlAttribute(): ?string
+    {
+        return $this->cover_image
+            ? Storage::url($this->cover_image)
+            : null;
+    }
 
+    /** Scopes */
+    public function scopeSearch($q, ?string $term)
+    {
+        $term = trim((string) $term);
+        if ($term === '') return $q;
+
+        return $q->where(function ($x) use ($term) {
+            $x->where('title',  'like', "%{$term}%")
+              ->orWhere('author','like', "%{$term}%")
+              ->orWhere('isbn',  'like', "%{$term}%");
+        });
+    }
+
+    public function scopeWithCover($q)
+    {
+        return $q->whereNotNull('cover_image')->where('cover_image', '!=', '');
+    }
 }

@@ -86,13 +86,14 @@
 
             {{-- 🛒 ICON TAMBAH KE KERANJANG (BARU) --}}
             <form id="addCartInline" action="{{ route('cart.add') }}" method="POST" class="ms-2">
-              @csrf
-              <input type="hidden" name="book_id" value="{{ $book->id_buku }}">
-              <input type="hidden" name="qty" id="qtyInline" value="1">
-              <button type="submit" class="btn btn-outline-success" title="Tambah ke Keranjang">
-                <i class="bi bi-cart-plus"></i>
-              </button>
-            </form>
+            @csrf
+            <input type="hidden" name="book_id" value="{{ $book->id_buku }}">
+            <input type="hidden" name="qty" id="qtyInline" value="1">
+            <button type="submit" class="btn btn-outline-success" title="Tambah ke Keranjang">
+              <i class="bi bi-cart-plus"></i>
+            </button>
+          </form>
+
           </div>
 
           <div class="d-flex flex-wrap gap-2">
@@ -230,6 +231,47 @@
     totalPriceModal.textContent = total.toLocaleString('id-ID');
     totalHiddenModal.value = total;
   });
+</script>
+<!-- ✅ Toast Notifikasi -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert">
+    <div class="d-flex">
+      <div class="toast-body">
+        🛒 Buku berhasil ditambahkan ke keranjang!
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('addCartInline').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const form = this;
+  const formData = new FormData(form);
+
+  try {
+    const res = await fetch(form.action, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value
+      },
+      body: formData
+    });
+
+    if (res.ok) {
+      const toastEl = document.getElementById('cartToast');
+      const toast = new bootstrap.Toast(toastEl);
+      toast.show();
+    } else {
+      alert('❌ Gagal menambahkan ke keranjang.');
+    }
+  } catch (error) {
+    console.error(error);
+    alert('Terjadi kesalahan saat menambahkan ke keranjang.');
+  }
+});
 </script>
 
 </body>

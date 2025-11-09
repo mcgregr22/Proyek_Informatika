@@ -78,8 +78,11 @@ Route::middleware('auth')->group(function () {
     // =========================
     // KERANJANG (AKSI)
     // =========================
+    Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
     Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
     Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
+    Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])->name('pengelolaan.keranjang');
+
 
     // =========================
     // PROFIL USER
