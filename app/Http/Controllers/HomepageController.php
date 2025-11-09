@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomepageController extends Controller
 {
@@ -63,8 +64,15 @@ class HomepageController extends Controller
 
    public function show($id)
 {
-    $book = Buku::with('user')->findOrFail($id);
-    return view('detailbuku', compact('book'));
+   
+    $book = Buku::with('user')->where('id_buku', $id)->firstOrFail();
+
+    // buku milik user yang login (untuk dropdown "ditawarkan")
+    $myBooks = Auth::check()
+        ? Buku::where('user_id', Auth::id())->get()
+        : collect();
+
+    return view('detailbuku', compact('book', 'myBooks'));
 }
 
         // -------------------------------

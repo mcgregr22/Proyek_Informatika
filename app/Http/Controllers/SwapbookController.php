@@ -1,21 +1,55 @@
 <?php
+
+// app/Http/Controllers/SwapbookController.php
 namespace App\Http\Controllers;
 
-use App\Models\SwapRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Buku;
+use App\Models\SwapRequest;
 
 class SwapbookController extends Controller
 {
-    public function index()
+    public function __construct() { $this->middleware('auth'); }
+
+    public function store(Request $request)
     {
-        $userId = Auth::id();
+        $data = $request->validate([
+            'requested_book_id' => 'required|integer|exists:_buku,id_buku',
+            'offered_book_id'   => 'required|integer|exists:_buku,id_buku', // jadikan required bila harus pilih buku
+            'message'           => 'nullable|string|max:255',
+        ]);
 
-        $incoming = SwapRequest::with(['requester','requestedBook','offeredBook'])
-            ->where('owner_id', $userId)->latest()->get();
+        $uid       = Auth::id();
+        $requested = Buku::where('id_buku', $data['requested_book_id'])->firstOrFail();
+        $offered   = Buku::where('id_buku', $data['offered_book_id'])
+                        ->where('user_id', $uid)->firstOrFail();
 
-        $outgoing = SwapRequest::with(['owner','requestedBook','offeredBook'])
-            ->where('requester_id', $userId)->latest()->get();
+        if ((int)$requested->user_id === (int)$uid) {
+            return back()->with('error', 'Tidak bisa menukar buku milik sendiri.');
+        }
 
-        return view('swapbook', compact('incoming','outgoing'));
+        // Cegah duplikasi pending
+        $dup = SwapRequest::where([
+                    'requester_id'      => $uid,
+                    'owner_id'          => $requested->user_id,
+                    'requested_book_id' => $requested->id_buku,
+                    'offered_book_id'   => $offered->id_buku,
+                ])->where('status','pending')->exists();
+
+        if ($dup) return back()->with('error','Permintaan serupa sudah ada & masih pending.');
+
+        SwapRequest::create([
+            'requested_book_id' => $requested->id_buku,
+            'offered_book_id'   => $offered->id_buku,
+            'requester_id'      => $uid,
+            'owner_id'          => $requested->user_id, // → ini yang bikin muncul di "Masuk" user pemilik buku
+            'status'            => 'pending',
+            'is_read'           => false,
+            'message'           => $data['message'] ?? null,
+        ]);
+
+        return redirect()->route('pengelolaan.swapbook')
+            ->with('success','Permintaan tukar dikirim.');
     }
 }

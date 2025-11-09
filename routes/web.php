@@ -9,7 +9,7 @@ use App\Http\Controllers\ProfilUserController;
 use App\Http\Controllers\HomePageAdminController;
 use App\Http\Controllers\SwapbookController;
 use App\Http\Controllers\MyCollectionController;
-use App\Http\Controllers\RequestSwapController;    
+ 
 
 /* ----------------------
 |  PUBLIC
@@ -50,13 +50,21 @@ Route::middleware('auth')->group(function () {
     // Tukar Buku (dashboard swap)
     Route::get('/pengelolaan/swapbook', [SwapbookController::class, 'index'])->name('pengelolaan.swapbook');
 
-    // My Collection (pilih buku milik sendiri untuk ditukar)
-    Route::get('/pengelolaan/mycollection', [MyCollectionController::class, 'index'])->name('mycollection.index');
-    Route::get('/mycollection', fn () => redirect()->route('mycollection.index'))->name('mycollection.alias');
+     Route::get('/pengelolaan/mycollection', [MyCollectionController::class, 'index'])
+        ->name('mycollection.index');
 
-    // Kirim permintaan tukar
-    Route::post('/swap/requests', [\App\Http\Controllers\SwapbookController::class, 'store'])
-    ->name('swap.store');
+    // (opsional alias singkat)
+    Route::get('/mycollection', fn () => redirect()->route('mycollection.index'))
+        ->name('mycollection.alias');
+
+    // Buat permintaan tukar (POST)
+    Route::post('/swap/requests', [SwapbookController::class, 'store'])
+        ->name('swap.store');
+
+    // (opsional) Halaman daftar permintaan tukar
+    Route::get('/swap/requests', [SwapbookController::class, 'index'])
+        ->name('swap.index');
+
 
     // Profil user & Forum
     Route::get('/profil_user', [ProfilUserController::class, 'index'])->name('profil_user');
@@ -68,9 +76,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin/buku/{book:id_buku}', [HomePageAdminController::class, 'destroy'])->name('admin.books.destroy');
     Route::get('/admin/profil', [HomePageAdminController::class, 'profil'])->name('admin.profil');
 
-    Route::get('/pengelolaan/request_swap', [RequestSwapController::class, 'index'])->name('request_swap.index');
-    Route::put('/swap/{id}/accept', [RequestSwapController::class, 'accept'])->name('swap.accept');
-    Route::put('/swap/{id}/reject', [RequestSwapController::class, 'reject'])->name('swap.reject');
 
     // Logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
