@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Buku;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+
 
 class HomepageController extends Controller
 {
@@ -24,7 +26,9 @@ class HomepageController extends Controller
                       ->orWhere('isbn', 'like', "%{$q}%");
                 });
             }
+        
         };
+        
 
         // ID kategori (ubah sesuai data kamu)
         $ID_KAT_HUMOR   = 1;

@@ -131,11 +131,11 @@
 
       {{-- MAIN --}}
       <main id="mainContent" class="flex-1 p-8">
-        <h2 class="text-2xl font-semibold mb-2">Buku Saya</h2>
-        <p class="text-sm text-zinc-500 mb-6">Kelola koleksi buku Anda!</p>
-
         <div class="rounded-2xl border border-zinc-200 bg-white shadow-sm p-10 text-center text-zinc-500">
-          Belum ada buku yang ditambahkan.
+          <h3 class="text-lg font-semibold mb-1"> Selamat datang  , {{ $user->name }} 📚</h3>
+          <p class="text-sm">Kelola koleksi buku Anda dan temukan buku baru untuk ditukar!</p>
+
+          
         </div>
       </main>
     </div>

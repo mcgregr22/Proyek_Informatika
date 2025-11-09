@@ -48,7 +48,11 @@ Route::middleware('auth')->group(function () {
     // =========================
     // PENGELOLAAN (LAYOUT + MENU)
     // =========================
-    Route::view('/pengelolaan', 'pengelolaan')->name('pengelolaan');
+    Route::get('/pengelolaan', function () {
+    $user = Auth::user(); // kalau mau tetap pakai nama user di halaman
+    return view('pengelolaan', compact('user'));
+});
+
 
     // // Keranjang DI DALAM layout pengelolaan
     // Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])
