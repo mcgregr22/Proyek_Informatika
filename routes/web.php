@@ -148,5 +148,13 @@ Route::middleware(['auth'])->prefix('forumdiscuss')->group(function () {
 use App\Http\Controllers\PurchaseController;
 Route::post('/purchase', [PurchaseController::class, 'show'])->name('purchase.show');
 Route::post('/purchase/confirm', [PurchaseController::class, 'confirm'])->name('purchase.confirm');
-// Route::post('/purchase/{bookId}', [BukuController::class, 'purchase'])->name('purchase');
 Route::post('/purchase/{id}', [PurchaseController::class, 'store'])->name('purchase.store');
+Route::post('/purchase/{book}', [PurchaseController::class, 'store'])->name('purchase.store');
+Route::get('/payment/{purchase}', [PurchaseController::class, 'showPayment'])->name('payment.show');
+
+// Tampilkan halaman pembayaran (data belum disimpan)
+Route::post('/purchase/{book}/payment', [PurchaseController::class, 'showPaymentForm'])->name('purchase.payment');
+// Simpan ke database saat "Bayar Sekarang"
+Route::post('/purchase/{book}/pay', [PurchaseController::class, 'payNow'])->name('purchase.pay');
+
+

@@ -165,8 +165,8 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <form action="{{ route('purchase.store', $book->id_buku) }}" method="POST">
-        @csrf
+      <form action="{{ route('purchase.payment', $book->id_buku) }}" method="POST">
+      @csrf
         <div class="modal-body p-4">
           <div class="mb-3">
             <label class="form-label fw-semibold">Nama Lengkap</label>
@@ -209,7 +209,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
           <button type="submit" class="btn btn-primary">
-            <i class="bi bi-check-circle me-2"></i>Konfirmasi Pembelian
+            <i class="bi bi-check-circle me-2"></i>Lanjutkan ke Pembayaran
           </button>
         </div>
       </form>
