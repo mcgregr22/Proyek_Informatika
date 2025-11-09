@@ -15,6 +15,17 @@
     <div class="p-3 mb-4 rounded bg-red-50 text-red-700">{{ session('error') }}</div>
   @endif
 
+  {{-- Error validasi (jika ada) --}}
+  @if ($errors->any())
+    <div class="p-3 mb-4 rounded bg-red-50 text-red-700 text-sm">
+      <ul class="list-disc pl-5">
+        @foreach ($errors->all() as $e)
+          <li>{{ $e }}</li>
+        @endforeach
+      </ul>
+    </div>
+  @endif
+
   {{-- Peringatan jika belum ada target buku yang ingin ditukar --}}
   @if(empty($requestedId))
     <div class="p-3 mb-6 rounded bg-amber-50 text-amber-800 text-sm">

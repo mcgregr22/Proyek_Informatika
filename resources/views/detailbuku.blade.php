@@ -97,10 +97,10 @@
     <i class="bi bi-cart-plus"></i>
   </button>
 </form>
+
           </div>
 
           <div class="d-flex flex-wrap gap-2">
-         
             <form action="{{ route('mycollection.index') }}" method="GET">
   <input type="hidden" name="requested" value="{{ $book->id_buku }}">
   <button type="submit" class="btn btn-primary">

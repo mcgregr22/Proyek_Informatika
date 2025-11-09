@@ -5,6 +5,14 @@
   <h2 class="text-2xl font-semibold mb-2">Tukar Buku</h2>
   <p class="text-sm text-zinc-500 mb-6">Kelola permintaan tukar buku Anda</p>
 
+  {{-- Flash messages --}}
+  @if(session('success'))
+    <div class="p-3 mb-4 rounded bg-green-50 text-green-700">{{ session('success') }}</div>
+  @endif
+  @if(session('error'))
+    <div class="p-3 mb-4 rounded bg-red-50 text-red-700">{{ session('error') }}</div>
+  @endif
+
   <div class="flex gap-3 mb-6">
     <button id="incomingBtn" class="tab-button px-5 py-2 border-b-2 border-black font-semibold">Masuk</button>
     <button id="outgoingBtn" class="tab-button px-5 py-2 text-gray-500 hover:text-black">Keluar</button>
@@ -26,12 +34,12 @@
             <th>Buku Diminta</th>
             <th>Buku Ditukar</th>
             <th>Status</th>
-            <th>Tanggal</th>
+            <th>Tanggal / Aksi</th>
           </tr>
         </thead>
         <tbody class="text-sm">
           @foreach ($incoming as $req)
-            <tr class="border-b">
+            <tr class="border-b align-top">
               <td class="py-2">{{ $req->requester->name ?? 'User Dihapus' }}</td>
               <td>{{ $req->requestedBook->title ?? '-' }}</td>
               <td>{{ $req->offeredBook->title ?? '-' }}</td>
@@ -43,7 +51,32 @@
                   {{ ucfirst($req->status) }}
                 </span>
               </td>
-              <td>{{ $req->created_at->format('Y-m-d') }}</td>
+              <td class="py-2 whitespace-nowrap">
+                {{ optional($req->created_at)->format('Y-m-d') }}
+
+                {{-- Tombol aksi muncul hanya saat pending --}}
+                @if($req->status === 'pending')
+                  <div class="mt-2 flex gap-2">
+                    <form action="{{ route('swap.accept', $req->id) }}" method="POST" onsubmit="return confirm('Terima permintaan ini?')">
+                      @csrf
+                      @method('PATCH')
+                      <button type="submit"
+                              class="px-3 py-1 rounded bg-green-600 text-white text-xs hover:bg-green-700">
+                        Terima
+                      </button>
+                    </form>
+
+                    <form action="{{ route('swap.reject', $req->id) }}" method="POST" onsubmit="return confirm('Tolak permintaan ini?')">
+                      @csrf
+                      @method('PATCH')
+                      <button type="submit"
+                              class="px-3 py-1 rounded bg-red-600 text-white text-xs hover:bg-red-700">
+                        Tolak
+                      </button>
+                    </form>
+                  </div>
+                @endif
+              </td>
             </tr>
           @endforeach
         </tbody>
@@ -84,7 +117,7 @@
                   {{ ucfirst($req->status) }}
                 </span>
               </td>
-              <td>{{ $req->created_at->format('Y-m-d') }}</td>
+              <td class="py-2">{{ optional($req->created_at)->format('Y-m-d') }}</td>
             </tr>
           @endforeach
         </tbody>

@@ -26,13 +26,27 @@ class SwapRequest extends Model
         'is_read'           => 'boolean',
     ];
 
+    /** Relasi ke buku yang diminta */
     public function requestedBook()
     {
         return $this->belongsTo(\App\Models\Buku::class, 'requested_book_id', 'id_buku');
     }
 
+    /** Relasi ke buku yang ditawarkan */
     public function offeredBook()
     {
         return $this->belongsTo(\App\Models\Buku::class, 'offered_book_id', 'id_buku');
+    }
+
+    /** ⬇️ Tambahan: relasi ke user pengaju (requester) */
+    public function requester()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'requester_id');
+    }
+
+    /** ⬇️ Tambahan: relasi ke user pemilik buku (owner) */
+    public function owner()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'owner_id');
     }
 }
