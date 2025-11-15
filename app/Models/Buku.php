@@ -22,6 +22,9 @@ class Buku extends Model
         'cover_image',
         'harga',
         'listing_type',
+        'tanggal_rilis',
+        'penerbit',
+        'bahasa',
         'user_id',
     ];
 
