@@ -92,4 +92,38 @@ class KeranjangController extends Controller
 
         return redirect()->route('cart.index')->with('success', 'Buku dihapus dari keranjang.');
     }
+    /** Tambah kuantitas */public function increase($id_buku)
+{
+    $item = Keranjang::where('user_id', Auth::id())
+        ->where('id_buku', $id_buku)
+        ->first();
+
+    if ($item) {
+        $item->qty += 1;
+        $item->save();
+    }
+
+    return back()->with('success', 'Jumlah buku berhasil ditambahkan!');
+}
+
+    /** Kurangi kuantitas */
+public function decrease($id_buku)
+{
+    $item = Keranjang::where('user_id', Auth::id())
+        ->where('id_buku', $id_buku)
+        ->first();
+
+    if ($item) {
+        if ($item->qty > 1) {
+            $item->qty -= 1;
+            $item->save();
+        } else {
+            // Jika qty = 1, hapus item
+            $item->delete();
+        }
+    }
+
+    return back()->with('success', 'Jumlah buku berhasil dikurangi!');
+}
+
 }

@@ -49,8 +49,10 @@ Route::middleware('auth')->group(function () {
     // PENGELOLAAN (LAYOUT + MENU)
     // =========================
     Route::get('/pengelolaan', function () {
-    $user = Auth::user(); // kalau mau tetap pakai nama user di halaman
+    $user = Auth::user();
     return view('pengelolaan', compact('user'));
+})->name('pengelolaan');
+    
 });
 
 
@@ -82,6 +84,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
     Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
     Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])->name('pengelolaan.keranjang');
+    Route::post('/keranjang/tambah-qty/{id}', [KeranjangController::class, 'increase'])->name('cart.increase');
+    Route::post('/keranjang/kurang-qty/{id}', [KeranjangController::class, 'decrease'])->name('cart.decrease');
+
 
 
     // =========================
@@ -125,8 +130,9 @@ Route::middleware('auth')->group(function () {
     // =========================
     // LOGOUT
     // =========================
+    Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-});
+    });
 
 // FORUM DISCUSS ROUTES
 use App\Http\Controllers\ForumController;
