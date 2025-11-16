@@ -9,16 +9,19 @@
 body {
     background-color: #f0f3f5; /* Warna latar yang lebih lembut dari #f8f9fa */
 }
+
 /* Menghilangkan jarak header di atas banner */
 .banner {
-    /* Menjaga styling gradient & warna */
-    background: linear-gradient(135deg, #0b2256 0%, #3e64ff 100%);
-    color: white;
-    border-radius: 16px; 
-    padding: 50px 40px;
-    margin-top: 0px; /* Penting untuk menjaga banner tetap tinggi */
-    box-shadow: 0 10px 30px rgba(13, 30, 86, 0.4); 
-    transition: transform 0.3s ease;
+/* Menjaga styling gradient & warna */
+background: linear-gradient(135deg, #0b2256 0%, #3e64ff 100%);
+color: white;
+border-radius: 16px;
+padding: 50px 40px;
+margin-top: 0px;
+box-shadow: 0 10px 30px rgba(13, 30, 86, 0.4);
+transition: transform 0.3s ease;
+    
+    text-align: center; 
 }
 .banner:hover {
     transform: scale(1.005);
