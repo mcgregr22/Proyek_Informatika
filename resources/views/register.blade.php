@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <title>Register - Library-Hub</title>
     <style>
         /* Gaya dasar */
@@ -77,7 +78,7 @@
         .toggle-password {
             position: absolute;
             top: 50%;
-            right: 10px;
+            right: 12px;
             transform: translateY(-50%);
             cursor: pointer;
             color: #888;
@@ -207,31 +208,39 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="kata_sandi">Kata Sandi</label>
-                <div class="password-container">
-                    <input
-                        type="password"
-                        id="kata_sandi"
-                        name="kata_sandi"
-                        placeholder="Kata Sandi"
-                        required>
-                    <span class="toggle-password" data-target="kata_sandi" onclick="togglePassword(this)">👁️</span>
-                </div>
+        <div class="form-group">
+            <label for="kata_sandi">Kata Sandi</label>
+            <div class="password-container">
+                <input
+                    type="password"
+                    id="kata_sandi"
+                    name="kata_sandi"
+                    placeholder="Kata Sandi"
+                    required>
+                <span class="toggle-password"
+                    data-target="kata_sandi"
+                    onclick="togglePassword(this)">
+                    <i class="bi bi-eye" style="font-size:18px;"></i>
+                </span>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label for="kata_sandi_confirmation">Konfirmasi Kata Sandi</label>
-                <div class="password-container">
-                    <input
-                        type="password"
-                        id="kata_sandi_confirmation"
-                        name="kata_sandi_confirmation"
-                        placeholder="Konfirmasi Kata Sandi"
-                        required>
-                    <span class="toggle-password" data-target="kata_sandi_confirmation" onclick="togglePassword(this)">👁️</span>
-                </div>
+        <div class="form-group">
+            <label for="kata_sandi_confirmation">Konfirmasi Kata Sandi</label>
+            <div class="password-container">
+                <input
+                    type="password"
+                    id="kata_sandi_confirmation"
+                    name="kata_sandi_confirmation"
+                    placeholder="Konfirmasi Kata Sandi"
+                    required>
+                <span class="toggle-password"
+                    data-target="kata_sandi_confirmation"
+                    onclick="togglePassword(this)">
+                    <i class="bi bi-eye" style="font-size:18px;"></i>
+                </span>
             </div>
+        </div>
 
             <button type="submit" class="btn-daftar">Daftar</button>
         </form>
@@ -246,26 +255,23 @@
     </div>
 
 <script>
-    /**
-     * Fungsi untuk mengubah tipe input password menjadi text (show) atau sebaliknya (hide).
-     * @param {HTMLElement} iconElement - Elemen ikon mata yang diklik.
-     */
+    
     function togglePassword(iconElement) {
-        // Ambil ID dari input yang terhubung
-        const targetId = iconElement.getAttribute('data-target');
-        const passwordInput = document.getElementById(targetId);
+    const targetId = iconElement.getAttribute('data-target');
+    const passwordInput = document.getElementById(targetId);
+    const icon = iconElement.querySelector('i');
 
-        // Periksa tipe input saat ini
         if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            // Ubah ikon/teks menjadi 'sembunyikan'
-            iconElement.textContent = '🔒';
+        passwordInput.type = 'text';
+        icon.classList.remove('bi-eye');
+        icon.classList.add('bi-eye-slash');
         } else {
-            passwordInput.type = 'password';
-            // Ubah ikon/teks menjadi 'tampilkan'
-            iconElement.textContent = '👁️';
+        passwordInput.type = 'password';
+        icon.classList.remove('bi-eye-slash');
+        icon.classList.add('bi-eye');
         }
     }
+
 </script>
 
 </body>

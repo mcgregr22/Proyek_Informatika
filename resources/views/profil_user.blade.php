@@ -33,41 +33,41 @@
 
         <div>
           <label class="block font-medium text-zinc-700 mb-1">Nama Lengkap</label>
-          <input 
-            type="text" 
-            name="name" 
-            value="{{ $user->name }}" 
+          <input
+            type="text"
+            name="name"
+            value="{{ $user->name }}"
             class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
           >
         </div>
 
         <div>
           <label class="block font-medium text-zinc-700 mb-1">Email</label>
-          <input 
-            type="email" 
-            name="email" 
-            value="{{ $user->email }}" 
+          <input
+            type="email"
+            name="email"
+            value="{{ $user->email }}"
             class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
           >
         </div>
 
         <div>
           <label class="block font-medium text-zinc-700 mb-1">Nomor Telepon</label>
-          <input 
-            type="text" 
-            name="phone" 
-            value="{{ $user->phone ?? '' }}" 
+          <input
+            type="text"
+            name="phone"
+            value="{{ $user->phone ?? '' }}"
             class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
           >
         </div>
 
         <div>
           <label class="block font-medium text-zinc-700 mb-1">Role</label>
-          <input 
-            type="text" 
-            name="role" 
-            value="{{ $user->role }}" 
-            class="w-full border border-zinc-300 rounded-lg px-4 py-2 bg-zinc-100" 
+          <input
+            type="text"
+            name="role"
+            value="{{ $user->role }}"
+            class="w-full border border-zinc-300 rounded-lg px-4 py-2 bg-zinc-100"
             readonly
           >
         </div>
@@ -83,10 +83,10 @@
 
         <div>
           <label class="block font-medium text-zinc-700 mb-1">Email</label>
-          <input 
-            type="email" 
-            name="email_confirm" 
-            value="{{ $user->email }}" 
+          <input
+            type="email"
+            name="email_confirm"
+            value="{{ $user->email }}"
             class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
           >
         </div>
@@ -95,10 +95,10 @@
           <label class="block font-medium text-zinc-700 mb-1">Password</label>
 
           <div class="relative">
-            <input 
+            <input
               id="passwordInput"
-              type="password" 
-              name="password" 
+              type="password"
+              name="password"
               placeholder="Kosongkan jika tidak ingin mengubah"
               class="w-full border border-zinc-300 rounded-lg px-4 py-2 pr-12 focus:ring-indigo-500 focus:outline-none"
             >
