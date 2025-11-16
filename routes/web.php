@@ -53,12 +53,8 @@ use App\Http\Controllers\ForumController;
     });
 
 
-    // // Keranjang DI DALAM layout pengelolaan
-    // Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])
-    //     ->name('pengelolaan.keranjang'); // <- sesuai dengan yang dipanggil di layout
-       
 
-         // Keranjang
+    // Keranjang
     Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])->name('pengelolaan.keranjang');
     Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
     Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
