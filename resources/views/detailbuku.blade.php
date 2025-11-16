@@ -1,4 +1,4 @@
-@extends('layouts.homepage') 
+@extends('layouts.detailbuku') 
 
 @section('title', 'Detail Buku - ' . $book->title)
 
