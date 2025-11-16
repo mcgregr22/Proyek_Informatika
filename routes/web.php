@@ -15,8 +15,8 @@ use App\Http\Controllers\ForumController;
     // ----------------------
     // HALAMAN AWAL
     // ----------------------
-    // Route::get('/', fn () => view('welcome'));
-    Route::get('/', fn () => view('home'))->name('home');
+    Route::get('/', fn () => view('home'));
+    Route::get('/home', fn () => view('home'))->name('home');
 
     // ----------------------
     // TAMU (BELUM LOGIN)
