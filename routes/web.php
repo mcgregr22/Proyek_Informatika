@@ -9,35 +9,32 @@ use App\Http\Controllers\ProfilUserController;
 use App\Http\Controllers\HomePageAdminController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\MyCollectionController;
+use App\Http\Controllers\ForumController;
 
 
-// ----------------------
-// HALAMAN AWAL (PUBLIC)
-// ----------------------
-Route::get('/', fn () => view('welcome'));
+    // ----------------------
+    // HALAMAN AWAL
+    // ----------------------
+    // Route::get('/', fn () => view('welcome'));
+    Route::get('/', fn () => view('home'))->name('home');
 
-Route::get('/home', fn () => view('home'))->name('home');
-
-
-
-
-// ----------------------
-// TAMU (BELUM LOGIN)
-// ----------------------
-Route::middleware('guest')->group(function () {
+    // ----------------------
+    // TAMU (BELUM LOGIN)
+    // ----------------------
+    Route::middleware('guest')->group(function () {
     Route::get('/register', [RegistrasiController::class, 'show'])->name('register.show');
     Route::post('/register', [RegistrasiController::class, 'store'])->name('register.store');
 
     Route::get('/login', [LoginController::class, 'show'])->name('login.show');
     Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
-});
-Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
-Route::get('/admin', [HomePageAdminController::class, 'index'])->name('homepage_admin');
+    });
 
-// ----------------------
-// SUDAH LOGIN (AUTH)
-// ----------------------
-Route::middleware('auth')->group(function () {
+    Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
+
+    // ----------------------
+    // SUDAH LOGIN (AUTH)
+    // ----------------------
+    Route::middleware('auth')->group(function () {
 
     // =========================
     // HOMEPAGE USER
@@ -51,9 +48,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengelolaan', function () {
     $user = Auth::user();
     return view('pengelolaan', compact('user'));
-})->name('pengelolaan');
-    
-});
+    })->name('pengelolaan');
+        
+    });
 
 
     // // Keranjang DI DALAM layout pengelolaan
@@ -121,7 +118,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/profil', [HomePageAdminController::class, 'profil'])->name('admin.profil');
 
 
-// =========================
+    // =========================
     // BUKU CONTROLLER
     // =========================
     Route::post('/buku/tambah', [BukuController::class, 'store'])->name('buku.store');
@@ -134,11 +131,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     });
 
-// FORUM DISCUSS ROUTES
-use App\Http\Controllers\ForumController;
+    // FORUM DISCUSS ROUTES
 
-// Grup Rute Forum yang memerlukan otentikasi
-Route::middleware(['auth'])->prefix('forumdiscuss')->group(function () {
+    // Grup Rute Forum yang memerlukan otentikasi
+    Route::middleware(['auth'])->prefix('forumdiscuss')->group(function () {
     // Rute Tampilan (GET)
     // URI: /forumdiscuss
     Route::get('/', [ForumController::class, 'index'])->name('forum.index');
@@ -151,19 +147,22 @@ Route::middleware(['auth'])->prefix('forumdiscuss')->group(function () {
     // PERBAIKAN: Nama rute diubah dari 'forum.comment.store' menjadi 'forum.comment'
     // URI: /forumdiscuss/{id_post}/comment
     Route::post('/{id_post}/comment', [ForumController::class, 'storeComment'])->name('forum.comment');
-});
-// =========================
-// PURCHASE DETAIL ROUTES
-use App\Http\Controllers\PurchaseController;
-Route::post('/purchase', [PurchaseController::class, 'show'])->name('purchase.show');
-Route::post('/purchase/confirm', [PurchaseController::class, 'confirm'])->name('purchase.confirm');
-Route::post('/purchase/{id}', [PurchaseController::class, 'store'])->name('purchase.store');
-Route::post('/purchase/{book}', [PurchaseController::class, 'store'])->name('purchase.store');
-Route::get('/payment/{purchase}', [PurchaseController::class, 'showPayment'])->name('payment.show');
+    });
 
-// Tampilkan halaman pembayaran (data belum disimpan)
-Route::post('/purchase/{book}/payment', [PurchaseController::class, 'showPaymentForm'])->name('purchase.payment');
-// Simpan ke database saat "Bayar Sekarang"
-Route::post('/purchase/{book}/pay', [PurchaseController::class, 'payNow'])->name('purchase.pay');
+
+    // =========================
+    // PURCHASE DETAIL ROUTES
+    // =========================
+    use App\Http\Controllers\PurchaseController;
+    Route::post('/purchase', [PurchaseController::class, 'show'])->name('purchase.show');
+    Route::post('/purchase/confirm', [PurchaseController::class, 'confirm'])->name('purchase.confirm');
+    Route::post('/purchase/{id}', [PurchaseController::class, 'store'])->name('purchase.store');
+    Route::post('/purchase/{book}', [PurchaseController::class, 'store'])->name('purchase.store');
+    Route::get('/payment/{purchase}', [PurchaseController::class, 'showPayment'])->name('payment.show');
+
+    // Tampilkan halaman pembayaran (data belum disimpan)
+    Route::post('/purchase/{book}/payment', [PurchaseController::class, 'showPaymentForm'])->name('purchase.payment');
+    // Simpan ke database saat "Bayar Sekarang"
+    Route::post('/purchase/{book}/pay', [PurchaseController::class, 'payNow'])->name('purchase.pay');
 
 
