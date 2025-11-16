@@ -62,7 +62,7 @@
 
       {{-- CHAT & PROFIL --}}
       <div class="flex items-center gap-2">
-        <a href="/forumdiscuss" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-zinc-100 text-zinc-500">
+        <a href="/forumdiscuss" class="w-1 h-1 flex items-center justify-center rounded-full hover:bg-zinc-100 text-zinc-500">
           <i class="bi bi-chat-dots text-xl"></i>
         </a>
         <a href="{{ route('profil_user') }}" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-zinc-100 text-zinc-500">
