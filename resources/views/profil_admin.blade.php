@@ -1,6 +1,6 @@
-@extends('layouts.profil')
+@extends('layouts.profil_admin')
 
-@section('title', 'Profil User - ' . $user->name)
+@section('title', 'Profil Admin - ' . $admin->name)
 
 @push('styles')
 {{-- Bisa tambah style khusus di sini kalau perlu --}}
@@ -19,13 +19,13 @@
         src="https://cdn-icons-png.flaticon.com/512/149/149071.png" 
         class="w-28 h-28 mx-auto rounded-full border-4 border-indigo-600"
       >
-      <h2 class="mt-4 text-2xl font-semibold text-indigo-700">{{ $user->name }}</h2>
+      <h2 class="mt-4 text-2xl font-semibold text-indigo-700">{{ $admin->name }}</h2>
     </div>
 
     {{-- Form Profil --}}
     <h3 class="text-lg font-semibold mb-3 text-zinc-700">Profil</h3>
 
-    <form action="{{ route('profil_user.update') }}" method="POST">
+    <form action="{{ route('profil_admin.update') }}" method="POST">
       @csrf
       @method('PUT')
 
@@ -36,7 +36,7 @@
           <input
             type="text"
             name="name"
-            value="{{ $user->name }}"
+            value="{{ $admin->name }}"
             class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
           >
         </div>
@@ -46,7 +46,7 @@
           <input
             type="email"
             name="email"
-            value="{{ $user->email }}"
+            value="{{ $admin->email }}"
             class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
           >
         </div>
@@ -56,7 +56,7 @@
           <input
             type="text"
             name="phone"
-            value="{{ $user->phone ?? '' }}"
+            value="{{ $admin->phone ?? '' }}"
             class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
           >
         </div>
@@ -66,7 +66,7 @@
           <input
             type="text"
             name="role"
-            value="{{ $user->role }}"
+            value="{{ $admin->role }}"
             class="w-full border border-zinc-300 rounded-lg px-4 py-2 bg-zinc-100"
             readonly
           >
@@ -86,7 +86,7 @@
           <input
             type="email"
             name="email_confirm"
-            value="{{ $user->email }}"
+            value="{{ $admin->email }}"
             class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
           >
         </div>

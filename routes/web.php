@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\ProfilUserController;
+use App\Http\Controllers\ProfilAdminController;
 use App\Http\Controllers\HomePageAdminController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\MyCollectionController;
@@ -92,6 +93,12 @@ use App\Http\Controllers\ManajemenAdminController;
 
 
     // =========================
+    //  ADMIN: Profil Admin
+    // =========================
+    Route::get('/profil_admin', [ProfilAdminController::class, 'index'])->name('profil_admin');
+    Route::put('/profil_admin/update', [ProfilAdminController::class, 'update'])->name('profil_admin.update');
+
+    // =========================
     // HALAMAN TAMBAHAN
     // =========================
       // My Collection (pilih buku milik sendiri untuk ditukar)
@@ -106,12 +113,6 @@ use App\Http\Controllers\ManajemenAdminController;
     Route::get('/admin', [HomePageAdminController::class, 'index'])->name('homepage_admin');
     Route::post('/admin/tambah', [HomePageAdminController::class, 'store'])->name('homepage_admin.store');
     Route::delete('/admin/buku/{book:id_buku}', [HomePageAdminController::class, 'destroy'])->name('homepage_admin.destroy');
-
-    // =========================
-    //  ADMIN: Profil Admin
-    // =========================
-    Route::get('/admin/profil', [HomePageAdminController::class, 'profil'])->name('admin.profil');
-    Route::put('/admin/profil/update', [HomePageAdminController::class, 'updateProfil'])->name('admin.profil.update');
 
     // =========================
     // ADMIN: Manajemen Akun & Role
