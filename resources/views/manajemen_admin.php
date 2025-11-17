@@ -1,16 +1,3 @@
-<?php
-// Data dummy pengguna dan role
-$pengguna = [
-    ["nama" => "Andi Nugraha", "email" => "andi.nugraha@libhub.com", "peran" => "Admin"],
-    ["nama" => "Budi Santoso", "email" => "budi.santoso@libhub.com", "peran" => "Pengguna"],
-    ["nama" => "Citra Dewi", "email" => "citra.dewi@libhub.com", "peran" => "Pengguna"],
-    ["nama" => "Dian Permata", "email" => "dian.permata@libhub.com", "peran" => "Pengguna"],
-    ["nama" => "Eka Wijaya", "email" => "eka.wijaya@libhub.com", "peran" => "Pengguna"]
-];
-
-$roles = ["Admin", "Pengguna"];
-?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -20,54 +7,6 @@ $roles = ["Admin", "Pengguna"];
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-  <style>
-    body {
-        background-color: #f8f9fa;
-        font-family: 'Poppins', sans-serif;
-    }
-    .navbar-brand span {
-        color: #0d6efd;
-        font-weight: 700;
-    }
-    .navbar-icon {
-        font-size: 1.2rem;
-        margin-left: 15px;
-        color: #333;
-        transition: color 0.2s;
-    }
-    .navbar-icon:hover {
-        color: #0d6efd;
-    }
-    .page-title {
-        font-weight: 700;
-        margin-top: 30px;
-    }
-    .card {
-        border: none;
-        border-radius: 12px;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.05);
-    }
-    .btn-primary, .btn-success {
-        border-radius: 8px;
-    }
-    .table th {
-        color: #0d6efd;
-    }
-    .footer {
-        margin-top: 60px;
-        text-align: center;
-        padding: 20px 0;
-        border-top: 1px solid #ddd;
-        color: #777;
-    }
-    .section-title {
-    color: #003f88; 
-    font-weight: 700;
-    }
-  </style>
-</head>
-
-<body>
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
