@@ -10,6 +10,8 @@ use App\Http\Controllers\HomePageAdminController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\MyCollectionController;
 use App\Http\Controllers\ForumController;
+use App\Http\Controllers\ManajemenAdminController;
+
 
 
     // ----------------------
@@ -99,19 +101,32 @@ use App\Http\Controllers\ForumController;
     Route::view('/forumdiscuss', 'forumdiscuss')->name('forumdiscuss');
 
     // =========================
-    // ADMIN (HomePageAdminController)
+    //        ADMIN: Dashboard buku
     // =========================
-    // Dashboard admin (dipakai oleh controller saat redirect ->route('homepage_admin'))
     Route::get('/admin', [HomePageAdminController::class, 'index'])->name('homepage_admin');
+    Route::post('/admin/tambah', [HomePageAdminController::class, 'store'])->name('homepage_admin.store');
+    Route::delete('/admin/buku/{book:id_buku}', [HomePageAdminController::class, 'destroy'])->name('homepage_admin.destroy');
 
-    // Simpan buku baru (form tambah buku admin)
-    // Route::post('/admin/buku', [HomePageAdminController::class, 'store'])->name('admin.books.store');
-
-    // Hapus buku (pakai route model binding; jika PK tabelmu 'id_buku', pakai {book:id_buku})
-    Route::delete('/admin/buku/{book:id_buku}', [HomePageAdminController::class, 'destroy'])->name('admin.books.destroy');
-
-    // (opsional) Profil admin
+    // =========================
+    //  ADMIN: Profil Admin
+    // =========================
     Route::get('/admin/profil', [HomePageAdminController::class, 'profil'])->name('admin.profil');
+    Route::put('/admin/profil/update', [HomePageAdminController::class, 'updateProfil'])->name('admin.profil.update');
+
+    // =========================
+    // ADMIN: Manajemen Akun & Role
+    // =========================
+    Route::prefix('manajemen_admin')->group(function () {
+
+    Route::get('/', [ManajemenAdminController::class, 'index'])->name('manajemen_admin');
+
+    Route::get('/edit/{id}', [ManajemenAdminController::class, 'edit'])->name('manajemen_admin.edit');
+    Route::put('/update/{id}', [ManajemenAdminController::class, 'update'])->name('manajemen_admin.update');
+
+    Route::delete('/delete/{id}', [ManajemenAdminController::class, 'destroy'])->name('manajemen_admin.delete');
+    Route::get('/role/{id}', [ManajemenAdminController::class, 'editRole'])->name('manajemen_admin.role');
+    Route::put('/role/update/{id}', [ManajemenAdminController::class, 'updateRole'])->name('manajemen_admin.role.update');
+    });
 
 
     // =========================
@@ -155,10 +170,25 @@ use App\Http\Controllers\ForumController;
     Route::post('/purchase/{id}', [PurchaseController::class, 'store'])->name('purchase.store');
     Route::post('/purchase/{book}', [PurchaseController::class, 'store'])->name('purchase.store');
     Route::get('/payment/{purchase}', [PurchaseController::class, 'showPayment'])->name('payment.show');
-
     // Tampilkan halaman pembayaran (data belum disimpan)
     Route::post('/purchase/{book}/payment', [PurchaseController::class, 'showPaymentForm'])->name('purchase.payment');
     // Simpan ke database saat "Bayar Sekarang"
     Route::post('/purchase/{book}/pay', [PurchaseController::class, 'payNow'])->name('purchase.pay');
+
+    // =========================
+    // ADMIN: Manajemen Akun & Role
+    // =========================
+    Route::prefix('manajemen_admin')->group(function () {
+
+        Route::get('/', [ManajemenAdminController::class, 'index'])->name('manajemen_admin');
+
+        Route::get('/edit/{id}', [ManajemenAdminController::class, 'edit'])->name('manajemen_admin.edit');
+        Route::put('/update/{id}', [ManajemenAdminController::class, 'update'])->name('manajemen_admin.update');
+
+        Route::delete('/delete/{id}', [ManajemenAdminController::class, 'destroy'])->name('manajemen_admin.delete');
+
+        Route::get('/role/{id}', [ManajemenAdminController::class, 'editRole'])->name('manajemen_admin.role');
+        Route::put('/role/update/{id}', [ManajemenAdminController::class, 'updateRole'])->name('manajemen_admin.role.update');
+    });
 
 
