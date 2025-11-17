@@ -6,7 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\ProfilUserController;
-use App\Http\Controllers\ProfilAdminController;
+
 use App\Http\Controllers\HomePageAdminController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\MyCollectionController;
@@ -95,8 +95,11 @@ use App\Http\Controllers\ManajemenAdminController;
     // =========================
     //  ADMIN: Profil Admin
     // =========================
-    Route::get('/profil_admin', [ProfilAdminController::class, 'index'])->name('profil_admin');
-    Route::put('/profil_admin/update', [ProfilAdminController::class, 'update'])->name('profil_admin.update');
+    Route::get('/admin/profil', [HomePageAdminController::class, 'profil'])->name('admin.profil');
+    Route::put('/admin/profil/update', [HomePageAdminController::class, 'updateProfil'])->name('admin.profil.update');
+
+    Route::get('/profil_admin', [ProfilUserController::class, 'index'])->name('profil_admin');
+    Route::put('/profil_admin/update', [ProfilUserController::class, 'update'])->name('profil_admin.update');
 
     // =========================
     // HALAMAN TAMBAHAN
