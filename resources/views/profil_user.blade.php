@@ -1,4 +1,4 @@
-@extends('layouts.profil')
+@extends('layouts.profil_user')
 
 @section('title', 'Profil User - ' . $user->name)
 
