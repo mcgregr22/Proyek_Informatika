@@ -8,9 +8,9 @@
 
   {{-- Flash sukses --}}
   @if (session('success'))
-    <div class="rounded-xl border border-green-200 bg-green-50 text-green-700 p-3 mb-4">
-      {{ session('success') }}
-    </div>
+  <div class="rounded-xl border border-green-200 bg-green-50 text-green-700 p-3 mb-4">
+    {{ session('success') }}
+  </div>
   @endif
 
   <form action="{{ route('buku.store') }}" method="POST" enctype="multipart/form-data">
@@ -31,8 +31,8 @@
       <div>
         <label class="block text-sm font-medium mb-1">ID Kategori</label>
         <input type="number" name="id_kategori"
-               class="w-full border rounded-lg px-3 py-2 @error('id_kategori') border-red-400 @enderror"
-               placeholder="Contoh: 1" value="{{ old('id_kategori') }}" required>
+          class="w-full border rounded-lg px-3 py-2 @error('id_kategori') border-red-400 @enderror"
+          placeholder="Contoh: 1" value="{{ old('id_kategori') }}" required>
         @error('id_kategori') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
@@ -40,8 +40,8 @@
       <div>
         <label class="block text-sm font-medium mb-1">Judul Buku</label>
         <input type="text" name="title"
-               class="w-full border rounded-lg px-3 py-2 @error('title') border-red-400 @enderror"
-               placeholder="Masukkan judul buku" value="{{ old('title') }}" required>
+          class="w-full border rounded-lg px-3 py-2 @error('title') border-red-400 @enderror"
+          placeholder="Masukkan judul buku" value="{{ old('title') }}" required>
         @error('title') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
@@ -49,8 +49,8 @@
       <div>
         <label class="block text-sm font-medium mb-1">Penulis</label>
         <input type="text" name="author"
-               class="w-full border rounded-lg px-3 py-2 @error('author') border-red-400 @enderror"
-               placeholder="Masukkan nama penulis" value="{{ old('author') }}" required>
+          class="w-full border rounded-lg px-3 py-2 @error('author') border-red-400 @enderror"
+          placeholder="Masukkan nama penulis" value="{{ old('author') }}" required>
         @error('author') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
@@ -58,8 +58,8 @@
       <div class="md:col-span-2">
         <label class="block text-sm font-medium mb-1">ISBN</label>
         <input type="text" name="isbn"
-               class="w-full border rounded-lg px-3 py-2 @error('isbn') border-red-400 @enderror"
-               placeholder="Masukkan nomor ISBN" value="{{ old('isbn') }}" required>
+          class="w-full border rounded-lg px-3 py-2 @error('isbn') border-red-400 @enderror"
+          placeholder="Masukkan nomor ISBN" value="{{ old('isbn') }}" required>
         @error('isbn') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
@@ -67,8 +67,8 @@
       <div>
         <label class="block text-sm font-medium mb-1">Tanggal Rilis</label>
         <input type="date" name="tanggal_rilis"
-               class="w-full border rounded-lg px-3 py-2 @error('tanggal_rilis') border-red-400 @enderror"
-               value="{{ old('tanggal_rilis') }}" required>
+          class="w-full border rounded-lg px-3 py-2 @error('tanggal_rilis') border-red-400 @enderror"
+          value="{{ old('tanggal_rilis') }}" required>
         @error('tanggal_rilis') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
@@ -76,8 +76,8 @@
       <div>
         <label class="block text-sm font-medium mb-1">Bahasa</label>
         <input type="text" name="bahasa"
-               class="w-full border rounded-lg px-3 py-2 @error('bahasa') border-red-400 @enderror"
-               placeholder="Masukkan Bahasa" value="{{ old('bahasa') }}">
+          class="w-full border rounded-lg px-3 py-2 @error('bahasa') border-red-400 @enderror"
+          placeholder="Masukkan Bahasa" value="{{ old('bahasa') }}">
         @error('bahasa') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
@@ -85,8 +85,8 @@
       <div class="md:col-span-2">
         <label class="block text-sm font-medium mb-1">Penerbit</label>
         <input type="text" name="penerbit"
-               class="w-full border rounded-lg px-3 py-2 @error('penerbit') border-red-400 @enderror"
-               placeholder="Masukkan nama penerbit" value="{{ old('penerbit') }}" required>
+          class="w-full border rounded-lg px-3 py-2 @error('penerbit') border-red-400 @enderror"
+          placeholder="Masukkan nama penerbit" value="{{ old('penerbit') }}" required>
         @error('penerbit') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
@@ -96,14 +96,14 @@
         <div class="flex gap-4 mt-1">
           <label class="flex items-center gap-2 border rounded-lg px-4 py-2 cursor-pointer hover:bg-zinc-50">
             <input type="checkbox" name="listing_type[]" value="exchange"
-                   class="text-indigo-600 focus:ring-indigo-500"
-                   {{ (is_array(old('listing_type')) && in_array('exchange', old('listing_type'))) ? 'checked' : '' }}>
+              class="text-indigo-600 focus:ring-indigo-500"
+              {{ (is_array(old('listing_type')) && in_array('exchange', old('listing_type'))) ? 'checked' : '' }}>
             <span class="text-sm font-medium text-gray-700">Exchange</span>
           </label>
           <label class="flex items-center gap-2 border rounded-lg px-4 py-2 cursor-pointer hover:bg-zinc-50">
             <input type="checkbox" name="listing_type[]" value="sell"
-                   class="text-indigo-600 focus:ring-indigo-500"
-                   {{ (is_array(old('listing_type')) && in_array('sell', old('listing_type'))) ? 'checked' : '' }}>
+              class="text-indigo-600 focus:ring-indigo-500"
+              {{ (is_array(old('listing_type')) && in_array('sell', old('listing_type'))) ? 'checked' : '' }}>
             <span class="text-sm font-medium text-gray-700">Sell</span>
           </label>
         </div>
@@ -114,18 +114,29 @@
       <div class="md:col-span-2" id="harga-wrapper">
         <label class="block text-sm font-medium mb-1">Harga</label>
         <input type="number" name="harga" min="0" step="1"
-               class="w-full border rounded-lg px-3 py-2 @error('harga') border-red-400 @enderror"
-               placeholder="Masukkan harga buku (Rp)" value="{{ old('harga') }}">
+          class="w-full border rounded-lg px-3 py-2 @error('harga') border-red-400 @enderror"
+          placeholder="Masukkan harga buku (Rp)" value="{{ old('harga') }}">
         <p class="text-gray-500 text-xs mt-1">Isi harga meskipun tipe Exchange agar buku bisa dijual juga.</p>
         @error('harga') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+      </div>
+
+      {{-- Kondisi --}}
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium mb-1">Kondisi</label>
+        <select name="kondisi" class="w-full border rounded-lg px-3 py-2 @error('kondisi') border-red-400 @enderror" required>
+          <option value="Baru" {{ old('kondisi') == 'Baru' ? 'selected' : '' }}>Baru</option>
+          <option value="Bekas Layak" {{ old('kondisi') == 'Bekas Layak' ? 'selected' : '' }}>Bekas Layak</option>
+          <option value="Bekas" {{ old('kondisi') == 'Bekas' ? 'selected' : '' }}>Bekas</option>
+        </select>
+        @error('kondisi') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
       {{-- Deskripsi --}}
       <div class="md:col-span-2">
         <label class="block text-sm font-medium mb-1">Deskripsi</label>
         <textarea name="deskripsi" rows="4"
-                  class="w-full border rounded-lg px-3 py-2 @error('deskripsi') border-red-400 @enderror"
-                  placeholder="Masukkan deskripsi buku" required>{{ old('deskripsi') }}</textarea>
+          class="w-full border rounded-lg px-3 py-2 @error('deskripsi') border-red-400 @enderror"
+          placeholder="Masukkan deskripsi buku" required>{{ old('deskripsi') }}</textarea>
         @error('deskripsi') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
 
@@ -133,8 +144,8 @@
       <div class="md:col-span-2">
         <label class="block text-sm font-medium mb-1">Cover Buku (opsional)</label>
         <input type="file" name="cover_image"
-               class="block w-full border rounded-lg px-3 py-2 bg-white @error('cover_image') border-red-400 @enderror"
-               accept="image/*">
+          class="block w-full border rounded-lg px-3 py-2 bg-white @error('cover_image') border-red-400 @enderror"
+          accept="image/*">
         @error('cover_image') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
       </div>
     </div>

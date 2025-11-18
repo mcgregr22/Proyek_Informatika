@@ -1,145 +1,173 @@
-@extends('layouts.homepage') 
+@extends('layouts.homepage')
 
-@section('title', 'Library-Hub Home') 
+@section('title', 'Library-Hub Home')
 
 {{-- 1. Menyuntikkan CSS khusus Homepage --}}
 @push('styles')
 <style>
-/* Menghilangkan margin/padding bawaan browser */
-body {
-    background-color: #f0f3f5; /* Warna latar yang lebih lembut dari #f8f9fa */
-}
+  /* Menghilangkan margin/padding bawaan browser */
+  body {
+    background-color: #f0f3f5;
+    /* Warna latar yang lebih lembut dari #f8f9fa */
+  }
 
-/* Menghilangkan jarak header di atas banner */
-.banner {
-/* Menjaga styling gradient & warna */
-background: linear-gradient(135deg, #0b2256 0%, #3e64ff 100%);
-color: white;
-border-radius: 16px;
-padding: 50px 40px;
-margin-top: 0px;
-box-shadow: 0 10px 30px rgba(13, 30, 86, 0.4);
-transition: transform 0.3s ease;
-    
-    text-align: center; 
-}
-.banner:hover {
+  /* Menghilangkan jarak header di atas banner */
+  .banner {
+    /* Menjaga styling gradient & warna */
+    background: linear-gradient(135deg, #0b2256 0%, #3e64ff 100%);
+    color: white;
+    border-radius: 16px;
+    padding: 50px 40px;
+    margin-top: 0px;
+    box-shadow: 0 10px 30px rgba(13, 30, 86, 0.4);
+    transition: transform 0.3s ease;
+
+    text-align: center;
+  }
+
+  .banner:hover {
     transform: scale(1.005);
     box-shadow: 0 12px 35px rgba(13, 30, 86, 0.55);
-}
-.banner h2 { 
-    font-weight: 800; 
-    font-size: 2.2rem; 
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-}
+  }
 
-/* ========================================
+  .banner h2 {
+    font-weight: 800;
+    font-size: 2.2rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  /* ========================================
    SEARCH FORM
    ======================================== */
-.search-form {
+  .search-form {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
     max-width: 600px;
-}
-.search-form select, .search-form input {
-    border-radius: 10px; /* Lebih membulat */
+  }
+
+  .search-form select,
+  .search-form input {
+    border-radius: 10px;
+    /* Lebih membulat */
     padding: 8px 14px;
-    border: 1px solid #d1d5db; /* Border abu-abu halus */
+    border: 1px solid #d1d5db;
+    /* Border abu-abu halus */
     background-color: #fff;
     transition: all 0.3s ease;
-}
-.search-form input {
-    width: 55%; 
-}
-.search-form select:focus, .search-form input:focus {
-    border-color: #4f46e5; /* Biru Indigo */
+  }
+
+  .search-form input {
+    width: 55%;
+  }
+
+  .search-form select:focus,
+  .search-form input:focus {
+    border-color: #4f46e5;
+    /* Biru Indigo */
     box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
     outline: none;
-}
+  }
 
-/* ========================================
+  /* ========================================
    SECTION HEADERS & BUTTONS
    ======================================== */
-.section-header {
+  .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 3.5rem; 
-    margin-bottom: 1rem; 
+    margin-top: 3.5rem;
+    margin-bottom: 1rem;
     padding-bottom: 8px;
-    border-bottom: 2px solid #e5e7eb; /* Garis pemisah yang bersih */
-}
-.section-header h5 {
+    border-bottom: 2px solid #e5e7eb;
+    /* Garis pemisah yang bersih */
+  }
+
+  .section-header h5 {
     font-size: 1.3rem;
     font-weight: 700;
-    color: #1f2937; /* Warna teks gelap */
-}
-.section-header a {
-    color: #4f46e5; /* Warna tautan Indigo */
+    color: #1f2937;
+    /* Warna teks gelap */
+  }
+
+  .section-header a {
+    color: #4f46e5;
+    /* Warna tautan Indigo */
     font-weight: 500;
     transition: color 0.3s ease;
-}
-.section-header a:hover {
+  }
+
+  .section-header a:hover {
     color: #3730a3;
     text-decoration: underline;
-}
+  }
 
-/* Tombol Pengelolaan (Mencolok dan Modern) */
-.btn-manage {
-    background: linear-gradient(90deg, #4f46e5 0%, #3e64ff 100%); /* Gradien Indigo */
+  /* Tombol Pengelolaan (Mencolok dan Modern) */
+  .btn-manage {
+    background: linear-gradient(90deg, #4f46e5 0%, #3e64ff 100%);
+    /* Gradien Indigo */
     color: #fff;
     border: none;
-    border-radius: 25px; 
+    border-radius: 25px;
     font-size: 0.9rem;
     padding: 10px 20px;
     font-weight: 600;
     letter-spacing: 0.5px;
-    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4); 
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
     transition: all 0.3s ease;
-}
-.btn-manage:hover { 
-    transform: translateY(-3px); 
-    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.6); 
-    filter: brightness(1.1);
-}
+  }
 
-/* ========================================
-   BOOK CARDS
+  .btn-manage:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.6);
+    filter: brightness(1.1);
+  }
+
+  /* ========================================
+    BOOK CARDS
    ======================================== */
-.book-card {
-    border: 1px solid #f3f4f6; /* Border sangat halus */
+  .book-card {
+    border: 1px solid #f3f4f6;
+    /* Border sangat halus */
     border-radius: 12px;
     background-color: #fff;
-    box-shadow: 0 5px 15px rgba(0,0,0,.08); /* Shadow halus saat diam */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
+    /* Shadow halus saat diam */
     transition: all 0.3s ease;
     position: relative;
-    overflow: hidden; /* Mengamankan sudut */
-}
-.book-card:hover { 
-    transform: translateY(-6px); /* Mengangkat lebih tinggi */
-    box-shadow: 0 18px 30px rgba(0,0,0,0.15); /* Shadow dramatis saat hover */
-}
+    overflow: hidden;
+    /* Mengamankan sudut */
+  }
 
-/* Gambar Buku */
-.book-thumb {
+  .book-card:hover {
+    transform: translateY(-6px);
+    /* Mengangkat lebih tinggi */
+    box-shadow: 0 18px 30px rgba(0, 0, 0, 0.15);
+    /* Shadow dramatis saat hover */
+  }
+
+  /* Gambar Buku */
+  .book-thumb {
     width: 100%;
-    height: 250px; /* Tinggi yang lebih vertikal */
+    height: 250px;
+    /* Tinggi yang lebih vertikal */
     object-fit: cover;
-    border-radius: 10px; /* Menyesuaikan sudut card */
-}
+    border-radius: 10px;
+    /* Menyesuaikan sudut card */
+  }
 
-.price { 
-    color:#ef4444; /* Warna merah yang kontras (merah Tailwind 500) */
-    font-weight:700; 
-    font-size: 1.1rem; 
+  .price {
+    color: #ef4444;
+    /* Warna merah yang kontras (merah Tailwind 500) */
+    font-weight: 700;
+    font-size: 1.1rem;
     margin-top: 5px;
-}
+  }
 
-/* Listing Badges */
-.listing-badge {
+  /* Listing Badges */
+  .listing-badge {
     position: absolute;
     top: 8px;
     left: 8px;
@@ -149,20 +177,29 @@ transition: transform 0.3s ease;
     font-weight: 700;
     color: #fff;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-}
-.listing-badge.sell { 
-    background: linear-gradient(45deg, #f59e0b, #d97706); /* Orange/Amber */
-}
-.listing-badge.exchange { 
-    background: linear-gradient(45deg, #10b981, #059669); /* Hijau Teal/Emerald */
-}
+  }
 
-/* Footer styling sudah terintegrasi di Master Layout */
+  .listing-badge.sell {
+    background: linear-gradient(45deg, #f59e0b, #d97706);
+    /* Orange/Amber */
+  }
 
-@media (max-width: 768px) {
-    .book-thumb { height: 180px; }
-    .search-form input { width: 70%; }
-}
+  .listing-badge.exchange {
+    background: linear-gradient(45deg, #10b981, #059669);
+    /* Hijau Teal/Emerald */
+  }
+
+  /* Footer styling sudah terintegrasi di Master Layout */
+
+  @media (max-width: 768px) {
+    .book-thumb {
+      height: 180px;
+    }
+
+    .search-form input {
+      width: 70%;
+    }
+  }
 </style>
 @endpush
 
@@ -179,142 +216,156 @@ transition: transform 0.3s ease;
 </form>
 @endsection
 
-{{-- 3. Konten Utama --}}
+<!-- 3. Konten Utama -->
 @section('content')
-  
-  <div class="container-fluid p-0">
-    
-    <div class="banner">
-      <h2>Selamat Datang di Library-Hub</h2>
+
+<div class="container-fluid p-0">
+
+  <div class="banner">
+    <h2>Selamat Datang di Library-Hub</h2>
+  </div>
+  <!-- 🔍 Pesan jika hasil pencarian kosong -->
+  @if($q && $booksHumor->isEmpty() && $booksHistory->isEmpty() && $booksRecs->isEmpty())
+      <div class="alert alert-warning mt-3 mx-3 text-center">
+          Buku "<strong>{{ $q }}</strong>" tidak ditemukan.
+      </div>
+  @endif
+  <div class="mt-4">
+
+
+    <div class="section-header">
+      <h5 class="fw-semibold">Humor & Komedi</h5>
     </div>
 
-    <div class="mt-4">
+    <div class="row g-3">
+      @forelse ($booksHumor as $b)
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="card book-card h-100 position-relative">
+          <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
 
-
-      <div class="section-header">
-        <h5 class="fw-semibold">Humor & Komedi</h5>
-      </div>
-
-      <div class="row g-3">
-        @forelse ($booksHumor as $b)
-          <div class="col-6 col-md-4 col-lg-2">
-            <div class="card book-card h-100 position-relative">
-              <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
-                
-                {{-- 🔹 Label Listing Type --}}
-                @php $types = explode(',', $b->listing_type ?? ''); @endphp
-                <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
-                  @foreach ($types as $type)
-                    @if (trim($type) === 'sell')
-                      <span class="listing-badge sell">Sell</span>
-                    @elseif (trim($type) === 'exchange')
-                      <span class="listing-badge exchange">Exchange</span>
-                    @endif
-                  @endforeach
-                </div>
-
-                <div class="card-body text-center">
-                  @if($b->cover_image)
-                    <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
-                  @else
-                    <div class="py-5 bg-light rounded mb-2">📘</div>
-                  @endif
-                  <h6 class="fw-semibold text-truncate" title="{{ $b->title }}">{{ $b->title }}</h6>
-                  <div class="text-muted small">{{ $b->author }}</div>
-                  <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
-                </div>
-              </a>
+            {{-- 🔹 Label Listing Type --}}
+            @php $types = explode(',', $b->listing_type ?? '');
+            @endphp
+            <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
+              @foreach ($types as $type)
+              @if (trim($type) === 'sell')
+              <span class="listing-badge sell">Dijual</span>
+              @elseif (trim($type) === 'exchange')
+              <span class="listing-badge exchange">Tukar</span>
+              @endif
+              @endforeach
             </div>
-          </div>
-        @empty
-          <div class="col-12"><p class="text-muted">Belum ada buku kategori ini.</p></div>
-        @endforelse
-      </div>
 
-      <div class="section-header mt-5">
-        <h5 class="fw-semibold">Sejarah</h5>
-      </div>
-
-      <div class="row g-3">
-        @forelse ($booksHistory as $b)
-          <div class="col-6 col-md-4 col-lg-2">
-            <div class="card book-card h-100 position-relative">
-              <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
-
-                {{-- 🔹 Label Listing Type --}}
-                @php $types = explode(',', $b->listing_type ?? ''); @endphp
-                <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
-                  @foreach ($types as $type)
-                    @if (trim($type) === 'sell')
-                      <span class="listing-badge sell">Sell</span>
-                    @elseif (trim($type) === 'exchange')
-                      <span class="listing-badge exchange">Exchange</span>
-                    @endif
-                  @endforeach
-                </div>
-
-                <div class="card-body text-center">
-                  @if($b->cover_image)
-                    <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
-                  @else
-                    <div class="py-5 bg-light rounded mb-2">📘</div>
-                  @endif
-                  <h6 class="fw-semibold text-truncate">{{ $b->title }}</h6>
-                  <div class="text-muted small">{{ $b->author }}</div>
-                  <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
-                </div>
-              </a>
+            <div class="card-body text-center">
+              @if($b->cover_image)
+              <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
+              @else
+              <div class="py-5 bg-light rounded mb-2">📘</div>
+              @endif
+              <h6 class="fw-semibold text-truncate" title="{{ $b->title }}">{{ $b->title }}</h6>
+              <div class="text-muted small">{{ $b->author }}</div>
+              <div class="badge rounded-pill bg-light text-dark small fw-semibold">{{ $b->kondisi }}</div>
+              <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
             </div>
-          </div>
-        @empty
-          <div class="col-12"><p class="text-muted">Belum ada buku kategori ini.</p></div>
-        @endforelse
+          </a>
+        </div>
       </div>
-
-      <div class="section-header mt-5">
-        <h5 class="fw-semibold">Rekomendasi</h5>
-        <a href="#" class="text-decoration-none small text-primary">Lihat Selengkapnya...</a>
+      @empty
+      <div class="col-12">
+        <p class="text-muted">Belum ada buku kategori ini.</p>
       </div>
-
-      <div class="row g-3">
-        @forelse ($booksRecs as $b)
-          <div class="col-6 col-md-4 col-lg-2">
-            <div class="card book-card h-100 position-relative">
-              <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
-
-                {{-- 🔹 Label Listing Type --}}
-                @php $types = explode(',', $b->listing_type ?? ''); @endphp
-                <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
-                  @foreach ($types as $type)
-                    @if (trim($type) === 'sell')
-                      <span class="listing-badge sell">Sell</span>
-                    @elseif (trim($type) === 'exchange')
-                      <span class="listing-badge exchange">Exchange</span>
-                    @endif
-                  @endforeach
-                </div>
-
-                <div class="card-body text-center">
-                  @if($b->cover_image)
-                    <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
-                  @else
-                    <div class="py-5 bg-light rounded mb-2">📕</div>
-                  @endif
-                  <h6 class="fw-semibold text-truncate">{{ $b->title }}</h6>
-                  <div class="text-muted small">{{ $b->author }}</div>
-                  <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
-                </div>
-              </a>
-            </div>
-          </div>
-        @empty
-          <div class="col-12"><p class="text-muted">Belum ada rekomendasi.</p></div>
-        @endforelse
-      </div>
+      @endforelse
     </div>
 
-    <div class="footer">
-      <p>© 2025 Library-Hub</p>
+    <div class="section-header mt-5">
+      <h5 class="fw-semibold">Sejarah</h5>
+    </div>
+
+    <div class="row g-3">
+      @forelse ($booksHistory as $b)
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="card book-card h-100 position-relative">
+          <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
+
+            {{-- 🔹 Label Listing Type --}}
+            @php $types = explode(',', $b->listing_type ?? ''); @endphp
+            <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
+              @foreach ($types as $type)
+              @if (trim($type) === 'sell')
+              <span class="listing-badge sell">Sell</span>
+              @elseif (trim($type) === 'exchange')
+              <span class="listing-badge exchange">Exchange</span>
+              @endif
+              @endforeach
+            </div>
+
+            <div class="card-body text-center">
+              @if($b->cover_image)
+              <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
+              @else
+              <div class="py-5 bg-light rounded mb-2">📘</div>
+              @endif
+              <h6 class="fw-semibold text-truncate">{{ $b->title }}</h6>
+              <div class="text-muted small">{{ $b->author }}</div>
+              <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
+            </div>
+          </a>
+        </div>
+      </div>
+      @empty
+      <div class="col-12">
+        <p class="text-muted">Belum ada buku kategori ini.</p>
+      </div>
+      @endforelse
+    </div>
+
+    <div class="section-header mt-5">
+      <h5 class="fw-semibold">Rekomendasi</h5>
+      <a href="#" class="text-decoration-none small text-primary">Lihat Selengkapnya...</a>
+    </div>
+
+    <div class="row g-3">
+      @forelse ($booksRecs as $b)
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="card book-card h-100 position-relative">
+          <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
+
+            {{-- 🔹 Label Listing Type --}}
+            @php $types = explode(',', $b->listing_type ?? ''); @endphp
+            <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
+              @foreach ($types as $type)
+              @if (trim($type) === 'sell')
+              <span class="listing-badge sell">Dijual</span>
+              @elseif (trim($type) === 'exchange')
+              <span class="listing-badge exchange">Tukar</span>
+              @endif
+              @endforeach
+            </div>
+
+            <div class="card-body text-center">
+              @if($b->cover_image)
+              <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
+              @else
+              <div class="py-5 bg-light rounded mb-2">📕</div>
+              @endif
+              <h6 class="fw-semibold text-truncate">{{ $b->title }}</h6>
+              <div class="text-muted small">{{ $b->author }}</div>
+              <div class="badge rounded-pill bg-light text-dark small fw-semibold">{{ $b->kondisi }}</div>
+              <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
+            </div>
+          </a>
+        </div>
+      </div>
+      @empty
+      <div class="col-12">
+        <p class="text-muted">Belum ada rekomendasi.</p>
+      </div>
+      @endforelse
     </div>
   </div>
+
+  <div class="footer">
+    <p>© 2025 Library-Hub</p>
+  </div>
+</div>
 @endsection

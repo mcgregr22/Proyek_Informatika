@@ -20,6 +20,7 @@ class BukuController extends Controller
             'author' => 'required',
             'isbn' => 'required',
             'deskripsi' => 'required',
+            'kondisi' => 'required|string',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'harga' => 'required|numeric',
             'listing_type' => 'required|array|min:1',
@@ -40,6 +41,7 @@ class BukuController extends Controller
             'author' => $request->author,
             'isbn' => $request->isbn,
             'deskripsi' => $request->deskripsi,
+            'kondisi' => $request->kondisi,
             'cover_image' => $imagePath,
             'harga' => $request->harga,
             'tanggal_rilis' => $request->tanggal_rilis,
@@ -85,4 +87,3 @@ class BukuController extends Controller
         return redirect()->back()->with('success', '🛍️ Pembelian berhasil! Silakan tunggu konfirmasi.');
     }
 }
-    
