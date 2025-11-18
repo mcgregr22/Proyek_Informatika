@@ -6,7 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\ProfilUserController;
-
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomePageAdminController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\MyCollectionController;
@@ -15,184 +15,182 @@ use App\Http\Controllers\ManajemenAdminController;
 
 
 
-    // ----------------------
-    // HALAMAN AWAL
-    // ----------------------
-    Route::get('/', fn () => view('home'));
-    Route::get('/home', fn () => view('home'))->name('home');
+// ----------------------
+// HALAMAN AWAL
+// ----------------------
+Route::get('/', fn() => view('home'));
+Route::get('/home', fn() => view('home'))->name('home');
 
-    // ----------------------
-    // TAMU (BELUM LOGIN)
-    // ----------------------
-    Route::middleware('guest')->group(function () {
-    Route::get('/register', [RegistrasiController::class, 'show'])->name('register.show');
-    Route::post('/register', [RegistrasiController::class, 'store'])->name('register.store');
+// ----------------------
+// TAMU (BELUM LOGIN)
+// ----------------------
+Route::middleware('guest')->group(function () {
+  Route::get('/register', [RegistrasiController::class, 'show'])->name('register.show');
+  Route::post('/register', [RegistrasiController::class, 'store'])->name('register.store');
 
-    Route::get('/login', [LoginController::class, 'show'])->name('login.show');
-    Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
-    });
+  Route::get('/login', [LoginController::class, 'show'])->name('login.show');
+  Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
+});
 
-    Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
+Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
 
-    // ----------------------
-    // SUDAH LOGIN (AUTH)
-    // ----------------------
-    Route::middleware('auth')->group(function () {
+// ----------------------
+// SUDAH LOGIN (AUTH)
+// ----------------------
+Route::middleware('auth')->group(function () {
 
-    // =========================
-    // HOMEPAGE USER
-    // =========================
-    Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
-    Route::get('/buku/{id}', [HomepageController::class, 'show'])->name('buku.show');
+  // =========================
+  // HOMEPAGE USER
+  // =========================
+  Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
+  Route::get('/buku/{id}', [HomepageController::class, 'show'])->name('buku.show');
 
-    // =========================
-    // PENGELOLAAN (LAYOUT + MENU)
-    // =========================
-    Route::get('/pengelolaan', function () {
+  // =========================
+  // PENGELOLAAN (LAYOUT + MENU)
+  // =========================
+  Route::get('/pengelolaan', function () {
     $user = Auth::user();
     return view('pengelolaan', compact('user'));
-    })->name('pengelolaan');
-        
-    });
+  })->name('pengelolaan');
+});
 
 
 
-    // Keranjang
-    Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])->name('pengelolaan.keranjang');
-    Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
-    Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
-    Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
+// Keranjang
+Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])->name('pengelolaan.keranjang');
+Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
+Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
+Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
 
 
 
-    // Tambah Buku (view placeholder, sesuaikan file view-mu)
-    Route::view('/pengelolaan/tambahbuku', 'tambahbuku')->name('pengelolaan.tambahbuku');
+// Tambah Buku (view placeholder, sesuaikan file view-mu)
+Route::view('/pengelolaan/tambahbuku', 'tambahbuku')->name('pengelolaan.tambahbuku');
 
-    // Tukar Buku
-    // Jika view kamu di resources/views/swapbook.blade.php -> pakai 'swapbook'
-    // Jika view-nya di resources/views/pengelolaan/swapbook.blade.php -> ganti ke 'pengelolaan.swapbook'
-    Route::view('/pengelolaan/swapbook', 'swapbook')->name('pengelolaan.swapbook');
+// Tukar Buku
+// Jika view kamu di resources/views/swapbook.blade.php -> pakai 'swapbook'
+// Jika view-nya di resources/views/pengelolaan/swapbook.blade.php -> ganti ke 'pengelolaan.swapbook'
+Route::view('/pengelolaan/swapbook', 'swapbook')->name('pengelolaan.swapbook');
 
-    // =========================
-    // KERANJANG (AKSI)
-    // =========================
-    Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
-    Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
-    Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
-    Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])->name('pengelolaan.keranjang');
-    Route::post('/keranjang/tambah-qty/{id}', [KeranjangController::class, 'increase'])->name('cart.increase');
-    Route::post('/keranjang/kurang-qty/{id}', [KeranjangController::class, 'decrease'])->name('cart.decrease');
-
-
-
-    // =========================
-    // PROFIL USER
-    // =========================
-    Route::get('/profil_user', [ProfilUserController::class, 'index'])->name('profil_user');
-    Route::put('/profil_user/update', [ProfilUserController::class, 'update'])->name('profil_user.update');
+// =========================
+// KERANJANG (AKSI)
+// =========================
+Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
+Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
+Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
+Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])->name('pengelolaan.keranjang');
+Route::post('/keranjang/tambah-qty/{id}', [KeranjangController::class, 'increase'])->name('cart.increase');
+Route::post('/keranjang/kurang-qty/{id}', [KeranjangController::class, 'decrease'])->name('cart.decrease');
 
 
-    // =========================
-    //  ADMIN: Profil Admin
-    // =========================
-    Route::get('/admin/profil', [HomePageAdminController::class, 'profil'])->name('admin.profil');
-    Route::put('/admin/profil/update', [HomePageAdminController::class, 'updateProfil'])->name('admin.profil.update');
 
-    Route::get('/profil_admin', [ProfilUserController::class, 'index'])->name('profil_admin');
-    Route::put('/profil_admin/update', [ProfilUserController::class, 'update'])->name('profil_admin.update');
-
-    // =========================
-    // HALAMAN TAMBAHAN
-    // =========================
-      // My Collection (pilih buku milik sendiri untuk ditukar)
-    Route::get('/pengelolaan/mycollection', [MyCollectionController::class, 'index'])->name('mycollection.index');
-    Route::get('/mycollection', [MyCollectionController::class, 'index'])->name('mycollection.index');
-
-    Route::view('/forumdiscuss', 'forumdiscuss')->name('forumdiscuss');
-
-    // =========================
-    //        ADMIN: Dashboard buku
-    // =========================
-    Route::get('/admin', [HomePageAdminController::class, 'index'])->name('homepage_admin');
-    Route::post('/admin/tambah', [HomePageAdminController::class, 'store'])->name('homepage_admin.store');
-    Route::delete('/admin/buku/{book:id_buku}', [HomePageAdminController::class, 'destroy'])->name('homepage_admin.destroy');
-
-    // =========================
-    // ADMIN: Manajemen Akun & Role
-    // =========================
-    Route::prefix('manajemen_admin')->group(function () {
-
-    Route::get('/', [ManajemenAdminController::class, 'index'])->name('manajemen_admin');
-
-    Route::get('/edit/{id}', [ManajemenAdminController::class, 'edit'])->name('manajemen_admin.edit');
-    Route::put('/update/{id}', [ManajemenAdminController::class, 'update'])->name('manajemen_admin.update');
-
-    Route::delete('/delete/{id}', [ManajemenAdminController::class, 'destroy'])->name('manajemen_admin.delete');
-    Route::get('/role/{id}', [ManajemenAdminController::class, 'editRole'])->name('manajemen_admin.role');
-    Route::put('/role/update/{id}', [ManajemenAdminController::class, 'updateRole'])->name('manajemen_admin.role.update');
-    });
+// =========================
+// PROFIL USER
+// =========================
+Route::get('/profil_user', [ProfilUserController::class, 'index'])->name('profil_user');
+Route::put('/profil_user/update', [ProfilUserController::class, 'update'])->name('profil_user.update');
 
 
-    // =========================
-    // BUKU CONTROLLER
-    // =========================
-    Route::post('/buku/tambah', [BukuController::class, 'store'])->name('buku.store');
-    Route::delete('/buku/hapus/{book}', [BukuController::class, 'destroy'])->name('buku.destroy');
+// =========================
+//  ADMIN: Profil Admin
+// =========================
+Route::get('/admin/profil', [HomePageAdminController::class, 'profil'])->name('admin.profil');
+Route::put('/admin/profil/update', [HomePageAdminController::class, 'updateProfil'])->name('admin.profil.update');
 
-    // =========================
-    // LOGOUT
-    // =========================
-    Route::middleware('auth')->group(function () {
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-    });
+Route::get('/profil_admin', [ProfilUserController::class, 'index'])->name('profil_admin');
+Route::put('/profil_admin/update', [ProfilUserController::class, 'update'])->name('profil_admin.update');
 
-    // FORUM DISCUSS ROUTES
+// =========================
+// HALAMAN TAMBAHAN
+// =========================
+// My Collection (pilih buku milik sendiri untuk ditukar)
+Route::get('/pengelolaan/mycollection', [MyCollectionController::class, 'index'])->name('mycollection.index');
+Route::get('/mycollection', [MyCollectionController::class, 'index'])->name('mycollection.index');
 
-    // Grup Rute Forum yang memerlukan otentikasi
-    Route::middleware(['auth'])->prefix('forumdiscuss')->group(function () {
-    // Rute Tampilan (GET)
-    // URI: /forumdiscuss
-    Route::get('/', [ForumController::class, 'index'])->name('forum.index');
-    
-    // Rute Simpan Post Baru (POST)
-    // URI: /forumdiscuss/post
-    Route::post('/post', [ForumController::class, 'store'])->name('forum.post.store');
+Route::view('/forumdiscuss', 'forumdiscuss')->name('forumdiscuss');
 
-    // Rute Menyimpan Komentar Baru (POST)
-    // PERBAIKAN: Nama rute diubah dari 'forum.comment.store' menjadi 'forum.comment'
-    // URI: /forumdiscuss/{id_post}/comment
-    Route::post('/{id_post}/comment', [ForumController::class, 'storeComment'])->name('forum.comment');
-    });
+// =========================
+//        ADMIN: Dashboard buku
+// =========================
+Route::get('/admin', [HomePageAdminController::class, 'index'])->name('homepage_admin');
+Route::post('/admin/tambah', [HomePageAdminController::class, 'store'])->name('homepage_admin.store');
+Route::delete('/admin/buku/{book:id_buku}', [HomePageAdminController::class, 'destroy'])->name('homepage_admin.destroy');
 
+// =========================
+// ADMIN: Manajemen Akun & Role
+// =========================
+Route::prefix('manajemen_admin')->group(function () {
 
-    // =========================
-    // PURCHASE DETAIL ROUTES
-    // =========================
-    use App\Http\Controllers\PurchaseController;
-    Route::post('/purchase', [PurchaseController::class, 'show'])->name('purchase.show');
-    Route::post('/purchase/confirm', [PurchaseController::class, 'confirm'])->name('purchase.confirm');
-    Route::post('/purchase/{id}', [PurchaseController::class, 'store'])->name('purchase.store');
-    Route::post('/purchase/{book}', [PurchaseController::class, 'store'])->name('purchase.store');
-    Route::get('/payment/{purchase}', [PurchaseController::class, 'showPayment'])->name('payment.show');
-    // Tampilkan halaman pembayaran (data belum disimpan)
-    Route::post('/purchase/{book}/payment', [PurchaseController::class, 'showPaymentForm'])->name('purchase.payment');
-    // Simpan ke database saat "Bayar Sekarang"
-    Route::post('/purchase/{book}/pay', [PurchaseController::class, 'payNow'])->name('purchase.pay');
+  Route::get('/', [ManajemenAdminController::class, 'index'])->name('manajemen_admin');
 
-    // =========================
-    // ADMIN: Manajemen Akun & Role
-    // =========================
-    Route::prefix('manajemen_admin')->group(function () {
+  Route::get('/edit/{id}', [ManajemenAdminController::class, 'edit'])->name('manajemen_admin.edit');
+  Route::put('/update/{id}', [ManajemenAdminController::class, 'update'])->name('manajemen_admin.update');
 
-        Route::get('/', [ManajemenAdminController::class, 'index'])->name('manajemen_admin');
-
-        Route::get('/edit/{id}', [ManajemenAdminController::class, 'edit'])->name('manajemen_admin.edit');
-        Route::put('/update/{id}', [ManajemenAdminController::class, 'update'])->name('manajemen_admin.update');
-
-        Route::delete('/delete/{id}', [ManajemenAdminController::class, 'destroy'])->name('manajemen_admin.delete');
-
-        Route::get('/role/{id}', [ManajemenAdminController::class, 'editRole'])->name('manajemen_admin.role');
-        Route::put('/role/update/{id}', [ManajemenAdminController::class, 'updateRole'])->name('manajemen_admin.role.update');
-    });
+  Route::delete('/delete/{id}', [ManajemenAdminController::class, 'destroy'])->name('manajemen_admin.delete');
+  Route::get('/role/{id}', [ManajemenAdminController::class, 'editRole'])->name('manajemen_admin.role');
+  Route::put('/role/update/{id}', [ManajemenAdminController::class, 'updateRole'])->name('manajemen_admin.role.update');
+});
 
 
+// =========================
+// BUKU CONTROLLER
+// =========================
+Route::post('/buku/tambah', [BukuController::class, 'store'])->name('buku.store');
+Route::delete('/buku/hapus/{book}', [BukuController::class, 'destroy'])->name('buku.destroy');
+
+// =========================
+// LOGOUT
+// =========================
+Route::middleware('auth')->group(function () {
+  Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+});
+
+// FORUM DISCUSS ROUTES
+
+// Grup Rute Forum yang memerlukan otentikasi
+Route::middleware(['auth'])->prefix('forumdiscuss')->group(function () {
+  // Rute Tampilan (GET)
+  // URI: /forumdiscuss
+  Route::get('/', [ForumController::class, 'index'])->name('forum.index');
+
+  // Rute Simpan Post Baru (POST)
+  // URI: /forumdiscuss/post
+  Route::post('/post', [ForumController::class, 'store'])->name('forum.post.store');
+
+  // Rute Menyimpan Komentar Baru (POST)
+  // PERBAIKAN: Nama rute diubah dari 'forum.comment.store' menjadi 'forum.comment'
+  // URI: /forumdiscuss/{id_post}/comment
+  Route::post('/{id_post}/comment', [ForumController::class, 'storeComment'])->name('forum.comment');
+});
+
+
+// =========================
+// PURCHASE DETAIL ROUTES
+// =========================
+use App\Http\Controllers\PurchaseController;
+
+Route::post('/purchase', [PurchaseController::class, 'show'])->name('purchase.show');
+Route::post('/purchase/confirm', [PurchaseController::class, 'confirm'])->name('purchase.confirm');
+Route::post('/purchase/{id}', [PurchaseController::class, 'store'])->name('purchase.store');
+Route::post('/purchase/{book}', [PurchaseController::class, 'store'])->name('purchase.store');
+Route::get('/payment/{purchase}', [PurchaseController::class, 'showPayment'])->name('payment.show');
+// Tampilkan halaman pembayaran (data belum disimpan)
+Route::post('/purchase/{book}/payment', [PurchaseController::class, 'showPaymentForm'])->name('purchase.payment');
+// Simpan ke database saat "Bayar Sekarang"
+Route::post('/purchase/{book}/pay', [PurchaseController::class, 'payNow'])->name('purchase.pay');
+
+// =========================
+// ADMIN: Manajemen Akun & Role
+// =========================
+Route::prefix('manajemen_admin')->group(function () {
+
+  Route::get('/', [ManajemenAdminController::class, 'index'])->name('manajemen_admin');
+
+  Route::get('/edit/{id}', [ManajemenAdminController::class, 'edit'])->name('manajemen_admin.edit');
+  Route::put('/update/{id}', [ManajemenAdminController::class, 'update'])->name('manajemen_admin.update');
+
+  Route::delete('/delete/{id}', [ManajemenAdminController::class, 'destroy'])->name('manajemen_admin.delete');
+
+  Route::get('/role/{id}', [ManajemenAdminController::class, 'editRole'])->name('manajemen_admin.role');
+  Route::put('/role/update/{id}', [ManajemenAdminController::class, 'updateRole'])->name('manajemen_admin.role.update');
+});
