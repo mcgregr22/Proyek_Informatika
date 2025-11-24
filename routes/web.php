@@ -205,8 +205,14 @@ Route::prefix('manajemen_admin')->group(function () {
 // =========================
 
 // tombol beli → buat transaksi + tampilkan snap popup
-Route::post('/pay/{bookId}', [MidtransController::class, 'createTransaction'])
+Route::post('/buy-now/{bookId}', [App\Http\Controllers\MidtransController::class, 'buyNow'])
+    ->name('midtrans.buyNow');
+
+Route::post('/pay', [App\Http\Controllers\MidtransController::class, 'createCheckout'])
     ->name('midtrans.pay');
+
+Route::post('/midtrans/callback', [App\Http\Controllers\MidtransController::class, 'notificationHandler']);
+
 
 
     // MIDTRANS CHECKOUT DARI KERANJANG
@@ -215,9 +221,3 @@ Route::post('/checkout', [MidtransController::class, 'createCheckout'])
 
 // Midtrans Notification / Callback
 Route::post('/midtrans/notification', [MidtransController::class, 'notificationHandler']);
-
-
-
-
-
-

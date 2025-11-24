@@ -76,6 +76,57 @@ class MidtransController extends Controller
         ]);
     }
 
+    public function buyNow(Request $request, $bookId)
+{
+    $user = Auth::user();
+
+    // qty dari tombol Beli Sekarang
+    $qty = $request->qty;
+
+    // Ambil buku
+    $book = \App\Models\Buku::findOrFail($bookId);
+
+    // Hitung total: harga × qty
+    $total = $book->harga * $qty;
+
+    // Buat order baru
+    $order = Order::create([
+        'user_id'  => $user->id,
+        'order_id' => 'ORD-' . time(),
+        'total'    => $total,
+        'status'   => 'pending'
+    ]);
+
+    // Simpan item order
+    OrderItem::create([
+        'order_id' => $order->id,
+        'buku_id'  => $book->id_buku,
+        'qty'      => $qty,
+        'harga'    => $book->harga,
+    ]);
+
+    // Data ke Midtrans
+    $params = [
+        'transaction_details' => [
+            'order_id'     => $order->order_id,
+            'gross_amount' => $order->total,
+        ],
+        'customer_details' => [
+            'first_name' => $user->name,
+            'email'      => $user->email,
+        ]
+    ];
+
+    // Ambil Snap Token
+    $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+    return view('payment', [
+        'snapToken' => $snapToken,
+        'order'     => $order
+    ]);
+}
+
+
     /* ======================================================
      * 2. MIDTRANS CALLBACK / WEBHOOK
      * ====================================================== */
