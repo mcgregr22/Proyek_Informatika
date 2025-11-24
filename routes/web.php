@@ -12,6 +12,8 @@ use App\Http\Controllers\BukuController;
 use App\Http\Controllers\MyCollectionController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ManajemenAdminController;
+use App\Http\Controllers\MidtransController;
+
 
 
 
@@ -20,6 +22,8 @@ use App\Http\Controllers\ManajemenAdminController;
 // ----------------------
 Route::get('/', fn() => view('home'));
 Route::get('/home', fn() => view('home'))->name('home');
+
+
 
 // ----------------------
 // TAMU (BELUM LOGIN)
@@ -66,6 +70,7 @@ Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->
 
 // Tambah Buku (view placeholder, sesuaikan file view-mu)
 Route::view('/pengelolaan/tambahbuku', 'tambahbuku')->name('pengelolaan.tambahbuku');
+
 
 // Tukar Buku
 // Jika view kamu di resources/views/swapbook.blade.php -> pakai 'swapbook'
@@ -194,3 +199,25 @@ Route::prefix('manajemen_admin')->group(function () {
   Route::get('/role/{id}', [ManajemenAdminController::class, 'editRole'])->name('manajemen_admin.role');
   Route::put('/role/update/{id}', [ManajemenAdminController::class, 'updateRole'])->name('manajemen_admin.role.update');
 });
+
+// =========================
+// MIDTRANS CONTROLLER
+// =========================
+
+// tombol beli → buat transaksi + tampilkan snap popup
+Route::post('/pay/{bookId}', [MidtransController::class, 'createTransaction'])
+    ->name('midtrans.pay');
+
+
+    // MIDTRANS CHECKOUT DARI KERANJANG
+Route::post('/checkout', [MidtransController::class, 'createCheckout'])
+    ->name('midtrans.create');
+
+// Midtrans Notification / Callback
+Route::post('/midtrans/notification', [MidtransController::class, 'notificationHandler']);
+
+
+
+
+
+

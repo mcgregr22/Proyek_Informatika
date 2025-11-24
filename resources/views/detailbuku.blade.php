@@ -135,6 +135,7 @@
         </div>
 
         <div class="d-flex flex-wrap gap-2">
+
           {{-- Tombol Tukar Buku --}}
           <form action="{{ route('mycollection.index') }}" method="GET">
             <input type="hidden" name="requested" value="{{ $book->id_buku }}">
@@ -143,13 +144,20 @@
             </button>
           </form>
 
-          {{-- Tombol Beli Sekarang (Membuka Modal) --}}
+          <!-- {{-- Tombol Beli Sekarang (Membuka Modal) --}}
           <button type="button" class="btn btn-outline" data-bs-toggle="modal" data-bs-target="#purchaseModal">
             <i class="bi bi-bag me-2"></i>Beli Sekarang
           </button>
         </div>
       </div>
-    </div>
+    </div> -->
+
+    <form action="{{ route('midtrans.pay', $book->id_buku) }}" method="POST">
+    @csrf
+    <button class="btn btn-primary">Beli Sekarang</button>
+</form>
+
+
 
     {{-- Deskripsi --}}
     <div class="mt-5">

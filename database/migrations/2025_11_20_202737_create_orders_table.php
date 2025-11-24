@@ -6,24 +6,26 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('purchases', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('book_id')->constrained('_buku', 'id_buku')->onDelete('cascade');
-            $table->integer('qty');
+            $table->string('order_id')->unique(); // dari Midtrans
             $table->integer('total');
-            $table->string('address');
-            $table->string('payment_method');
-            $table->string('status')->default('pending');
+            $table->enum('status', ['pending', 'paid', 'failed'])->default('pending');
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('purchases');
+        Schema::dropIfExists('orders');
     }
 };
-
