@@ -60,14 +60,6 @@ Route::middleware('auth')->group(function () {
 });
 
 
-
-// // Keranjang
-// Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])->name('pengelolaan.keranjang');
-// Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
-// Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
-// Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
-
-
 // =========================
 // PENGELOLAAN (VIEW)
 // =========================
@@ -79,10 +71,10 @@ Route::view('/pengelolaan/swapbook', 'swapbook')->name('pengelolaan.swapbook');
 // =========================
 Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
 Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
-Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
+Route::delete('/keranjang/hapus/{id_buku}', [KeranjangController::class, 'remove'])->name('cart.remove');
 Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])->name('pengelolaan.keranjang');
-Route::post('/keranjang/tambah-qty/{id}', [KeranjangController::class, 'increase'])->name('cart.increase');
-Route::post('/keranjang/kurang-qty/{id}', [KeranjangController::class, 'decrease'])->name('cart.decrease');
+Route::post('/keranjang/tambah-qty/{id_buku}', [KeranjangController::class, 'increase'])->name('cart.increase');
+Route::post('/keranjang/kurang-qty/{id_buku}', [KeranjangController::class, 'decrease'])->name('cart.decrease');
 
 
 
@@ -112,7 +104,7 @@ Route::get('/mycollection', [MyCollectionController::class, 'index'])->name('myc
 Route::view('/forumdiscuss', 'forumdiscuss')->name('forumdiscuss');
 
 // =========================
-//        ADMIN: Dashboard buku
+// ADMIN: Dashboard buku
 // =========================
 Route::get('/admin', [HomePageAdminController::class, 'index'])->name('homepage_admin');
 Route::post('/admin/tambah', [HomePageAdminController::class, 'store'])->name('homepage_admin.store');
