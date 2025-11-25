@@ -1,4 +1,4 @@
-@extends('layouts.profil_admin')
+@extends('layouts.profil')
 
 @section('title', 'Profil Admin - ' . $admin->name)
 

@@ -21,7 +21,7 @@
         <h2 class="text-2xl font-bold text-gray-800 mb-4">Pembayaran Pesanan</h2>
 
         <p class="text-gray-600 text-sm mb-6">
-            Klik tombol di bawah untuk melanjutkan pembayaran melalui <span class="font-semibold">Midtrans</span>.
+            Klik tombol di bawah untuk melanjutkan pembayaran Anda
         </p>
 
         <!-- Loading Message -->
@@ -39,10 +39,17 @@
             <p class="text-blue-600 font-semibold mt-3">Membuka halaman pembayaran...</p>
         </div>
 
+        <!-- Tombol Bayar -->
         <button id="pay"
             class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-lg font-semibold transition">
             Bayar Sekarang
         </button>
+
+        <!-- Tombol Batalkan -->
+        <a href="/pengelolaan/keranjang"
+           class="block w-full mt-3 bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg text-lg font-semibold transition">
+            Batalkan Pembayaran
+        </a>
 
         <p class="text-xs text-gray-500 mt-4">Transaksi Anda aman & terenkripsi.</p>
     </div>
