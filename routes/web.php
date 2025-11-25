@@ -13,6 +13,7 @@ use App\Http\Controllers\MyCollectionController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ManajemenAdminController;
 use App\Http\Controllers\MidtransController;
+use App\Http\Controllers\PurchaseController;
 
 
 
@@ -60,21 +61,17 @@ Route::middleware('auth')->group(function () {
 
 
 
-// Keranjang
-Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])->name('pengelolaan.keranjang');
-Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
-Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
-Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
+// // Keranjang
+// Route::get('/pengelolaan/keranjang', [KeranjangController::class, 'index'])->name('pengelolaan.keranjang');
+// Route::get('/keranjang', [KeranjangController::class, 'index'])->name('cart.index');
+// Route::post('/keranjang/tambah', [KeranjangController::class, 'add'])->name('cart.add');
+// Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'remove'])->name('cart.remove');
 
 
-
-// Tambah Buku (view placeholder, sesuaikan file view-mu)
+// =========================
+// PENGELOLAAN (VIEW)
+// =========================
 Route::view('/pengelolaan/tambahbuku', 'tambahbuku')->name('pengelolaan.tambahbuku');
-
-
-// Tukar Buku
-// Jika view kamu di resources/views/swapbook.blade.php -> pakai 'swapbook'
-// Jika view-nya di resources/views/pengelolaan/swapbook.blade.php -> ganti ke 'pengelolaan.swapbook'
 Route::view('/pengelolaan/swapbook', 'swapbook')->name('pengelolaan.swapbook');
 
 // =========================
@@ -150,8 +147,9 @@ Route::middleware('auth')->group(function () {
   Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
+// ===============================================
 // FORUM DISCUSS ROUTES
-
+// ===============================================
 // Grup Rute Forum yang memerlukan otentikasi
 Route::middleware(['auth'])->prefix('forumdiscuss')->group(function () {
   // Rute Tampilan (GET)
@@ -169,20 +167,13 @@ Route::middleware(['auth'])->prefix('forumdiscuss')->group(function () {
 });
 
 
-// =========================
-// PURCHASE DETAIL ROUTES
-// =========================
-use App\Http\Controllers\PurchaseController;
+// ===============================================
+// RIWAYAT PEMBELIAN (PURCHASE HISTORY)
+// ===============================================
+Route::get('/purchase', [PurchaseController::class, 'index'])
+  ->middleware('auth')
+  ->name('purchase.index');
 
-Route::post('/purchase', [PurchaseController::class, 'show'])->name('purchase.show');
-Route::post('/purchase/confirm', [PurchaseController::class, 'confirm'])->name('purchase.confirm');
-Route::post('/purchase/{id}', [PurchaseController::class, 'store'])->name('purchase.store');
-Route::post('/purchase/{book}', [PurchaseController::class, 'store'])->name('purchase.store');
-Route::get('/payment/{purchase}', [PurchaseController::class, 'showPayment'])->name('payment.show');
-// Tampilkan halaman pembayaran (data belum disimpan)
-Route::post('/purchase/{book}/payment', [PurchaseController::class, 'showPaymentForm'])->name('purchase.payment');
-// Simpan ke database saat "Bayar Sekarang"
-Route::post('/purchase/{book}/pay', [PurchaseController::class, 'payNow'])->name('purchase.pay');
 
 // =========================
 // ADMIN: Manajemen Akun & Role
@@ -203,12 +194,10 @@ Route::prefix('manajemen_admin')->group(function () {
 // =========================
 // MIDTRANS
 // =========================
-
 // tombol beli langsung (1 buku)
 Route::post('/buy-now/{bookId}', [MidtransController::class, 'buyNow'])
-    ->name('midtrans.buyNow');
+  ->name('midtrans.buyNow');
 
 // checkout keranjang atau banyak item
 Route::post('/checkout', [MidtransController::class, 'createCheckout'])
-    ->name('midtrans.checkout');
-
+  ->name('midtrans.checkout');

@@ -108,14 +108,19 @@
           <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Keranjang</span>
         </a>
 
-        <a href="/pengelolaan/purchase" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
+        <a href="{{ route('purchase.index') }}" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
           <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h3.586a2 2 0 011.414.586l6.828 6.828a2 2 0 010 2.828l-2.586 2.586a2 2 0 01-2.828 0L6.586 13A2 2 0 016 11.586V8a1 1 0 011-1z"/><circle cx="9" cy="9" r="1.25"/>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+              stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M8 7h8m-8 4h5m-5 4h8M5 4h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z" />
             </svg>
           </span>
-          <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Purchase</span>
+          <span class="font-medium text-zinc-700 group-hover:text-indigo-700">
+            Riwayat Pembelian
+          </span>
         </a>
+
 
         <a href="/pengelolaan/swapbook" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
           <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
