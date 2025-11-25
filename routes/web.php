@@ -14,6 +14,7 @@ use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ManajemenAdminController;
 use App\Http\Controllers\MidtransController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\SwapbookController;
 
 
 
@@ -193,3 +194,16 @@ Route::post('/buy-now/{bookId}', [MidtransController::class, 'buyNow'])
 // checkout keranjang atau banyak item
 Route::post('/checkout', [MidtransController::class, 'createCheckout'])
   ->name('midtrans.checkout');
+//==========================
+// SWAP BOOK ROUTES
+// =========================
+    Route::get('/swapbook', [SwapbookController::class, 'index'])->name('swap.index');
+    Route::post('/swapbook', [SwapbookController::class, 'store'])->name('swap.store');
+
+    // Alias lama → redirect aman
+    Route::get('/swap/requests', fn() => redirect()->route('swap.index'))->name('swap.requests.alias');
+    Route::get('/pengelolaan/swapbook', fn() => redirect()->route('swap.index'))->name('pengelolaan.swapbook');
+
+    // Aksi terima / tolak permintaan swap
+Route::patch('/swap/requests/{swap}/accept', [SwapbookController::class, 'accept'])->name('swap.accept');
+Route::patch('/swap/requests/{swap}/reject', [SwapbookController::class, 'reject'])->name('swap.reject');
