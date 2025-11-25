@@ -188,7 +188,7 @@ $isEmpty = empty($items) || (is_countable($items) && count($items) === 0);
         <span class="text-indigo-600 font-bold">{{ $rp($total ?? 0) }}</span>
     </div>
 
-    <form action="{{ route('midtrans.create') }}" method="POST">
+    <form action="{{ route('midtrans.checkout') }}" method="POST">
         @csrf
         <button class="w-full mt-4 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">
             Bayar Sekarang
@@ -208,10 +208,11 @@ $isEmpty = empty($items) || (is_countable($items) && count($items) === 0);
         );
 
         const link = document.querySelector(
-            'a[href="/pengelolaan/keranjang"], ' +
-            'a[href="pengelolaan/keranjang"], ' +
-            'a[href="{{ url('/pengelolaan/keranjang ')}}"]'
-        );
+    `a[href="/pengelolaan/keranjang"],
+     a[href="pengelolaan/keranjang"],
+     a[href="{{ url('/pengelolaan/keranjang') }}"]`
+);
+
 
         if (link) {
             link.classList.add(...active);

@@ -3,25 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Keranjang;
 use App\Models\Order;
 use App\Models\OrderItem;
-use Illuminate\Support\Facades\Log;
+use App\Models\Keranjang;
 
 class MidtransController extends Controller
 {
     public function __construct()
     {
-        \Midtrans\Config::$serverKey = config('midtrans.server_key');
-        \Midtrans\Config::$isProduction = config('midtrans.is_production');
-        \Midtrans\Config::$isSanitized = true;
-        \Midtrans\Config::$is3ds = true;
+        \Midtrans\Config::$serverKey     = config('midtrans.server_key');
+        \Midtrans\Config::$isProduction  = config('midtrans.is_production');
+        \Midtrans\Config::$isSanitized   = true;
+        \Midtrans\Config::$is3ds         = true;
     }
 
-    /* ======================================================
+    /* ==========================================================
      * 1. CREATE TRANSACTION (CHECKOUT)
-     * ====================================================== */
+     * ==========================================================*/
     public function createCheckout(Request $request)
     {
         $user = Auth::user();
@@ -31,13 +31,8 @@ class MidtransController extends Controller
             return back()->with('error', 'Keranjang kosong.');
         }
 
-        // Hitung total pembayaran
-        $total = 0;
-        foreach ($cart as $c) {
-            $total += $c->harga * $c->qty;
-        }
+        $total = $cart->sum(fn ($c) => $c->harga * $c->qty);
 
-        // Buat order
         $order = Order::create([
             'user_id'  => $user->id,
             'order_id' => 'ORD-' . time(),
@@ -45,7 +40,6 @@ class MidtransController extends Controller
             'status'   => 'pending'
         ]);
 
-        // Simpan item order
         foreach ($cart as $item) {
             OrderItem::create([
                 'order_id' => $order->id,
@@ -55,7 +49,49 @@ class MidtransController extends Controller
             ]);
         }
 
-        // Data ke midtrans
+        $params = [
+            'transaction_details' => [
+                'order_id'     => $order->order_id,
+                'gross_amount' => $order->total,
+            ],
+            'customer_details' => [
+                'first_name' => $user->name,
+                'email'      => $user->email,
+            ],
+        ];
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+        return view('payment', [
+            'snapToken' => $snapToken,
+            'order'     => $order,
+        ]);
+    }
+
+    /* ==========================================================
+     * 2. BUY NOW
+     * ==========================================================*/
+    public function buyNow(Request $request, $bookId)
+    {
+        $user = Auth::user();
+        $qty  = $request->qty;
+
+        $book = \App\Models\Buku::findOrFail($bookId);
+
+        $order = Order::create([
+            'user_id'  => $user->id,
+            'order_id' => 'ORD-' . time(),
+            'total'    => $book->harga * $qty,
+            'status'   => 'pending',
+        ]);
+
+        OrderItem::create([
+            'order_id' => $order->id,
+            'buku_id'  => $book->id_buku,
+            'qty'      => $qty,
+            'harga'    => $book->harga,
+        ]);
+
         $params = [
             'transaction_details' => [
                 'order_id'     => $order->order_id,
@@ -67,111 +103,82 @@ class MidtransController extends Controller
             ]
         ];
 
-        // Dapatkan Snap Token
         $snapToken = \Midtrans\Snap::getSnapToken($params);
 
         return view('payment', [
             'snapToken' => $snapToken,
-            'order'     => $order
+            'order'     => $order,
         ]);
     }
 
-    public function buyNow(Request $request, $bookId)
+
+    /* ==========================================================
+     * 3. MIDTRANS WEBHOOK / NOTIFICATION HANDLER
+     * ==========================================================*/
+   public function handleNotification(Request $request)
 {
-    $user = Auth::user();
+    Log::info("MIDTRANS CALLBACK PAYLOAD: " . json_encode($request->all()));
 
-    // qty dari tombol Beli Sekarang
-    $qty = $request->qty;
+    $payload = $request->all();
+    $orderId = $payload['order_id'] ?? null;
 
-    // Ambil buku
-    $book = \App\Models\Buku::findOrFail($bookId);
-
-    // Hitung total: harga × qty
-    $total = $book->harga * $qty;
-
-    // Buat order baru
-    $order = Order::create([
-        'user_id'  => $user->id,
-        'order_id' => 'ORD-' . time(),
-        'total'    => $total,
-        'status'   => 'pending'
-    ]);
-
-    // Simpan item order
-    OrderItem::create([
-        'order_id' => $order->id,
-        'buku_id'  => $book->id_buku,
-        'qty'      => $qty,
-        'harga'    => $book->harga,
-    ]);
-
-    // Data ke Midtrans
-    $params = [
-        'transaction_details' => [
-            'order_id'     => $order->order_id,
-            'gross_amount' => $order->total,
-        ],
-        'customer_details' => [
-            'first_name' => $user->name,
-            'email'      => $user->email,
-        ]
-    ];
-
-    // Ambil Snap Token
-    $snapToken = \Midtrans\Snap::getSnapToken($params);
-
-    return view('payment', [
-        'snapToken' => $snapToken,
-        'order'     => $order
-    ]);
-}
-
-
-    /* ======================================================
-     * 2. MIDTRANS CALLBACK / WEBHOOK
-     * ====================================================== */
-    public function notificationHandler(Request $request)
-    {
-        Log::info('Midtrans Callback Received:', $request->all());
-
-        $notif = new \Midtrans\Notification();
-
-        $orderId = $notif->order_id;
-        $transactionStatus = $notif->transaction_status;
-
-        // Ambil order berdasarkan order_id Midtrans
-        $order = Order::where('order_id', $orderId)->first();
-
-        if (!$order) {
-            Log::error("ORDER NOT FOUND: " . $orderId);
-            return response()->json(['message' => 'Order not found'], 404);
-        }
-
-        // Update status berdasarkan respon Midtrans
-        if ($transactionStatus == 'settlement' || $transactionStatus == 'capture') {
-            $order->status = 'paid';
-
-            // Hapus keranjang user
-            Keranjang::where('user_id', $order->user_id)->delete();
-
-        } elseif ($transactionStatus == 'pending') {
-            $order->status = 'pending';
-
-        } elseif ($transactionStatus == 'expire') {
-            $order->status = 'expired';
-
-        } elseif ($transactionStatus == 'cancel') {
-            $order->status = 'canceled';
-
-        } else {
-            $order->status = 'failed';
-        }
-
-        $order->save();
-
-        Log::info("ORDER UPDATED --> " . $order->status);
-
-        return response()->json(['message' => 'Callback processed']);
+    if (!$orderId) {
+        Log::error("No order_id in callback!");
+        return response()->json(['error' => 'order_id missing'], 400);
     }
+
+    // Jika test webhook dari dashboard
+    if (str_starts_with($orderId, 'payment_notif_test')) {
+        Log::info("Webhook TEST diterima, tidak update DB.");
+        return response()->json(['message' => 'Test callback OK']);
+    }
+
+    // Ambil detail dari Midtrans secara resmi
+    $notif = new \Midtrans\Notification();
+
+    $transaction = $notif->transaction_status;
+    $type        = $notif->payment_type;
+    $fraud       = $notif->fraud_status;
+    $va_numbers  = $notif->va_numbers ?? [];
+    $bank        = $notif->bank ?? null;
+
+    // Ambil order berdasarkan kolom order_id (bukan id)
+    $order = Order::where('order_id', $orderId)->first();
+
+    if (!$order) {
+        Log::error("Order tidak ditemukan: " . $orderId);
+        return response()->json(['message' => 'order not found'], 404);
+    }
+
+    // Update data VA (hanya untuk bank_transfer)
+    if ($type === 'bank_transfer' && !empty($va_numbers)) {
+        $order->bank      = $va_numbers[0]['bank'] ?? null;
+        $order->va_number = $va_numbers[0]['va_number'] ?? null;
+    }
+
+    // Update kolom payment_type
+    $order->payment_type = $type;
+    $order->fraud_status = $fraud;
+    $order->transaction_status = $transaction;
+
+    // Mapping status Midtrans → status di tabel
+    if ($transaction == 'settlement') {
+        $order->status = 'paid';
+        $order->settlement_time = now();
+    }
+    elseif ($transaction == 'cancel' || $transaction == 'deny' || $transaction == 'expire') {
+        $order->status = 'failed';
+    }
+    elseif ($transaction == 'pending') {
+        $order->status = 'pending';
+    }
+
+    $order->save();
+
+    Log::info("ORDER UPDATED: " . json_encode($order));
+
+    return response()->json(['message' => 'Notification processed']);
 }
 
+
+}
