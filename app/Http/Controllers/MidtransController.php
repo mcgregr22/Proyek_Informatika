@@ -31,7 +31,7 @@ class MidtransController extends Controller
             return back()->with('error', 'Keranjang kosong.');
         }
 
-        $total = $cart->sum(fn ($c) => $c->harga * $c->qty);
+        $total = $cart->sum(fn($c) => $c->harga * $c->qty);
 
         $order = Order::create([
             'user_id'  => $user->id,
@@ -115,70 +115,77 @@ class MidtransController extends Controller
     /* ==========================================================
      * 3. MIDTRANS WEBHOOK / NOTIFICATION HANDLER
      * ==========================================================*/
-   public function handleNotification(Request $request)
-{
-    Log::info("MIDTRANS CALLBACK PAYLOAD: " . json_encode($request->all()));
+    public function handleNotification(Request $request)
+    {
+        Log::info("MIDTRANS CALLBACK PAYLOAD: " . json_encode($request->all()));
 
-    $payload = $request->all();
-    $orderId = $payload['order_id'] ?? null;
+        $payload = $request->all();
+        $orderId = $payload['order_id'] ?? null;
 
-    if (!$orderId) {
-        Log::error("No order_id in callback!");
-        return response()->json(['error' => 'order_id missing'], 400);
+        if (!$orderId) {
+            Log::error("No order_id in callback!");
+            return response()->json(['error' => 'order_id missing'], 400);
+        }
+
+        // Jika test webhook dari dashboard
+        if (str_starts_with($orderId, 'payment_notif_test')) {
+            Log::info("Webhook TEST diterima, tidak update DB.");
+            return response()->json(['message' => 'Test callback OK']);
+        }
+
+        // Ambil detail dari Midtrans secara resmi
+        $notif = new \Midtrans\Notification();
+
+        $transaction = $notif->transaction_status;
+        $type        = $notif->payment_type;
+        $fraud       = $notif->fraud_status;
+        $va_numbers  = $notif->va_numbers ?? [];
+        $bank        = $notif->bank ?? null;
+
+        // Ambil order berdasarkan kolom order_id (bukan id)
+        $order = Order::where('order_id', $orderId)->first();
+
+        if (!$order) {
+            Log::error("Order tidak ditemukan: " . $orderId);
+            return response()->json(['message' => 'order not found'], 404);
+        }
+
+        // Update data VA (bank transfer)
+        if ($type === 'bank_transfer' && !empty($notif->va_numbers)) {
+            $order->bank      = $notif->va_numbers[0]->bank ?? null;
+            $order->va_number = $notif->va_numbers[0]->va_number ?? null;
+        }
+
+
+        // Update kolom payment_type
+        $order->payment_type = $type;
+        $order->fraud_status = $fraud;
+        $order->transaction_status = $transaction;
+
+        // Mapping status Midtrans → status di tabel
+        if ($transaction == 'settlement') {
+            $order->status = 'paid';
+            $order->settlement_time = now();
+        } elseif ($transaction == 'cancel' || $transaction == 'deny' || $transaction == 'expire') {
+            $order->status = 'failed';
+        } elseif ($transaction == 'pending') {
+            $order->status = 'pending';
+        }
+
+        $order->save();
+
+        // =======================================================
+        // HAPUS KERANJANG SETELAH PEMBAYARAN SUKSES
+        // =======================================================
+        if ($transaction == 'settlement' || $transaction == 'capture') {
+
+            Keranjang::where('user_id', $order->user_id)->delete();
+
+            Log::info("KERANJANG DIHAPUS untuk user_id: " . $order->user_id);
+        }
+
+        Log::info("ORDER UPDATED: " . json_encode($order));
+
+        return response()->json(['message' => 'Notification processed']);
     }
-
-    // Jika test webhook dari dashboard
-    if (str_starts_with($orderId, 'payment_notif_test')) {
-        Log::info("Webhook TEST diterima, tidak update DB.");
-        return response()->json(['message' => 'Test callback OK']);
-    }
-
-    // Ambil detail dari Midtrans secara resmi
-    $notif = new \Midtrans\Notification();
-
-    $transaction = $notif->transaction_status;
-    $type        = $notif->payment_type;
-    $fraud       = $notif->fraud_status;
-    $va_numbers  = $notif->va_numbers ?? [];
-    $bank        = $notif->bank ?? null;
-
-    // Ambil order berdasarkan kolom order_id (bukan id)
-    $order = Order::where('order_id', $orderId)->first();
-
-    if (!$order) {
-        Log::error("Order tidak ditemukan: " . $orderId);
-        return response()->json(['message' => 'order not found'], 404);
-    }
-
-    // Update data VA (hanya untuk bank_transfer)
-    if ($type === 'bank_transfer' && !empty($va_numbers)) {
-        $order->bank      = $va_numbers[0]['bank'] ?? null;
-        $order->va_number = $va_numbers[0]['va_number'] ?? null;
-    }
-
-    // Update kolom payment_type
-    $order->payment_type = $type;
-    $order->fraud_status = $fraud;
-    $order->transaction_status = $transaction;
-
-    // Mapping status Midtrans → status di tabel
-    if ($transaction == 'settlement') {
-        $order->status = 'paid';
-        $order->settlement_time = now();
-    }
-    elseif ($transaction == 'cancel' || $transaction == 'deny' || $transaction == 'expire') {
-        $order->status = 'failed';
-    }
-    elseif ($transaction == 'pending') {
-        $order->status = 'pending';
-    }
-
-    $order->save();
-
-    Log::info("ORDER UPDATED: " . json_encode($order));
-
-    return response()->json(['message' => 'Notification processed']);
-}
-
-
 }
