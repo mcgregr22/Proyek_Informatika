@@ -24,6 +24,7 @@ use App\Http\Controllers\SwapbookController;
 // ----------------------
 Route::get('/', fn() => view('home'));
 Route::get('/beranda', fn() => view('home'))->name('home');
+Route::get('/home', fn() => view('home'))->name('home');
 Route::get('/kontak', fn() => view('contact'))->name('contact');
 
 
