@@ -23,7 +23,9 @@ use App\Http\Controllers\SwapbookController;
 // HALAMAN AWAL
 // ----------------------
 Route::get('/', fn() => view('home'));
-Route::get('/home', fn() => view('home'))->name('home');
+Route::get('/beranda', fn() => view('home'))->name('home');
+Route::get('/kontak', fn() => view('contact'))->name('contact');
+
 
 
 
@@ -197,13 +199,13 @@ Route::post('/checkout', [MidtransController::class, 'createCheckout'])
 //==========================
 // SWAP BOOK ROUTES
 // =========================
-    Route::get('/swapbook', [SwapbookController::class, 'index'])->name('swap.index');
-    Route::post('/swapbook', [SwapbookController::class, 'store'])->name('swap.store');
+Route::get('/swapbook', [SwapbookController::class, 'index'])->name('swap.index');
+Route::post('/swapbook', [SwapbookController::class, 'store'])->name('swap.store');
 
-    // Alias lama → redirect aman
-    Route::get('/swap/requests', fn() => redirect()->route('swap.index'))->name('swap.requests.alias');
-    Route::get('/pengelolaan/swapbook', fn() => redirect()->route('swap.index'))->name('pengelolaan.swapbook');
+// Alias lama → redirect aman
+Route::get('/swap/requests', fn() => redirect()->route('swap.index'))->name('swap.requests.alias');
+Route::get('/pengelolaan/swapbook', fn() => redirect()->route('swap.index'))->name('pengelolaan.swapbook');
 
-    // Aksi terima / tolak permintaan swap
+// Aksi terima / tolak permintaan swap
 Route::patch('/swap/requests/{swap}/accept', [SwapbookController::class, 'accept'])->name('swap.accept');
 Route::patch('/swap/requests/{swap}/reject', [SwapbookController::class, 'reject'])->name('swap.reject');
