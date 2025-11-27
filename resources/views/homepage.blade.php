@@ -226,13 +226,13 @@
   </div>
   <!-- 🔍 Pesan jika hasil pencarian kosong -->
   @if($q && $booksHumor->isEmpty() && $booksHistory->isEmpty() && $booksRecs->isEmpty())
-      <div class="alert alert-warning mt-3 mx-3 text-center">
-          Buku "<strong>{{ $q }}</strong>" tidak ditemukan.
-      </div>
+  <div class="alert alert-warning mt-3 mx-3 text-center">
+    Buku "<strong>{{ $q }}</strong>" tidak ditemukan.
+  </div>
   @endif
   <div class="mt-4">
 
-
+    <!--
     <div class="section-header">
       <h5 class="fw-semibold">Humor & Komedi</h5>
     </div>
@@ -317,10 +317,10 @@
         <p class="text-muted">Belum ada buku kategori ini.</p>
       </div>
       @endforelse
-    </div>
+    </div> -->
 
     <div class="section-header mt-5">
-      <h5 class="fw-semibold">Rekomendasi</h5>
+      <h5 class="fw-semibold">Rekomendasi untuk anda</h5>
       <a href="#" class="text-decoration-none small text-primary">Lihat Selengkapnya...</a>
     </div>
 
