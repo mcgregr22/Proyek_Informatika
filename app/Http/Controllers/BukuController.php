@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Buku;
 use App\Models\Koleksi;
-use App\Models\Purchase; // 🟢 Tambahkan ini
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Kategori;
 
 class BukuController extends Controller
 {
@@ -15,7 +14,7 @@ class BukuController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_kategori' => 'required',
+            'kategori' => 'required',
             'title' => 'required',
             'author' => 'required',
             'isbn' => 'required',
@@ -36,7 +35,7 @@ class BukuController extends Controller
         }
 
         $buku = Buku::create([
-            'id_kategori' => $request->id_kategori,
+            'kategori' => $request->kategori,
             'title' => $request->title,
             'author' => $request->author,
             'isbn' => $request->isbn,
@@ -59,31 +58,14 @@ class BukuController extends Controller
             'koleksi_date' => now(),
         ]);
 
-        return redirect()->route('pengelolaan')->with('success', '📚 Buku berhasil ditambahkan!');
+        return redirect()->route('pengelolaan.tambahbuku')->with('success', '📚 Buku berhasil ditambahkan!');
     }
 
-    // /** 🛒 Proses Pembelian Buku */
-    // public function purchase(Request $request, $bookId)
-    // {
-    //     $request->validate([
-    //         'qty' => 'required|integer|min:1',
-    //         'address' => 'required|string',
-    //         'payment_method' => 'required|string',
-    //     ]);
 
-    //     $book = Buku::findOrFail($bookId);
-    //     $total = $book->harga * $request->qty;
 
-    //     Purchase::create([
-    //         'user_id' => Auth::id(),
-    //         'book_id' => $book->id_buku,
-    //         'qty' => $request->qty,
-    //         'total' => $total,
-    //         'address' => $request->address,
-    //         'payment_method' => $request->payment_method,
-    //         'status' => 'pending',
-    //     ]);
-
-    //     return redirect()->back()->with('success', '🛍️ Pembelian berhasil! Silakan tunggu konfirmasi.');
-    // }
+    public function create()
+    {
+        $kategori = Kategori::orderBy('nama_kategori')->get();
+        return view('tambahbuku', compact('kategori'));
+    }
 }

@@ -15,6 +15,7 @@ use App\Http\Controllers\ManajemenAdminController;
 use App\Http\Controllers\MidtransController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SwapbookController;
+use App\Http\Controllers\KategoriController;
 
 
 
@@ -65,9 +66,28 @@ Route::middleware('auth')->group(function () {
 
 
 // =========================
-// PENGELOLAAN (VIEW)
+// Tambah buku
 // =========================
-Route::view('/pengelolaan/tambahbuku', 'tambahbuku')->name('pengelolaan.tambahbuku');
+Route::get('/pengelolaan/tambahbuku', [BukuController::class, 'create'])
+    ->name('pengelolaan.tambahbuku');
+
+// =========================
+// BUKU CONTROLLER
+// =========================
+Route::post('/buku/tambah', [BukuController::class, 'store'])->name('buku.store');
+Route::delete('/buku/hapus/{book}', [BukuController::class, 'destroy'])->name('buku.destroy');
+
+// =========================
+// KATEGORI CONTROLLER
+// =========================
+
+Route::post('/kategori/tambah', [KategoriController::class, 'store'])
+    ->middleware('auth')
+    ->name('kategori.store');
+
+
+
+
 Route::view('/pengelolaan/swapbook', 'swapbook')->name('pengelolaan.swapbook');
 
 // =========================
@@ -98,9 +118,7 @@ Route::put('/admin/profil/update', [HomePageAdminController::class, 'updateProfi
 Route::get('/profil_admin', [ProfilUserController::class, 'index'])->name('profil_admin');
 Route::put('/profil_admin/update', [ProfilUserController::class, 'update'])->name('profil_admin.update');
 
-// =========================
-// HALAMAN TAMBAHAN
-// =========================
+
 // My Collection (pilih buku milik sendiri untuk ditukar)
 Route::get('/pengelolaan/mycollection', [MyCollectionController::class, 'index'])->name('mycollection.index');
 Route::get('/mycollection', [MyCollectionController::class, 'index'])->name('mycollection.index');
@@ -130,11 +148,7 @@ Route::prefix('manajemen_admin')->group(function () {
 });
 
 
-// =========================
-// BUKU CONTROLLER
-// =========================
-Route::post('/buku/tambah', [BukuController::class, 'store'])->name('buku.store');
-Route::delete('/buku/hapus/{book}', [BukuController::class, 'destroy'])->name('buku.destroy');
+
 
 // =========================
 // LOGOUT
