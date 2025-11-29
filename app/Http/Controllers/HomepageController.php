@@ -44,7 +44,7 @@ class HomepageController extends Controller
 
         // Buku rekomendasi random
         $booksRecs = Buku::tap($search)
-            ->inRandomOrder()->limit(5)->get();
+            ->inRandomOrder()->limit(1000)->get();
 
         return view('homepage', compact('booksHumor', 'booksHistory', 'booksRecs', 'q'));
     }
@@ -58,43 +58,5 @@ class HomepageController extends Controller
     return view('detailbuku', compact('book'));
 }
 
-
-    // -------------------------------
-    // ➕ TAMBAH BUKU (fungsi store)
-    // -------------------------------
-   public function store(Request $request)
-{
-    $validated = $request->validate([
-        'id_buku' => 'nullable|string',
-        'id_kategori' => 'required|integer',
-        'title' => 'required|string',
-        'author' => 'required|string',
-        'isbn' => 'required|string',
-        'deskripsi' => 'required|string',
-        'harga' => 'nullable|numeric',
-        'listing_type' => 'required|array|min:1',
-        'listing_type.*' => 'in:sell,exchange',
-        'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        'tanggal_rilis' => 'required|date_format:Y-m-d',
-        'penerbit' => 'nullable|string',
-        'bahasa' => 'nullable|string',
-    ]);
-
-    if ($request->hasFile('cover_image')) {
-        $filename = time().'_'.$request->file('cover_image')->getClientOriginalName();
-        $request->file('cover_image')->move(public_path('covers'), $filename);
-        $validated['cover_image'] = $filename;
-    }
-
-    $validated['listing_type'] = implode(',', $validated['listing_type']);
-
-    // ✅ Wajib! Simpan user yang menambahkan buku
-    $validated['user_id'] = auth()->id();
-
-
-    Buku::create($validated);
-
-    return redirect()->back()->with('success', 'Buku berhasil ditambahkan!');
-}
 
 }
