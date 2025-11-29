@@ -48,7 +48,7 @@ class MidtransController extends Controller
         foreach ($cart as $item) {
             OrderItem::create([
                 'order_id' => $order->id,
-                'buku_id'  => $item->id_buku,
+                'id_buku'  => $item->id_buku,
                 'qty'      => $item->qty,
                 'harga'    => $item->harga,
             ]);
@@ -89,7 +89,7 @@ class MidtransController extends Controller
 
         OrderItem::create([
             'order_id' => $order->id,
-            'buku_id'  => $book->id_buku,
+            'id_buku'  => $book->id_buku,
             'qty'      => $qty,
             'harga'    => $book->harga,
         ]);
