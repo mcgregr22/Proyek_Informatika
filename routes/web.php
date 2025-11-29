@@ -211,16 +211,28 @@ Route::post('/buy-now/{bookId}', [MidtransController::class, 'buyNow'])
 // checkout keranjang atau banyak item
 Route::post('/checkout', [MidtransController::class, 'createCheckout'])
   ->name('midtrans.checkout');
-//==========================
-// SWAP BOOK ROUTES
-// =========================
-Route::get('/swapbook', [SwapBookController::class, 'index'])->name('swap.index');
-Route::post('/swapbook', [SwapBookController::class, 'store'])->name('swap.store');
 
-// alias
-Route::get('/swap/requests', fn() => redirect()->route('swap.index'))->name('swap.requests.alias');
-Route::get('/pengelolaan/swapbook', fn() => redirect()->route('swap.index'))->name('pengelolaan.swapbook');
 
-// aksi terima / tolak
-Route::patch('/swap/requests/{swap}/accept', [SwapBookController::class, 'accept'])->name('swap.accept');
-Route::patch('/swap/requests/{swap}/reject', [SwapBookController::class, 'reject'])->name('swap.reject');
+// ----------------------------
+    // SWAPBOOK
+    // ----------------------------
+
+    // Halaman utama permintaan tukar buku (sidebar "Permintaan Tukar Buku")
+    Route::get('/pengelolaan/swapbook', [SwapbookController::class, 'index'])
+        ->name('swap.index');
+
+    // Form dari "Koleksi Buku Saya" untuk mengirim permintaan tukar
+    Route::post('/pengelolaan/swapbook', [SwapbookController::class, 'store'])
+        ->name('swap.store');
+
+    // Alias lama: /swapbook -> redirect ke halaman di atas (biar kalau ada URL lama, tetap aman)
+    Route::get('/swapbook', fn () => redirect()->route('swap.index'))
+        ->name('swap.alias');
+
+    // Incoming request: terima / tolak
+    Route::patch('/swap/requests/{swap}/accept', [SwapbookController::class, 'accept'])
+        ->name('swap.accept');
+
+    Route::patch('/swap/requests/{swap}/reject', [SwapbookController::class, 'reject'])
+        ->name('swap.reject');
+

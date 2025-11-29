@@ -1,4 +1,3 @@
-{{-- resources/views/swapbook.blade.php --}}
 @extends('layouts.pengelolaan')
 
 @section('content')

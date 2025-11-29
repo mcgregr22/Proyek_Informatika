@@ -4,24 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Koleksi;
+use App\Models\Buku;
 
 class MyCollectionController extends Controller
 {
-    public function index()
+    /**
+     * Tampilkan daftar koleksi buku milik user (halaman pilih saat tukar).
+     */
+    public function index(Request $request)
     {
-        $userId = Auth::id();
+        $userId      = Auth::id();
+        $requestedId = $request->query('requested'); // ID buku target yang ingin ditukar
 
-        // Ambil semua koleksi milik user yang sedang login, termasuk data buku
-        $myBooks = Koleksi::with('buku')
-            ->where('user_id', $userId)
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($item) {
-                return $item->buku; // ambil objek buku dari relasi
-            })
-            ->filter(); // buang null jika ada
+        // Ambil koleksi buku berdasarkan pemilik saat ini (user_id di _buku)
+        // Jadi setelah tukar buku, cukup ubah user_id di _buku, koleksi otomatis ikut berubah
+        $myBooks = Buku::where('user_id', $userId)
+            ->orderBy('title', 'asc')
+            ->get();
 
-        return view('mycollection', compact('myBooks'));
+        return view('mycollection', compact('myBooks', 'requestedId'));
     }
 }
