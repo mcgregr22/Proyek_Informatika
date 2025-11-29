@@ -62,28 +62,28 @@ class BukuController extends Controller
         return redirect()->route('pengelolaan')->with('success', '📚 Buku berhasil ditambahkan!');
     }
 
-    /** 🛒 Proses Pembelian Buku */
-    public function purchase(Request $request, $bookId)
-    {
-        $request->validate([
-            'qty' => 'required|integer|min:1',
-            'address' => 'required|string',
-            'payment_method' => 'required|string',
-        ]);
+    // /** 🛒 Proses Pembelian Buku */
+    // public function purchase(Request $request, $bookId)
+    // {
+    //     $request->validate([
+    //         'qty' => 'required|integer|min:1',
+    //         'address' => 'required|string',
+    //         'payment_method' => 'required|string',
+    //     ]);
 
-        $book = Buku::findOrFail($bookId);
-        $total = $book->harga * $request->qty;
+    //     $book = Buku::findOrFail($bookId);
+    //     $total = $book->harga * $request->qty;
 
-        Purchase::create([
-            'user_id' => Auth::id(),
-            'book_id' => $book->id_buku,
-            'qty' => $request->qty,
-            'total' => $total,
-            'address' => $request->address,
-            'payment_method' => $request->payment_method,
-            'status' => 'pending',
-        ]);
+    //     Purchase::create([
+    //         'user_id' => Auth::id(),
+    //         'book_id' => $book->id_buku,
+    //         'qty' => $request->qty,
+    //         'total' => $total,
+    //         'address' => $request->address,
+    //         'payment_method' => $request->payment_method,
+    //         'status' => 'pending',
+    //     ]);
 
-        return redirect()->back()->with('success', '🛍️ Pembelian berhasil! Silakan tunggu konfirmasi.');
-    }
+    //     return redirect()->back()->with('success', '🛍️ Pembelian berhasil! Silakan tunggu konfirmasi.');
+    // }
 }
