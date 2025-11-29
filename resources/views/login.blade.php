@@ -24,22 +24,16 @@
 
         .login-box {
             background: #fff;
-            padding: 40px;
+            padding: 120px;
             border-radius: 6px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             width: 320px;
             text-align: center;
         }
 
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            color: #2b2bff;
-        }
 
         h2 {
-            color: #1d2c8a;
+            color: #000000ff;
             font-size: 20px;
             margin-bottom: 20px;
         }
@@ -98,8 +92,20 @@
 <body>
     <div class="container">
         <div class="login-box">
-            <div class="logo">Library-<i>Hub</i></div>
+            
+            
             <h2>LOGIN</h2>
+
+            <!-- ✅ Tambahan untuk tampilkan validasi error & pesan sukses -->
+            @if ($errors->any())
+                <p class="error">{{ $errors->first() }}</p>
+            @endif
+
+            @if (session('success'))
+                <p class="error" style="color:green;">{{ session('success') }}</p>
+            @endif
+            <!-- ✅ END TAMBAHAN -->
+
             <form action="/login" method="POST">
                 @csrf
                 <label for="email">Email</label><br>
@@ -121,7 +127,9 @@
             </div>
         </div>
 
-        <div class="footer">© 2025 Library-Hub</div>
+        <div class="footer">
+        &copy; <?= date('Y'); ?> Library-Hub
+</div>
     </div>
 </body>
 </html>
