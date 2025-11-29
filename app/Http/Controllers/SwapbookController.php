@@ -44,11 +44,22 @@ class SwapbookController extends Controller
             'message'           => 'nullable|string|max:255',
         ]);
 
-        $uid       = Auth::id();
-        $requested = Buku::where('id_buku', $data['requested_book_id'])->firstOrFail();
+        $uid = Auth::id();
+
+        // ⬇️ PERBAIKAN: jangan pakai firstOrFail supaya tidak lempar 404
+        $requested = Buku::where('id_buku', $data['requested_book_id'])->first();
         $offered   = Buku::where('id_buku', $data['offered_book_id'])
                          ->where('user_id', $uid)
-                         ->firstOrFail();
+                         ->first();
+
+        // Kalau tidak ketemu, balik dengan flash error (bukan 404)
+        if (!$requested) {
+            return back()->with('error', 'Buku yang diminta tidak ditemukan.')->withInput();
+        }
+
+        if (!$offered) {
+            return back()->with('error', 'Buku yang ditawarkan tidak ditemukan atau bukan milik Anda.')->withInput();
+        }
 
         if ((int) $requested->user_id === (int) $uid) {
             return back()->with('error', 'Tidak bisa menukar buku milik sendiri.');
@@ -81,77 +92,77 @@ class SwapbookController extends Controller
 
     /** PATCH /swap/requests/{swap}/accept — owner menyetujui, koleksi ditukar */
     public function accept(SwapRequest $swap)
-{
-    // Hanya pemilik buku requested yang boleh menerima
-    if ($swap->owner_id !== Auth::id()) {
-        abort(Response::HTTP_FORBIDDEN, 'Tidak berhak.');
+    {
+        // Hanya pemilik buku requested yang boleh menerima
+        if ($swap->owner_id !== Auth::id()) {
+            abort(Response::HTTP_FORBIDDEN, 'Tidak berhak.');
+        }
+        if ($swap->status !== 'pending') {
+            return back()->with('error', 'Permintaan sudah tidak pending.');
+        }
+
+        try {
+            DB::transaction(function () use ($swap) {
+                // Kunci baris buku agar aman dari balapan
+                $requestedBook = DB::table('_buku')
+                    ->where('id_buku', $swap->requested_book_id)
+                    ->lockForUpdate()
+                    ->first();
+
+                $offeredBook = DB::table('_buku')
+                    ->where('id_buku', $swap->offered_book_id)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (!$requestedBook || !$offeredBook) {
+                    throw new \RuntimeException('Buku tidak ditemukan.');
+                }
+
+                // Validasi kepemilikan masih sesuai dengan swap yang pending
+                if ((int)$requestedBook->user_id !== (int)$swap->owner_id ||
+                    (int)$offeredBook->user_id   !== (int)$swap->requester_id) {
+                    throw new \RuntimeException('Kepemilikan buku sudah berubah.');
+                }
+
+                // Pindahkan requested_book ke requester
+                $aff1 = DB::table('_buku')
+                    ->where('id_buku', $swap->requested_book_id)
+                    ->update(['user_id' => $swap->requester_id]);
+
+                // Pindahkan offered_book ke owner
+                $aff2 = DB::table('_buku')
+                    ->where('id_buku', $swap->offered_book_id)
+                    ->update(['user_id' => $swap->owner_id]);
+
+                if ($aff1 < 1 || $aff2 < 1) {
+                    throw new \RuntimeException('Gagal memperbarui kepemilikan buku.');
+                }
+
+                // Tandai swap diterima
+                DB::table('swap_requests')
+                    ->where('id', $swap->id)
+                    ->update([
+                        'status'     => 'accepted',
+                        'is_read'    => true,
+                        'updated_at' => now(),
+                    ]);
+
+                // (opsional) auto-reject semua pending lain yang melibatkan buku-buku ini
+                DB::table('swap_requests')
+                    ->where('id', '!=', $swap->id)
+                    ->where('status', 'pending')
+                    ->where(function ($q) use ($swap) {
+                        $q->whereIn('requested_book_id', [$swap->requested_book_id, $swap->offered_book_id])
+                          ->orWhereIn('offered_book_id',   [$swap->requested_book_id, $swap->offered_book_id]);
+                    })
+                    ->update(['status' => 'rejected', 'is_read' => true, 'updated_at' => now()]);
+            });
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Gagal menyetujui: '.$e->getMessage());
+        }
+
+        return back()->with('success', 'Tukar buku disetujui. Koleksi sudah diperbarui.');
     }
-    if ($swap->status !== 'pending') {
-        return back()->with('error', 'Permintaan sudah tidak pending.');
-    }
-
-    try {
-        DB::transaction(function () use ($swap) {
-            // Kunci baris buku agar aman dari balapan
-            $requestedBook = DB::table('_buku')
-                ->where('id_buku', $swap->requested_book_id)
-                ->lockForUpdate()
-                ->first();
-
-            $offeredBook = DB::table('_buku')
-                ->where('id_buku', $swap->offered_book_id)
-                ->lockForUpdate()
-                ->first();
-
-            if (!$requestedBook || !$offeredBook) {
-                throw new \RuntimeException('Buku tidak ditemukan.');
-            }
-
-            // Validasi kepemilikan masih sesuai dengan swap yang pending
-            if ((int)$requestedBook->user_id !== (int)$swap->owner_id ||
-                (int)$offeredBook->user_id   !== (int)$swap->requester_id) {
-                throw new \RuntimeException('Kepemilikan buku sudah berubah.');
-            }
-
-            // Pindahkan requested_book ke requester
-            $aff1 = DB::table('_buku')
-                ->where('id_buku', $swap->requested_book_id)
-                ->update(['user_id' => $swap->requester_id]);
-
-            // Pindahkan offered_book ke owner
-            $aff2 = DB::table('_buku')
-                ->where('id_buku', $swap->offered_book_id)
-                ->update(['user_id' => $swap->owner_id]);
-
-            if ($aff1 < 1 || $aff2 < 1) {
-                throw new \RuntimeException('Gagal memperbarui kepemilikan buku.');
-            }
-
-            // Tandai swap diterima
-            DB::table('swap_requests')
-                ->where('id', $swap->id)
-                ->update([
-                    'status'     => 'accepted',
-                    'is_read'    => true,
-                    'updated_at' => now(),
-                ]);
-
-            // (opsional) auto-reject semua pending lain yang melibatkan buku-buku ini
-            DB::table('swap_requests')
-                ->where('id', '!=', $swap->id)
-                ->where('status', 'pending')
-                ->where(function ($q) use ($swap) {
-                    $q->whereIn('requested_book_id', [$swap->requested_book_id, $swap->offered_book_id])
-                      ->orWhereIn('offered_book_id',   [$swap->requested_book_id, $swap->offered_book_id]);
-                })
-                ->update(['status' => 'rejected', 'is_read' => true, 'updated_at' => now()]);
-        });
-    } catch (\Throwable $e) {
-        return back()->with('error', 'Gagal menyetujui: '.$e->getMessage());
-    }
-
-    return back()->with('success', 'Tukar buku disetujui. Koleksi sudah diperbarui.');
-}
 
     /** PATCH /swap/requests/{swap}/reject — owner menolak */
     public function reject(SwapRequest $swap)

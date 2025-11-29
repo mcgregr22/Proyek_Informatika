@@ -61,18 +61,18 @@
 
           {{-- Aksi: pilih buku ini untuk ditukar --}}
           <div class="p-4 pt-0">
-            <form action="{{ route('swap.store') }}" method="POST">
-              @csrf
-              <input type="hidden" name="requested_book_id" value="{{ $requestedId }}">
-              <input type="hidden" name="offered_book_id"   value="{{ $b->id_buku }}">
+           <form action="{{ route('swap.store') }}" method="POST">
+  @csrf
+  <input type="hidden" name="requested_book_id" value="{{ $requestedId }}">
+  <input type="hidden" name="offered_book_id"   value="{{ $b->id_buku }}">
 
-              <button type="submit"
-                      class="w-full px-3 py-2 rounded-lg text-white
-                             {{ empty($requestedId) ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700' }}"
-                      {{ empty($requestedId) ? 'disabled' : '' }}>
-                Tukar dengan buku ini
-              </button>
-            </form>
+  <button type="submit"
+          class="w-full px-3 py-2 rounded-lg text-white
+                 {{ empty($requestedId) ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700' }}"
+          {{ empty($requestedId) ? 'disabled' : '' }}>
+    Tukar dengan buku ini
+  </button>
+</form>
           </div>
         </div>
       @endforeach
