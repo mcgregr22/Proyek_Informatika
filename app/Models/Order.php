@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\OrderItem;  // ← WAJIB
+use App\Models\User;       // ← WAJIB
 
 class Order extends Model
 {
@@ -11,8 +13,6 @@ class Order extends Model
         'order_id',
         'total',
         'status',
-
-        // Midtrans
         'payment_type',
         'transaction_status',
         'fraud_status',
@@ -26,9 +26,9 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
-    public function user()
-{
-    return $this->belongsTo(\App\Models\User::class);
-}
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

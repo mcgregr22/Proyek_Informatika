@@ -1,4 +1,4 @@
-@extends('layouts.manajemen_admin')
+@extends('layouts.homepage_admin')
 
 @section('title', 'Manajemen Akun & Role | Library-Hub')
 

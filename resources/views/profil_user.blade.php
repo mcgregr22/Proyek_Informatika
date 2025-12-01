@@ -115,14 +115,19 @@
 
       </div>
 
-      {{-- Tombol Simpan --}}
-      <div class="text-center mt-8">
-        <button 
-          type="submit" 
-          class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow-sm"
-        >
+      <div class="d-flex justify-content-between align-items-center mt-4 gap-3">
+
+        <!-- Tombol Kembali -->
+        <a href="{{ url()->previous() }}" class="btn btn-outline-secondary me-2">
+          <i class="bi bi-arrow-left"></i> Kembali
+        </a>
+
+        <!-- Tombol Simpan -->
+        <button type="submit"
+          class="w-25 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow-sm border-0">
           Simpan
         </button>
+
       </div>
 
     </form>

@@ -46,24 +46,16 @@
         </span>
         </a>
         
-        {{-- TOMBOL TOGGLE SIDEBAR --}}
-        <button
-          class="inline-flex items-center justify-center w-10 h-10 rounded-xl border border-zinc-200 hover:bg-zinc-50"
-          @click="openSidebar = !openSidebar"
-          aria-label="Toggle sidebar">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-        </button>
+        
       </div>
 
       {{-- CHAT & PROFIL --}}
       <div class="flex items-center gap-2">
-        <a href="/forumdiscuss" class="w-1 h-1 flex items-center justify-center rounded-full hover:bg-zinc-100 text-zinc-500">
+        <!-- <a href="/forumdiscuss" class="w-1 h-1 flex items-center justify-center rounded-full hover:bg-zinc-100 text-zinc-500">
           <i class="bi bi-chat-dots text-xl"></i>
-        </a>
-        <a href="{{ route('profil_user') }}" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-zinc-100 text-zinc-500">
-          <i class="bi bi-person-circle text-xl"></i>
+        </a> -->
+        <a href="{{ route('admin.profil') }}" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-zinc-100 text-zinc-500">
+          <i class="bi bi-person-circle text-3xl"></i>
         </a>
       </div>
     </div>

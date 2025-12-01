@@ -16,4 +16,8 @@ class OrderItem extends Model {
     {
         return $this->belongsTo(Order::class);
     }
+    public function buku()
+    {
+        return $this->belongsTo(\App\Models\Buku::class, 'id_buku');
+    }
 }

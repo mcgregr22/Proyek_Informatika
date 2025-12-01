@@ -52,36 +52,36 @@ class KeranjangController extends Controller
     }
 
     /** Tambah ke keranjang */
-    public function add(Request $request)
-    {
-        $id_buku = $request->book_id; // dari form
-        $qty = $request->qty ?? 1;
+  public function add(Request $request)
+{
+    $id_buku = $request->book_id;
+    $qty = $request->qty ?? 1;
 
-        $buku = Buku::findOrFail($id_buku);
+    $buku = Buku::findOrFail($id_buku);
 
-        // cek apakah user sudah punya buku ini di keranjang
-        $item = Keranjang::where('id_buku', $id_buku)
-            ->where('user_id', Auth::id())
-            ->first();
+    $item = Keranjang::where('id_buku', $id_buku)
+        ->where('user_id', Auth::id())
+        ->first();
 
-        if ($item) {
-            $item->qty += $qty;
-            $item->save();
-        } else {
-            Keranjang::create([
-                'user_id' => Auth::id(),
-                'id_buku' => $id_buku,
-                'qty'     => $qty,
-                'harga'   => $buku->harga,
-            ]);
-        }
-
-        if ($request->ajax()) {
-            return response()->json(['success' => true]);
-        }
-
-        return redirect()->route('cart.index')->with('success', 'Buku berhasil ditambahkan ke keranjang.');
+    if ($item) {
+        $item->qty += $qty;
+        $item->save();
+    } else {
+        Keranjang::create([
+            'user_id' => Auth::id(),
+            'id_buku' => $id_buku,
+            'qty'     => $qty,
+            'harga'   => $buku->harga,
+        ]);
     }
+
+    // 🔥 WAJIB: SELALU RETURN JSON, TANPA SYARAT AJAX
+    return response()->json([
+        'success' => true,
+        'message' => 'Berhasil ditambahkan'
+    ]);
+}
+
 
     /** Hapus dari keranjang */
     public function remove($id_buku)

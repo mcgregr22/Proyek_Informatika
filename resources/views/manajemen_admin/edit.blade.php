@@ -1,4 +1,4 @@
-@extends('layouts.manajemen_admin')
+@extends('layouts.homepage_admin')
 
 @section('title', 'Edit Akun | Library-Hub')
 
@@ -31,7 +31,12 @@
         <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak diganti">
       </div>
 
-      <button class="btn btn-primary px-4" type="submit">Simpan Perubahan</button>
+      <div class="d-flex justify-content-between">
+        <a href="{{ route('manajemen_admin') }}" class="btn btn-outline-secondary d-flex align-items-center gap-2">
+          <i class="bi bi-arrow-left-circle"></i> Kembali
+        </a>
+
+        <button class="btn btn-primary px-4" type="submit">Simpan Perubahan</button>
     </form>
   </div>
 </div>

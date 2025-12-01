@@ -16,9 +16,7 @@ use App\Http\Controllers\MidtransController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SwapbookController;
 use App\Http\Controllers\KategoriController;
-
-
-
+use App\Http\Controllers\PurchaseAdminController;
 
 // ----------------------
 // HALAMAN AWAL
@@ -178,11 +176,25 @@ Route::middleware(['auth'])->prefix('forumdiscuss')->group(function () {
 
 
 // ===============================================
-// RIWAYAT PEMBELIAN (PURCHASE HISTORY)
+// RIWAYAT PEMBELIAN user
 // ===============================================
 Route::get('/purchase', [PurchaseController::class, 'index'])
   ->middleware('auth')
   ->name('purchase.index');
+// Untuk Admin
+    Route::get('/admin/purchase', [PurchaseAdminController::class, 'index'])
+        ->name('admin.purchase.index');
+
+// =========================
+// Riwayat Tukar Buku
+// =========================
+// Untuk Admin
+Route::get('/swap_history', [App\Http\Controllers\SwapHistoryController::class, 'index'])
+    ->name('swap.history');
+// Untuk User
+Route::get('swap_history_user', [App\Http\Controllers\SwapHistoryController::class, 'userHistory'])
+    ->middleware('auth')
+    ->name('swap.history.user');
 
 
 // =========================

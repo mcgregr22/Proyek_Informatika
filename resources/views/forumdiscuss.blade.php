@@ -1,147 +1,169 @@
-@extends('layouts.forumdiscuss') 
+@extends('layouts.forumdiscuss')
 
 @section('title', 'Library-Hub Discussion Forum')
 
-{{-- 1. Menyuntikkan CSS khusus Forum --}}
 @push('styles')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-    /* Mengatasi background-color di Master Layout */
     body {
-        background-color: #f6f7fb; 
+        background: #eef1f6;
+        font-family: "Inter", sans-serif;
     }
 
-    /* Styling Kustom Forum */
     .forum-container {
-        margin-top: 40px;
-        margin-bottom: 50px;
+        margin-top: 35px;
+        margin-bottom: 60px;
     }
 
     .forum-card {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
         margin-bottom: 25px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
     }
 
-    .comment-box {
-        background: #f8f9fa;
-        border-left: 3px solid #0d6efd;
-        padding: 10px 15px;
-        margin-top: 10px;
-        border-radius: 8px;
+    .comment-card {
+        background: #f8fafc;
+        border-left: 4px solid #2563eb;
+        border-radius: 12px;
+        padding: 12px 16px;
+        margin-top: 14px;
     }
 
-    .comment-box strong {
-        color: #0d6efd;
+    .comment-form input {
+        border-radius: 30px;
+        padding: 10px 16px;
     }
 
-    .input-comment {
-        border: 1px solid #ccc;
-        border-radius: 20px;
-        padding: 6px 12px;
-        width: 90%;
-        outline: none;
-    }
-
-    .btn-send {
+    .comment-form button {
         border: none;
-        background: none;
-        color: #0d6efd;
-        font-size: 1.2rem;
+        background: transparent;
+        font-size: 20px;
+        color: #2563eb;
+        padding-left: 10px;
     }
 
-    .add-post-btn {
-        background-color: #0d6efd;
-        border: none;
-        color: white;
-        font-weight: 500;
-        padding: 6px 16px;
-        border-radius: 8px;
-        transition: background-color 0.2s;
-    }
-    .add-post-btn:hover {
-        background-color: #0b5ed7;
+    .comment-form button:hover {
+        color: #1e3fae;
     }
 </style>
 @endpush
 
-{{-- 2. Menghilangkan Search Form (Jika tidak diperlukan di Forum) --}}
-@section('search_form')
-    {{-- Biarkan kosong, atau tambahkan form jika dibutuhkan --}}
-@endsection
-
-{{-- 3. Konten Utama --}}
 @section('content')
-
 <div class="container forum-container">
+
+    {{-- Header --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold">Forum Diskusi</h3>
-        <button class="add-post-btn" data-bs-toggle="modal" data-bs-target="#createPostModal">Buat Post Baru</button>
+        <div class="d-flex align-items-center">
+            <a href="{{ url()->previous() }}" class="btn btn-outline-secondary me-3">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <h3 class="fw-bold m-0">Forum Diskusi</h3>
+        </div>
+
+        <button class="btn btn-primary px-3 rounded-3" data-bs-toggle="modal" data-bs-target="#createPostModal">
+            <i class="bi bi-plus-circle me-1"></i> Post Baru
+        </button>
     </div>
 
-    <div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true">
+    {{-- Modal Buat Post --}}
+    <div class="modal fade" id="createPostModal">
         <div class="modal-dialog">
             <div class="modal-content">
+
                 <form action="{{ route('forum.post.store') }}" method="POST">
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createPostModalLabel">Buat Post Baru</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                        <h5 class="modal-title fw-bold">Buat Post Baru</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
+
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="postTitle" class="form-label">Judul</label>
-                            <input type="text" name="title" id="postTitle" class="form-control" placeholder="Judul Postingan..." required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="postContent" class="form-label">Isi Post</label>
-                            <textarea name="content" id="postContent" class="form-control" rows="5" placeholder="Tulis topik atau pertanyaan kamu di sini..." required></textarea>
-                        </div>
+
+                        <label class="fw-semibold mt-2">Judul</label>
+                        <input type="text" name="title" class="form-control" required>
+
+                        <label class="fw-semibold mt-3">Isi</label>
+                        <textarea name="content" class="form-control" rows="5" required></textarea>
+
                     </div>
+
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Kirim</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     </div>
+
                 </form>
+
             </div>
         </div>
     </div>
 
-    @foreach ($posts as $post)
-        <div class="forum-card">
-            <strong>{{ $post->user->name ?? 'Anonim' }}</strong>
-            <small class="text-muted"> • {{ $post->created_at->format('d M Y, H:i') }}</small>
-            
-            <h5 class="mt-2 fw-bold">{{ $post->title }}</h5> 
-            
-            <p class="mt-2">{{ $post->content }}</p>
 
-            <div class="comment-box">
-                <p class="mb-1"><strong>Komentar ({{ $post->comments_count ?? $post->comments->count() }}):</strong></p>
-                @forelse ($post->comments as $comment)
-                    <p><strong>{{ $comment->user->name ?? 'Anonim' }}:</strong> {{ $comment->komentar }}</p>
-                @empty
-                    <p class="text-muted">Belum ada komentar.</p>
-                @endforelse
+    {{-- LIST POST --}}
+    @forelse($posts as $post)
+
+    <div class="card forum-card p-3">
+
+        {{-- HEADER POST --}}
+        <div class="d-flex align-items-center mb-2">
+            <div class="fw-bold">{{ $post->user->name ?? 'Anonim' }}</div>
+            <div class="text-muted ms-2">
+                • {{ $post->created_at->format('d M Y, H:i') }}
             </div>
-
-            {{-- Form untuk Komentar --}}
-            <form action="{{ route('forum.comment', $post->id_post) }}" method="POST" class="d-flex align-items-center mt-3">
-                @csrf
-                <input type="text" name="komentar" class="input-comment form-control me-2" placeholder="Tulis komentar..." required>
-                <button type="submit" class="btn-send"><i class="bi bi-send"></i></button>
-            </form>
         </div>
-    @endforeach
+
+        {{-- JUDUL & ISI --}}
+        <h5 class="fw-bold">{{ $post->title }}</h5>
+
+        <p class="mb-1">{{ $post->content }}</p>
+
+        {{-- KOMENTAR --}}
+        <div class="comment-card">
+            <p class="fw-bold mb-2">
+                Komentar ({{ $post->comments_count ?? $post->comments->count() }})
+            </p>
+
+            @forelse($post->comments as $comment)
+            <div class="mb-1">
+                <span class="text-primary fw-semibold">{{ $comment->user->name ?? 'Anonim' }}</span> :
+                <span>{{ $comment->komentar }}</span>
+            </div>
+            @empty
+            <p class="text-muted mb-0">Belum ada komentar.</p>
+            @endforelse
+        </div>
+
+        {{-- FORM INPUT KOMENTAR --}}
+        <form action="{{ route('forum.comment', $post->id_post) }}"
+            method="POST"
+            class="comment-form d-flex align-items-center mt-3">
+            @csrf
+
+            <input type="text" name="komentar" class="form-control" placeholder="Tulis komentar..." required>
+
+            <button type="submit">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </form>
+
+    </div>
+
+    @empty
+
+    {{-- EMPTY STATE --}}
+    <div class="text-center p-5">
+        <i class="bi bi-chat-dots text-secondary" style="font-size: 64px;"></i>
+        <h4 class="mt-3 text-muted fw-bold">Belum ada postingan</h4>
+        <p class="text-muted">Mulai diskusi pertamamu dengan membuat post baru!</p>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPostModal">
+            Buat Post Baru
+        </button>
+    </div>
+
+    @endforelse
+
 </div>
-
-{{-- Script Bootstrap JS --}}
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-@endpush
-
 @endsection

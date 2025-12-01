@@ -11,7 +11,7 @@ class Buku extends Model
     protected $primaryKey = 'id_buku';
     public $incrementing  = true;
     protected $keyType    = 'int';
-    public $timestamps    = false;
+    public $timestamps    = true;
 
     protected $fillable = [
         'id_kategori',

@@ -15,10 +15,9 @@
 
     {{-- Header --}}
     <div class="text-center mb-8">
-      <img 
-        src="https://cdn-icons-png.flaticon.com/512/149/149071.png" 
-        class="w-28 h-28 mx-auto rounded-full border-4 border-indigo-600"
-      >
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+        class="w-28 h-28 mx-auto rounded-full border-4 border-indigo-600">
       <h2 class="mt-4 text-2xl font-semibold text-indigo-700">{{ $admin->name }}</h2>
     </div>
 
@@ -37,8 +36,7 @@
             type="text"
             name="name"
             value="{{ $admin->name }}"
-            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
-          >
+            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none">
         </div>
 
         <div>
@@ -47,8 +45,7 @@
             type="email"
             name="email"
             value="{{ $admin->email }}"
-            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
-          >
+            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none">
         </div>
 
         <div>
@@ -57,8 +54,7 @@
             type="text"
             name="phone"
             value="{{ $admin->phone ?? '' }}"
-            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
-          >
+            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none">
         </div>
 
         <div>
@@ -68,8 +64,7 @@
             name="role"
             value="{{ $admin->role }}"
             class="w-full border border-zinc-300 rounded-lg px-4 py-2 bg-zinc-100"
-            readonly
-          >
+            readonly>
         </div>
 
       </div>
@@ -87,8 +82,7 @@
             type="email"
             name="email_confirm"
             value="{{ $admin->email }}"
-            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
-          >
+            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none">
         </div>
 
         <div>
@@ -100,14 +94,12 @@
               type="password"
               name="password"
               placeholder="Kosongkan jika tidak ingin mengubah"
-              class="w-full border border-zinc-300 rounded-lg px-4 py-2 pr-12 focus:ring-indigo-500 focus:outline-none"
-            >
+              class="w-full border border-zinc-300 rounded-lg px-4 py-2 pr-12 focus:ring-indigo-500 focus:outline-none">
 
-            <button 
-              type="button" 
+            <button
+              type="button"
               id="togglePassword"
-              class="absolute top-1/2 right-3 -translate-y-1/2 text-zinc-500"
-            >
+              class="absolute top-1/2 right-3 -translate-y-1/2 text-zinc-500">
               <i id="toggleIcon" class="bi bi-eye text-lg"></i>
             </button>
           </div>
@@ -115,19 +107,28 @@
 
       </div>
 
-      {{-- Tombol Simpan --}}
-      <div class="text-center mt-8">
-        <button 
-          type="submit" 
-          class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow-sm"
-        >
+      <div class="d-flex justify-content-between align-items-center mt-4 gap-3">
+
+        <!-- Tombol Kembali -->
+        <a href="{{ url()->previous() }}" class="btn btn-outline-secondary me-2">
+          <i class="bi bi-arrow-left"></i> Kembali
+        </a>
+
+        <!-- Tombol Simpan -->
+        <button type="submit"
+          class="w-25 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow-sm border-0">
           Simpan
         </button>
+
       </div>
 
-    </form>
+
+      </button>
 
   </div>
+  </form>
+
+</div>
 </div>
 
 @endsection
