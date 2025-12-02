@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ForumPost;
 use App\Models\ForumComment;
 use Illuminate\Support\Facades\Auth; // Perlu ditambahkan untuk auth()->id()
+use App\Models\User;
 
 class ForumController extends Controller
 {
@@ -59,4 +60,40 @@ class ForumController extends Controller
 
         return redirect()->back()->with('success', 'Komentar berhasil ditambahkan!'); // Redirect back lebih baik
     }
+
+    public function deleteComment($id)
+{
+    // cari komentar berdasarkan id_comment
+    $comment = ForumComment::findOrFail($id);
+
+    // hanya admin yang boleh menghapus komentar
+    if (Auth::user()->role !== 'admin') {
+        return back()->with('error', 'Anda tidak memiliki izin.');
+    }
+
+    $comment->delete();
+
+    return back()->with('success', 'Komentar berhasil dihapus.');
+}
+
+public function deletePost($id_post)
+{
+    // ambil post
+    $post = ForumPost::findOrFail($id_post);
+
+    // cek apakah admin
+    if (Auth::user()->role != 'admin') {
+        return back()->with('error', 'Anda tidak memiliki izin untuk menghapus post.');
+    }
+
+    // hapus semua komentar terkait
+    ForumComment::where('id_post', $id_post)->delete();
+
+    // hapus post
+    $post->delete();
+
+    return back()->with('success', 'Post berhasil dihapus.');
+}
+
+
 }

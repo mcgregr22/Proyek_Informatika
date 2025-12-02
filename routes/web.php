@@ -21,12 +21,11 @@ use App\Http\Controllers\PurchaseAdminController;
 // ----------------------
 // HALAMAN AWAL
 // ----------------------
-Route::get('/', fn() => view('home'));
+Route::get('/', fn() => view('/beranda'));
 Route::get('/beranda', fn() => view('home'))->name('home');
 Route::get('/home', fn() => view('home'))->name('home');
 Route::get('/kontak', fn() => view('contact'))->name('contact');
-
-
+Route::get('/beranda', [HomepageController::class, 'landing'])->name('home');  // Ubah 'home' menjadi 'landing'
 
 
 // ----------------------
@@ -78,10 +77,13 @@ Route::delete('/buku/hapus/{book}', [BukuController::class, 'destroy'])->name('b
 // =========================
 // KATEGORI CONTROLLER
 // =========================
-
 Route::post('/kategori/tambah', [KategoriController::class, 'store'])
     ->middleware('auth')
     ->name('kategori.store');
+// Semua buku berdasarkan kategori
+Route::get('/kategori/{nama}', [HomepageController::class, 'kategoriShow'])
+     ->name('kategori.show');
+
 
 
 
@@ -173,6 +175,13 @@ Route::middleware(['auth'])->prefix('forumdiscuss')->group(function () {
   // URI: /forumdiscuss/{id_post}/comment
   Route::post('/{id_post}/comment', [ForumController::class, 'storeComment'])->name('forum.comment');
 });
+// delete komen
+Route::delete('/forum/comment/{id}', 
+    [ForumController::class, 'deleteComment']
+)->name('forum.comment.delete');
+// delete post
+Route::delete('/forum/post/{id_post}/delete', [ForumController::class, 'deletePost'])
+    ->name('forum.post.delete');
 
 
 // ===============================================

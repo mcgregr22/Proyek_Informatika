@@ -15,6 +15,7 @@
     .forum-container {
         margin-top: 35px;
         margin-bottom: 60px;
+        max-width: 820px;
     }
 
     .forum-card {
@@ -22,14 +23,46 @@
         border: none;
         box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
         margin-bottom: 25px;
+        padding: 22px;
+    }
+
+    .post-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .post-user {
+        font-weight: 600;
+        font-size: 15px;
+    }
+
+    .post-date {
+        font-size: 13px;
+        color: gray;
     }
 
     .comment-card {
         background: #f8fafc;
         border-left: 4px solid #2563eb;
         border-radius: 12px;
-        padding: 12px 16px;
-        margin-top: 14px;
+        padding: 14px 16px;
+        margin-top: 18px;
+    }
+
+    .comment-line {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+
+    .comment-user {
+        font-weight: 600;
+        color: #2563eb;
+    }
+
+    .comment-text {
+        font-size: 15px;
     }
 
     .comment-form input {
@@ -45,8 +78,9 @@
         padding-left: 10px;
     }
 
-    .comment-form button:hover {
-        color: #1e3fae;
+    .delete-btn {
+        padding: 4px 8px;
+        font-size: 14px;
     }
 </style>
 @endpush
@@ -82,7 +116,7 @@
 
                     <div class="modal-body">
 
-                        <label class="fw-semibold mt-2">Judul</label>
+                        <label class="fw-semibold">Judul</label>
                         <input type="text" name="title" class="form-control" required>
 
                         <label class="fw-semibold mt-3">Isi</label>
@@ -101,24 +135,40 @@
         </div>
     </div>
 
-
     {{-- LIST POST --}}
     @forelse($posts as $post)
 
-    <div class="card forum-card p-3">
+    <div class="card forum-card">
 
-        {{-- HEADER POST --}}
-        <div class="d-flex align-items-center mb-2">
-            <div class="fw-bold">{{ $post->user->name ?? 'Anonim' }}</div>
-            <div class="text-muted ms-2">
-                • {{ $post->created_at->format('d M Y, H:i') }}
+        {{-- POST HEADER --}}
+        <div class="post-header">
+
+            {{-- User + date --}}
+            <div>
+                <div class="post-user">{{ $post->user->name ?? 'Anonim' }}</div>
+                <div class="post-date">{{ $post->created_at->format('d M Y, H:i') }}</div>
             </div>
+
+            {{-- Admin Delete --}}
+            @auth
+            @if(Auth::user()->role == 'admin')
+                <form action="{{ route('forum.post.delete', $post->id_post) }}"
+                      method="POST"
+                      onsubmit="return confirm('Yakin ingin hapus post ini?')">
+                    @csrf
+                    @method('DELETE')
+                    <button class="btn btn-danger btn-sm delete-btn">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </form>
+            @endif
+            @endauth
+
         </div>
 
-        {{-- JUDUL & ISI --}}
-        <h5 class="fw-bold">{{ $post->title }}</h5>
-
-        <p class="mb-1">{{ $post->content }}</p>
+        {{-- CONTENT --}}
+        <h5 class="fw-bold mt-3">{{ $post->title }}</h5>
+        <p>{{ $post->content }}</p>
 
         {{-- KOMENTAR --}}
         <div class="comment-card">
@@ -127,19 +177,38 @@
             </p>
 
             @forelse($post->comments as $comment)
-            <div class="mb-1">
-                <span class="text-primary fw-semibold">{{ $comment->user->name ?? 'Anonim' }}</span> :
-                <span>{{ $comment->komentar }}</span>
+            <div class="comment-line">
+
+                <div>
+                    <span class="comment-user">{{ $comment->user->name ?? 'Anonim' }}</span> :
+                    <span class="comment-text">{{ $comment->komentar }}</span>
+                </div>
+
+                {{-- ADMIN ONLY DELETE --}}
+                @if(auth()->check() && auth()->user()->role === 'admin')
+                <form action="{{ route('forum.comment.delete', $comment->id_comment) }}" method="POST"
+                    onsubmit="return confirm('Hapus komentar ini?')">
+
+                    @csrf
+                    @method('DELETE')
+
+                    <button class="btn btn-sm btn-danger py-0 px-2">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </form>
+                @endif
+
             </div>
             @empty
             <p class="text-muted mb-0">Belum ada komentar.</p>
             @endforelse
         </div>
 
-        {{-- FORM INPUT KOMENTAR --}}
+        {{-- COMMENT FORM --}}
         <form action="{{ route('forum.comment', $post->id_post) }}"
-            method="POST"
-            class="comment-form d-flex align-items-center mt-3">
+              method="POST"
+              class="comment-form d-flex align-items-center mt-3">
+
             @csrf
 
             <input type="text" name="komentar" class="form-control" placeholder="Tulis komentar..." required>
@@ -158,6 +227,7 @@
         <i class="bi bi-chat-dots text-secondary" style="font-size: 64px;"></i>
         <h4 class="mt-3 text-muted fw-bold">Belum ada postingan</h4>
         <p class="text-muted">Mulai diskusi pertamamu dengan membuat post baru!</p>
+
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPostModal">
             Buat Post Baru
         </button>

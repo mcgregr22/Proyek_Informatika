@@ -8,10 +8,10 @@
   <title>Library Hub - Marketplace Buku Peer-to-Peer</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- Untuk ikon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
   <style>
-    * {
+    *{
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -158,12 +158,14 @@
     }
 
     .book-item img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 5px;
-      margin-bottom: 15px;
-    }
+  width: 100%;
+  height: 250px;
+  object-fit: contain;   /* gambar tampil full tanpa cropping */
+  background: #fff;      /* beri background putih biar rapi */
+  border-radius: 5px;
+  margin-bottom: 15px;
+  padding: 5px;          /* memberi jarak agar tidak mepet */
+}
 
     .book-item h3 {
       font-size: 18px;
@@ -402,7 +404,6 @@
 
     <ul id="nav-menu">
       <li><a href="/beranda">Beranda</a></li>
-      <!-- <li><a href="/kategori">Kategori</a></li> -->
       <li><a href="/kontak">Kontak</a></li>
       <li><a href="/login">Masuk</a></li>
       <li><a href="/register">Daftar</a></li>
@@ -415,7 +416,7 @@
     </div>
   </nav>
 
-  <!-- HERO SECTION -->
+  <!-- HERO -->
   <section class="hero">
     <h1>Temukan dan Jual Buku Impian Anda</h1>
     <p>
@@ -431,62 +432,34 @@
   <!-- FEATURED BOOKS -->
   <section class="featured">
     <h2>Beberapa buku yang ada di Library-Hub</h2>
+
     <div class="book-grid">
-      <div class="book-item">
-        <img src="{{ asset('images/book1.png') }}" alt="Sampul Buku 1">
-        <h3>Judul Buku 1</h3>
-        <p>Harga: Rp50.000 | Dijual oleh: User A</p>
-        <a href="/book/1">Lihat Detail</a>
-      </div>
-      <div class="book-item">
-        <img src="{{ asset('images/book2.png') }}" alt="Sampul Buku 2">
-        <h3>Judul Buku 2</h3>
-        <p>Harga: Rp75.000 | Dijual oleh: User B</p>
-        <a href="/book/2">Lihat Detail</a>
-      </div>
-      <div class="book-item">
-        <img src="{{ asset('images/book3.png') }}" alt="Sampul Buku 3">
-        <h3>Judul Buku 3</h3>
-        <p>Harga: Rp60.000 | Dijual oleh: User C</p>
-        <a href="/book/3">Lihat Detail</a>
-      </div>
-      <div class="book-item">
-        <img src="{{ asset('images/book4.png') }}" alt="Sampul Buku 4">
-        <h3>Judul Buku 4</h3>
-        <p>Harga: Rp40.000 | Dijual oleh: User D</p>
-        <a href="/book/4">Lihat Detail</a>
-      </div>
+      @forelse($featuredBooks as $book)
+        <div class="book-item">
+
+          <img src="{{ $book->cover_image ? asset('storage/' . $book->cover_image) : asset('images/default-book.png') }}" />
+
+          <h3>{{ $book->title }}</h3>
+          <p>Harga: Rp{{ number_format($book->harga, 0, ',', '.') }} | Dijual oleh: {{ $book->user->name ?? 'User' }}</p>
+          <a href="{{ route('login.show') }}">Lihat Detail</a>
+        </div>
+      @empty
+        <p>Tidak ada buku tersedia saat ini.</p>
+      @endforelse
     </div>
+
   </section>
 
   <!-- CATEGORIES -->
   <section class="categories">
     <h2>Jelajahi Kategori</h2>
     <div class="cat-grid">
-      <div class="cat-item">
-        <i class="fas fa-book"></i>
-        <h3>Fiksi</h3>
-      </div>
-      <div class="cat-item">
-        <i class="fas fa-brain"></i>
-        <h3>Pengembangan Diri</h3>
-      </div>
-      <div class="cat-item">
-        <i class="fas fa-briefcase"></i>
-        <h3>Bisnis</h3>
-      </div>
-      <div class="cat-item">
-        <i class="fas fa-heart"></i>
-        <h3>Romansa</h3>
-      </div>
-      <div class="cat-item">
-        <i class="fas fa-flask"></i>
-        <h3>Sains</h3>
-      </div>
-      <div class="cat-item">
-        <i class="fas fa-history"></i>
-        <h3>Sejarah</h3>
-      </div>
+      <div class="cat-item"><i class="fas fa-book"></i><h3>Fiksi</h3></div>
+      <div class="cat-item"><i class="fas fa-brain"></i><h3>Pengembangan Diri</h3></div>
+      <div class="cat-item"><i class="fas fa-briefcase"></i><h3>Bisnis</h3></div>
+      <div class="cat-item"><i class="fas fa-heart"></i><h3>Romansa</h3></div>
+      <div class="cat-item"><i class="fas fa-flask"></i><h3>Sains</h3></div>
+      <div class="cat-item"><i class="fas fa-history"></i><h3>Sejarah</h3></div>
     </div>
   </section>
 
@@ -494,70 +467,21 @@
   <section class="how-it-works">
     <h2>Cara Kerja Library Hub</h2>
     <div class="steps">
-      <div class="step">
-        <i class="fas fa-upload"></i>
-        <h3>1. Unggah Buku</h3>
-        <p>Jual buku Anda dengan mudah dengan mengunggah detail dan harga.</p>
-      </div>
-      <div class="step">
-        <i class="fas fa-search"></i>
-        <h3>2. Cari & Beli</h3>
-        <p>Jelajahi ribuan buku dari user lainnya dan beli dengan aman.</p>
-      </div>
-      <div class="step">
-        <i class="fas fa-handshake"></i>
-        <h3>3. Transaksi Aman</h3>
-        <p>Bayar dan terima buku digital melalui platform kami yang terpercaya.</p>
-      </div>
+      <div class="step"><i class="fas fa-upload"></i><h3>1. Unggah Buku</h3><p>Unggah detail buku dan harga.</p></div>
+      <div class="step"><i class="fas fa-search"></i><h3>2. Cari & Beli</h3><p>Cari buku dan beli dengan aman.</p></div>
+      <div class="step"><i class="fas fa-handshake"></i><h3>3. Transaksi Aman</h3><p>Proses pembayaran aman.</p></div>
     </div>
   </section>
 
-  <!-- HOW TO EXCHANGE BOOKS (Tambahan Baru) -->
+  <!-- EXCHANGE -->
   <section class="exchange">
-    <h2>Cara Kerja Tukar Buku</h2>
+    <h2>Cara Tukar Buku</h2>
     <div class="exchange-steps">
-      <div class="exchange-step">
-        <i class="fas fa-plus-circle"></i>
-        <h3>1. Tambahkan Buku Anda</h3>
-        <p>Unggah buku yang ingin Anda tukarkan ke dalam akun Anda untuk memulai proses.</p>
-      </div>
-      <div class="exchange-step">
-        <i class="fas fa-search"></i>
-        <h3>2. Cari Buku yang Ingin Ditukarkan</h3>
-        <p>Jelajahi katalog buku dari user lain dan pilih buku yang cocok untuk ditukar.</p>
-      </div>
-      <div class="exchange-step">
-        <i class="fas fa-exchange-alt"></i>
-        <h3>3. Tukarkan</h3>
-        <p>Ajukan permintaan tukar, konfirmasi dengan user lain, dan selesaikan pertukaran dengan aman.</p>
-      </div>
+      <div class="exchange-step"><i class="fas fa-plus-circle"></i><h3>1. Tambahkan Buku</h3><p>Unggah buku untuk ditukar.</p></div>
+      <div class="exchange-step"><i class="fas fa-search"></i><h3>2. Cari Buku Tukar</h3><p>Jelajahi daftar buku yang tersedia.</p></div>
+      <div class="exchange-step"><i class="fas fa-arrows-rotate"></i><h3>3. Tukar Buku</h3><p>Setujui pertukaran dan proses selesai.</p></div>
     </div>
   </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="testimonials">
-    <h2>Tentang Kami</h2>
-    <div class="testimonial">"Library Hub membuat jual & tukar eBook jadi gampang!"</div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>&copy; 2025 Library Hub. Semua hak dilindungi.</p>
-    <div class="social-icons">
-      <a href="#"><i class="fab fa-facebook"></i></a>
-      <a href="#"><i class="fab fa-twitter"></i></a>
-      <a href="#"><i class="fab fa-instagram"></i></a>
-    </div>
-    <p><a href="/privacy" style="color: white;">Kebijakan Privasi</a> | <a href="/terms" style="color: white;">Syarat & Ketentuan</a></p>
-  </footer>
-
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById('nav-menu');
-      menu.classList.toggle('active');
-    }
-  </script>
 
 </body>
-
 </html>

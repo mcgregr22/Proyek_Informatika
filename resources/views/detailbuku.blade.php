@@ -184,6 +184,9 @@
           <div class="col d-flex justify-content-between">
             <span class="label">Kondisi:</span><span class="val">{{ $book->kondisi ?: '-' }}</span>
           </div>
+          <div class="col d-flex justify-content-between">
+            <span class="label">Kategori:</span><span class="val">{{ $book->kategori?? '-' }}</span>
+          </div>
         </div>
 
       </div>

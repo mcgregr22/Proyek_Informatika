@@ -125,6 +125,27 @@
     filter: brightness(1.1);
   }
 
+  /* Tombol Kembali */
+  .btn-back {
+    background: linear-gradient(90deg, #ffffff 0%, #ffffffff 100%);
+    /* Gradien abu-abu */
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(50, 53, 59, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .btn-back:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(107, 114, 128, 0.6);
+    filter: brightness(1.1);
+  }
+
   /* ========================================
     BOOK CARDS
    ======================================== */
@@ -205,15 +226,31 @@
 
 {{-- 2. Menyuntikkan Search Form ke Header Master Layout --}}
 @section('search_form')
-<form class="search-form mx-auto d-none d-lg-flex" role="search" action="{{ route('homepage') }}" method="GET">
-  <select name="kategori">
+<form id="searchForm" class="search-form mx-auto d-none d-lg-flex" role="search" action="{{ route('homepage') }}" method="GET">
+  <select name="kategori" class="form-select" id="kategoriSelect">
     <option value="">Kategori</option>
-    <option value="humor">Humor & Comedy</option>
-    <option value="history">History</option>
-    <option value="romance">Romance</option>
+    @foreach ($kategoriList as $kat)
+    <option value="{{ $kat->nama_kategori }}"
+      {{ $kategoriDipilih == $kat->nama_kategori ? 'selected' : '' }}>
+      {{ $kat->nama_kategori }}
+    </option>
+    @endforeach
   </select>
+
   <input class="form-control" type="search" name="q" value="{{ $q ?? '' }}" placeholder="Cari Buku...">
+  
+  <!-- Tambahkan tombol submit untuk memudahkan -->
+  <button type="submit" class="btn btn-primary">Cari</button>
 </form>
+
+{{-- JavaScript untuk submit form saat dropdown kategori berubah --}}
+@push('scripts')
+<script>
+  document.getElementById('kategoriSelect').addEventListener('change', function() {
+    document.getElementById('searchForm').submit();
+  });
+</script>
+@endpush
 @endsection
 
 <!-- 3. Konten Utama -->
@@ -224,62 +261,131 @@
   <div class="banner">
     <h2>Selamat Datang di Library-Hub</h2>
   </div>
+
   <!-- 🔍 Pesan jika hasil pencarian kosong -->
-  @if($q && $booksHumor->isEmpty() && $booksHistory->isEmpty() && $booksRecs->isEmpty())
-  <div class="alert alert-warning mt-3 mx-3 text-center">
-    Buku "<strong>{{ $q }}</strong>" tidak ditemukan.
-  </div>
+  @if(($q || $kategoriDipilih) && $booksRecs->isEmpty())
+    <div class="alert alert-warning mt-3 mx-3 text-center">
+        @if($q)
+          Buku "<strong>{{ $q }}</strong>" tidak ditemukan.
+        @else
+          Buku di kategori "<strong>{{ $kategoriDipilih }}</strong>" tidak ditemukan.
+        @endif
+    </div>
   @endif
-  <div class="mt-4">
 
+  {{-- Jika ada query pencarian ($q) atau kategori dipilih, tampilkan hasil --}}
+  @if($q || $kategoriDipilih)
+    @if($booksRecs->isNotEmpty())
+      <div class="section-header mt-4">
+        <h5>
+          @if($q)
+            Hasil Pencarian untuk "{{ $q }}"
+          @else
+            Buku di Kategori "{{ $kategoriDipilih }}"
+          @endif
+        </h5>
+        {{-- Tombol Kembali --}}
+        <a href="{{ route('homepage') }}" class="btn btn-back">Kembali</a>
+      </div>
+      <div class="row g-3">
+        @foreach ($booksRecs as $b)
+        <div class="col-6 col-md-4 col-lg-2">
+          <div class="card book-card h-100 position-relative">
+            <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
 
-    <div class="section-header mt-5">
-      <h5 class="fw-semibold">Rekomendasi untuk anda</h5>
-      <a href="#" class="text-decoration-none small text-primary">Lihat Selengkapnya...</a>
-    </div>
+              {{-- 🔹 Label Listing Type --}}
+              @php $types = explode(',', $b->listing_type ?? ''); @endphp
+              <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
+                @foreach ($types as $type)
+                @if (trim($type) === 'sell')
+                <span class="listing-badge sell">Dijual</span>
+                @elseif (trim($type) === 'exchange')
+                <span class="listing-badge exchange">Tukar</span>
+                @endif
+                @endforeach
+              </div>
 
-    <div class="row g-3">
-      @forelse ($booksRecs as $b)
-      <div class="col-6 col-md-4 col-lg-2">
-        <div class="card book-card h-100 position-relative">
-          <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
-
-            {{-- 🔹 Label Listing Type --}}
-            @php $types = explode(',', $b->listing_type ?? ''); @endphp
-            <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
-              @foreach ($types as $type)
-              @if (trim($type) === 'sell')
-              <span class="listing-badge sell">Dijual</span>
-              @elseif (trim($type) === 'exchange')
-              <span class="listing-badge exchange">Tukar</span>
-              @endif
-              @endforeach
-            </div>
-
-            <div class="card-body text-center">
-              @if($b->cover_image)
-              <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
-              @else
-              <div class="py-5 bg-light rounded mb-2">📕</div>
-              @endif
-              <h6 class="fw-semibold text-truncate">{{ $b->title }}</h6>
-              <div class="text-muted small">{{ $b->author }}</div>
-              <div class="badge rounded-pill bg-light text-dark small fw-semibold">{{ $b->kondisi }}</div>
-              <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
-            </div>
-          </a>
+              <div class="card-body text-center">
+                @if($b->cover_image)
+                <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
+                @else
+                <div class="py-5 bg-light rounded mb-2">📕</div>
+                @endif
+                <h6 class="fw-semibold text-truncate">{{ $b->title }}</h6>
+                <div class="text-muted small">{{ $b->author }}</div>
+                <div class="badge rounded-pill bg-light text-dark small fw-semibold">{{ $b->kondisi }}</div>
+                <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
+              </div>
+            </a>
+          </div>
         </div>
+        @endforeach
       </div>
-      @empty
-      <div class="col-12">
-        <p class="text-muted">Belum ada rekomendasi.</p>
-      </div>
-      @endforelse
-    </div>
-  </div>
+    @endif
+  {{-- Jika tidak ada query pencarian atau kategori, tampilkan daftar buku per kategori --}}
+  @else
+    {{-- ================================
+      DAFTAR BUKU PER KATEGORI OTOMATIS
+    ================================ --}}
+    @foreach ($kategoriWithBooks as $kat)
+      @if ($kat->books->isNotEmpty())
+          <div class="section-header">
+              <h5 class="fw-semibold">{{ $kat->nama_kategori }}</h5>
+              <a href="{{ route('homepage', ['kategori' => $kat->nama_kategori]) }}" class="text-decoration-none small text-primary">Lihat Selengkapnya...</a>
+          </div>
 
-  <div class="footer">
-    <p>© 2025 Library-Hub</p>
-  </div>
+          <div class="row g-3 mb-4">
+              @foreach ($kat->books as $b)
+                  <div class="col-6 col-md-4 col-lg-2">
+                      <div class="card book-card h-100 position-relative">
+                          <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
+
+                              {{-- 🔹 Label Listing Type --}}
+                              @php $types = explode(',', $b->listing_type ?? ''); @endphp
+                              <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
+                                @foreach ($types as $type)
+                                @if (trim($type) === 'sell')
+                                <span class="listing-badge sell">Dijual</span>
+                                @elseif (trim($type) === 'exchange')
+                                <span class="listing-badge exchange">Tukar</span>
+                                @endif
+                                @endforeach
+                              </div>
+
+                              <div class="card-body text-center">
+                                  {{-- COVER --}}
+                                  @if($b->cover_image)
+                                      <img src="{{ asset('storage/' . $b->cover_image) }}"
+                                           alt="cover" class="book-thumb mb-2">
+                                  @else
+                                      <div class="py-5 bg-light rounded mb-2">📕</div>
+                                  @endif
+
+                                  {{-- JUDUL --}}
+                                  <h6 class="fw-semibold text-truncate">{{ $b->title }}</h6>
+
+                                  {{-- AUTHOR --}}
+                                  <div class="text-muted small">{{ $b->author }}</div>
+
+                                  {{-- KONDISI --}}
+                                  <div class="badge rounded-pill bg-light text-dark small fw-semibold">
+                                      {{ $b->kondisi }}
+                                  </div>
+
+                                  {{-- HARGA --}}
+                                  <div class="price mt-1">
+                                      Rp {{ number_format($b->harga, 0, ',', '.') }}
+                                  </div>
+
+                              </div>
+                          </a>
+                      </div>
+                  </div>
+              @endforeach
+          </div>
+      @endif
+    @endforeach
+  @endif
+
 </div>
 @endsection

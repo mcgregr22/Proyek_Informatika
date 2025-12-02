@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Buku;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-
+use App\Http\Controllers\KategoriController;
+use App\Models\Kategori;
 
 class HomepageController extends Controller
 {
@@ -16,47 +17,69 @@ class HomepageController extends Controller
     public function index(Request $request)
     {
         $q = $request->get('q');
+        $kategoriDipilih = $request->get('kategori');
 
-        // Filter pencarian global
-        $search = function ($query) use ($q) {
-            if ($q) {
-                $query->where(function ($x) use ($q) {
-                    $x->where('title', 'like', "%{$q}%")
-                      ->orWhere('author', 'like', "%{$q}%")
-                      ->orWhere('isbn', 'like', "%{$q}%");
-                });
-            }
-        
-        };
-        
+        // Debug: Uncomment baris ini untuk melihat nilai yang diterima
+        // dd($q, $kategoriDipilih);
 
-        // ID kategori (ubah sesuai data kamu)
-        $ID_KAT_HUMOR   = 1;
-        $ID_KAT_HISTORY = 2;
+        // Ambil kategori untuk dropdown
+        $kategoriList = Kategori::orderBy('nama_kategori')->get();
 
-        // Buku kategori Humor
-        $booksHumor = Buku::where('id_kategori', $ID_KAT_HUMOR)
-            ->tap($search)->orderBy('title')->limit(4)->get();
+        // Query dasar
+        $booksQuery = Buku::query();
 
-        // Buku kategori History
-        $booksHistory = Buku::where('id_kategori', $ID_KAT_HISTORY)
-            ->tap($search)->orderBy('title')->limit(6)->get();
+        // 🔍 Search (judul / penulis / isbn)
+        if (!empty($q)) {
+            $booksQuery->where(function ($x) use ($q) {
+                $x->where('title', 'like', "%{$q}%")
+                  ->orWhere('author', 'like', "%{$q}%")
+                  ->orWhere('isbn', 'like', "%{$q}%");
+            });
+        }
 
-        // Buku rekomendasi random
-        $booksRecs = Buku::tap($search)
-            ->inRandomOrder()->limit(1000)->get();
+        // 🎯 Filter kategori berdasarkan nama kategori (bukan id)
+        if (!empty($kategoriDipilih)) {
+            $booksQuery->where('kategori', $kategoriDipilih);
+        }
 
-        return view('homepage', compact('booksHumor', 'booksHistory', 'booksRecs', 'q'));
+        // Ambil hasil pencarian (tanpa limit untuk pencarian/filter)
+        $booksRecs = $booksQuery
+                        ->orderBy('title')
+                        ->get();
+
+        // Kategori beserta bukunya (untuk bagian "per kategori") - limit 6
+        $kategoriWithBooks = Kategori::orderBy('nama_kategori')
+            ->get()
+            ->map(function ($kat) {
+                $kat->books = Buku::where('kategori', $kat->nama_kategori)
+                    ->orderBy('title')
+                    ->limit(6)
+                    ->get();
+                return $kat;
+            });
+
+        return view('homepage', compact(
+            'booksRecs',
+            'kategoriList',
+            'kategoriDipilih',
+            'kategoriWithBooks',
+            'q'
+        ));
     }
 
     // -------------------------------
     // 📘 DETAIL BUKU
     // -------------------------------
-  public function show($id)
-{
-    $book = Buku::with('user')->findOrFail($id);
-    return view('detailbuku', compact('book'));
-}
-
-
+    public function show($id)
+    {
+        $book = Buku::with('user')->findOrFail($id);
+        return view('detailbuku', compact('book'));
+    }
+        public function landing()
+    {
+        // Ambil 4 buku random dari database
+        $featuredBooks = Buku::inRandomOrder()->limit(4)->get();
+        // Return view dengan data buku random
+        return view('home', compact('featuredBooks'));  // Ganti 'landing' dengan nama file Blade Anda
+    }
 }

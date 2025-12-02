@@ -133,7 +133,7 @@
                 <input type="number" min="0" name="harga"
                        class="w-full border rounded-lg px-3 h-[42px]"
                        placeholder="Masukkan harga (Rp)">
-                <p class="text-xs text-gray-500 mt-1">Isi harga meskipun Exchange agar tetap dapat dijual.</p>
+                <!-- <p class="text-xs text-gray-500 mt-1">Isi harga meskipun Exchange agar tetap dapat dijual.</p> -->
             </div>
 
             {{-- Kondisi --}}

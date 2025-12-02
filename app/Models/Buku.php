@@ -14,7 +14,7 @@ class Buku extends Model
     public $timestamps    = true;
 
     protected $fillable = [
-        'id_kategori',
+        'kategori',
         'title',
         'author',
         'isbn',
@@ -39,7 +39,7 @@ class Buku extends Model
     /** Relations */
     public function kategori()
     {
-        return $this->belongsTo(Kategori::class, 'id_kategori', 'id_kategori');
+        return $this->belongsTo(Kategori::class, 'kategori', 'nama_kategori');
     }
 
     public function user()
