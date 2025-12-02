@@ -72,7 +72,7 @@
     </div>
   </header>
 
-  <div class="flex min-h-screen">
+<div class="flex min-h-screen">
 
     {{-- SIDEBAR (Sama di semua halaman) --}}
     <aside class="w-72 bg-white border-r border-zinc-200 shadow-sm flex flex-col"
@@ -80,61 +80,73 @@
         x-transition.duration.200ms>
       <nav class="flex-1 px-4 py-4 space-y-1 text-[1.05rem]">
 
-        {{-- Navigasi Sidebar --}}
+        {{-- Manajemen Akun --}}
         <a href="/manajemen_admin" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
           <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6c-1.5-1-3.5-2-6-2-1.657 0-3 .895-3 2v12c0-1.105 1.343-2 3-2 2.5 0 4.5 1 6 2m0-12c1.5-1 3.5-2 6-2 1.657 0 3 .895 3 2v12c0-1.105-1.343-2-3-2-2.5 0-4.5 1-6 2"/>
+            <!-- Heroicons: Users -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+              stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16 14a4 4 0 10-8 0m8 0a4 4 0 01-8 0m8 0v2a2 2 0 002 2h2m-12-4v2a2 2 0 01-2 2H4m9-12a3 3 0 11-6 0 3 3 0 016 0zm6 3a3 3 0 11-6 0 3 3 0 016 0z"/>
             </svg>
           </span>
           <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Manajemen Akun</span>
         </a>
 
+
+        {{-- Riwayat Tukar Buku --}}
         <a href="{{route ('swap.history')}}" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
           <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6c-1.5-1-3.5-2-6-2-1.657 0-3 .895-3 2v12c0-1.105 1.343-2 3-2 2.5 0 4.5 1 6 2m0-12c1.5-1 3.5-2 6-2 1.657 0 3 .895 3 2v12c0-1.105-1.343-2-3-2-2.5 0-4.5 1-6 2M12 10h6M15 7v6"/>
+            <!-- Heroicons: Arrows Right-Left -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+              stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17 7H7m0 0l4-4M7 7l4 4m6 6H7m10 0l-4 4m4-4l-4-4"/>
             </svg>
           </span>
           <span class="font-semibold">Riwayat Tukar Buku</span>
         </a>
 
+
+        {{-- Forum Diskusi --}}
         <a href="/forumdiscuss" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
           <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m12-9l2 9M9 21h6"/>
-          </svg>
-        </span>
-          <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Forum Diskusi</span>
-        </a>
-
-        <a href="/admin/purchase" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
-          <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
+            <!-- Heroicons: Chat Bubble Left Right -->
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
               stroke-width="1.8" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round"
-                d="M8 7h8m-8 4h5m-5 4h8M5 4h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z" />
+                d="M2.25 12.75c0-4.556 3.694-8.25 8.25-8.25s8.25 3.694 8.25 8.25-3.694 8.25-8.25 8.25c-.84 0-1.65-.128-2.415-.366L4.5 21l.618-3.147A8.213 8.213 0 012.25 12.75z"/>
+            </svg>
+          </span>
+          <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Forum Diskusi</span>
+        </a>
+
+
+        {{-- Riwayat Pembelian --}}
+        <a href="/admin/purchase" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
+          <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
+            <!-- Heroicons: Receipt Refund -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+              stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 14l2-2m0 0l2-2m-2 2l2 2m-2-2l-2-2m8-5H7a2 2 0 00-2 2v14l3-2 3 2 3-2 3 2V5a2 2 0 00-2-2z"/>
             </svg>
           </span>
           <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Riwayat Pembelian</span>
         </a>
 
-
       </nav>
+
 
       {{-- LOGOUT --}}
       <div class="px-4 py-4 border-t border-zinc-100">
         <form action="{{ route('logout') }}" method="POST">
           @csrf
           <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
-            <span class="w-6 h-6">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M16 17v-1a4 4 0 00-4-4H5.5a.5.5 0 010-1H12a5 5 0 015 5v1h1a1 1 0 110 2H6a1 1 0 110-2h10z"/>
-                <path d="M7 7a5 5 0 1110 0v1H7V7z"/>
-              </svg>
-            </span>
+            <i class="bi bi-box-arrow-right text-xl"></i>
             <span class="font-semibold">Keluar</span>
           </button>
+
         </form>
       </div>
     </aside>

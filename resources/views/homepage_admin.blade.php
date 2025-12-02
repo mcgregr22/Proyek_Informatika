@@ -21,31 +21,37 @@
 </div>
 
 {{-- Grid Buku --}}
-<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"> 
     @forelse($books as $book)
-    <div class="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
-        <img src="{{ asset('storage/' . $book->cover_image) }}" 
-             class="w-full h-48 object-cover">
+    <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden p-3">
 
-        <div class="p-4 text-center">
-            <p class="font-semibold text-zinc-800">{{ $book->title }}</p>
-            <p class="text-sm text-zinc-500 mb-1">{{ $book->author }}</p>
-            <p class="font-bold text-zinc-800">{{ $book->harga_rupiah }}</p>
+        {{-- Cover buku agar terlihat seluruhnya --}}
+        <div class="w-full h-36 bg-zinc-100 flex items-center justify-center rounded-lg overflow-hidden">
+            <img src="{{ asset('storage/' . $book->cover_image) }}" 
+                 class="w-full h-full object-contain">
+        </div>
 
-            <form action="{{ route('homepage_admin.destroy', $book->id_buku) }}" method="POST" class="mt-3">
+        <div class="pt-3 text-center">
+            <p class="font-semibold text-zinc-800 text-sm line-clamp-2">{{ $book->title }}</p>
+            <p class="text-xs text-zinc-500">{{ $book->author }}</p>
+            <p class="text-sm font-bold text-zinc-800 mt-1">{{ $book->harga_rupiah }}</p>
+
+            <form action="{{ route('homepage_admin.destroy', $book->id_buku) }}" method="POST" class="mt-2">
                 @csrf
                 @method('DELETE')
                 <button 
                     onclick="return confirm('Yakin ingin menghapus buku ini?')"
-                    class="w-full py-2 bg-red-600 text-white rounded-xl hover:bg-red-700">
+                    class="w-full py-1.5 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700">
                     <i class="bi bi-trash"></i> Hapus
                 </button>
             </form>
         </div>
+
     </div>
     @empty
     <p class="text-zinc-500 col-span-full text-center">Belum ada buku dalam koleksi.</p>
     @endforelse
 </div>
+
 
 @endsection

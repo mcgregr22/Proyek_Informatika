@@ -72,83 +72,68 @@
     </div>
   </header>
 
+    {{-- SIDEBAR + KONTEN --}}
   <div class="flex min-h-screen">
 
-    {{-- SIDEBAR (Sama di semua halaman) --}}
+    {{-- SIDEBAR --}}
     <aside class="w-72 bg-white border-r border-zinc-200 shadow-sm flex flex-col"
-        x-show="openSidebar"
-        x-transition.duration.200ms>
-      <nav class="flex-1 px-4 py-4 space-y-1 text-[1.05rem]">
+      x-show="openSidebar"
+      x-transition.duration.200ms>
+      <nav class="flex-1 px-4 py-5 space-y-1 text-[1.05rem]">
 
-        {{-- Navigasi Sidebar --}}
+        {{-- Koleksi Buku --}}
         <a href="/pengelolaan/mycollection" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
-          <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6c-1.5-1-3.5-2-6-2-1.657 0-3 .895-3 2v12c0-1.105 1.343-2 3-2 2.5 0 4.5 1 6 2m0-12c1.5-1 3.5-2 6-2 1.657 0 3 .895 3 2v12c0-1.105-1.343-2-3-2-2.5 0-4.5 1-6 2"/>
-            </svg>
-          </span>
+          <i class="bi bi-bookmarks text-xl text-zinc-400 group-hover:text-indigo-600"></i>
           <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Koleksi Buku</span>
         </a>
 
+        {{-- Tambah Buku --}}
         <a href="/pengelolaan/tambahbuku" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
-          <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6c-1.5-1-3.5-2-6-2-1.657 0-3 .895-3 2v12c0-1.105 1.343-2 3-2 2.5 0 4.5 1 6 2m0-12c1.5-1 3.5-2 6-2 1.657 0 3 .895 3 2v12c0-1.105-1.343-2-3-2-2.5 0-4.5 1-6 2M12 10h6M15 7v6"/>
-            </svg>
-          </span>
-          <span class="font-semibold">Tambah Buku</span>
+          <i class="bi bi-journal-plus text-xl text-zinc-400 group-hover:text-indigo-600"></i>
+          <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Tambah Buku</span>
         </a>
 
-        <a href="/pengelolaan/keranjang" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
-          <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m12-9l2 9M9 21h6"/>
-          </svg>
-        </span>
+        {{-- Keranjang --}}
+        <a href="{{ route('cart.index') }}" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
+          <i class="bi bi-cart3 text-xl text-zinc-400 group-hover:text-indigo-600"></i>
           <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Keranjang</span>
         </a>
 
+        {{-- Riwayat Pembelian --}}
         <a href="{{ route('purchase.index') }}" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
-          <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
-              stroke-width="1.8" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M8 7h8m-8 4h5m-5 4h8M5 4h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z" />
-            </svg>
-          </span>
-          <span class="font-medium text-zinc-700 group-hover:text-indigo-700">
-            Riwayat Pembelian
-          </span>
+          <i class="bi bi-receipt text-xl text-zinc-400 group-hover:text-indigo-600"></i>
+          <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Riwayat Pembelian</span>
         </a>
 
+        {{-- Riwayat Tukar Buku --}}
+        <a href="{{ route('swap.history.user') }}" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
+          <i class="bi bi-arrow-left-right text-xl text-zinc-400 group-hover:text-indigo-600"></i>
+          <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Riwayat Tukar Buku</span>
+        </a>
 
+        {{-- Tukar Buku --}}
         <a href="/pengelolaan/swapbook" class="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50">
-          <span class="w-6 h-6 text-zinc-400 group-hover:text-indigo-600">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 7l2.5-2.5L9 7M20 17l-2.5 2.5L15 17M6.5 4.5A7.5 7.5 0 112 12"/>
-            </svg>
-          </span>
+          <i class="bi bi-arrow-repeat text-xl text-zinc-400 group-hover:text-indigo-600"></i>
           <span class="font-medium text-zinc-700 group-hover:text-indigo-700">Tukar Buku</span>
         </a>
 
       </nav>
+
+
 
       {{-- LOGOUT --}}
       <div class="px-4 py-4 border-t border-zinc-100">
         <form action="{{ route('logout') }}" method="POST">
           @csrf
           <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50">
-            <span class="w-6 h-6">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M16 17v-1a4 4 0 00-4-4H5.5a.5.5 0 010-1H12a5 5 0 015 5v1h1a1 1 0 110 2H6a1 1 0 110-2h10z"/>
-                <path d="M7 7a5 5 0 1110 0v1H7V7z"/>
-              </svg>
-            </span>
+            <i class="bi bi-box-arrow-right text-xl"></i>
             <span class="font-semibold">Keluar</span>
           </button>
+
         </form>
       </div>
     </aside>
+
 
     {{-- KONTEN UTAMA (p-8 sama di semua halaman) --}}
     <main class="flex-1 p-8">
