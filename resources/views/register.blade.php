@@ -1,260 +1,237 @@
-<?php
-// ... (Bagian PHP tetap sama) ...
-$error_message = "";
-$success_message = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil data dari formulir
-    $nama_lengkap = trim($_POST['nama_lengkap']);
-    $nomor_telepon = trim($_POST['nomor_telepon']);
-    $email = trim($_POST['email']);
-    $role = $_POST['role'];
-    $kata_sandi = $_POST['kata_sandi'];
-    $konfirmasi_sandi = $_POST['konfirmasi_sandi'];
-
-    // 1. Validasi Sederhana
-    if (empty($nama_lengkap) || empty($nomor_telepon) || empty($email) || empty($kata_sandi) || empty($konfirmasi_sandi)) {
-        $error_message = "Semua kolom harus diisi.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error_message = "Format email tidak valid.";
-    } elseif ($kata_sandi !== $konfirmasi_sandi) {
-        $error_message = "Kata Sandi dan Konfirmasi Kata Sandi tidak cocok.";
-    } else {
-        // --- SIMULASI PENYIMPANAN DATA (GANTIKAN DENGAN LOGIKA DATABASE ANDA) ---
-        $success_message = "Registrasi berhasil! Data Anda: Nama: $nama_lengkap, Email: $email, Role: $role";
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Library-Hub</title>
+    <title>Register - Library Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
     <style>
-        /* Gaya dasar */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6, #60a5fa);
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 30px 20px;
+            animation: fadeIn 1s ease-in-out;
         }
 
-        .header {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glass Card */
+        .register-card {
             width: 100%;
-            padding: 20px 50px;
-            box-sizing: border-box;
-            color: #3f51b5;
-            font-size: 24px;
-            font-weight: bold;
-            text-align: left;
-        }
-
-        /* Container utama formulir */
-        .register-container {
-            background-color: #ffffff;
+            max-width: 420px;
             padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            margin-top: 50px;
-            /* Tambahkan margin bawah agar ada jarak ke copyright di bawahnya */
-            margin-bottom: 20px; 
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.17);
+            backdrop-filter: blur(14px);
+            box-shadow: 0px 8px 25px rgba(0,0,0,0.25);
+            color: #ffffff;
+            animation: cardPop 0.7s ease;
+            margin-top: 40px;
         }
 
-        /* Judul Register */
-        .register-container h2 {
-            color: #3f51b5;
+        @keyframes cardPop {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        h2 {
             text-align: center;
-            margin-bottom: 30px;
-            font-weight: bold;
+            font-size: 26px;
+            margin-bottom: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
 
-        .form-group label {
+        label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #f1f5f9;
             font-weight: 500;
-            color: #333;
         }
 
-        /* Container untuk Input Sandi dan Ikon */
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255,255,255,0.85);
+            font-size: 14px;
+            outline: none;
+            transition: .2s;
+        }
+
+        input:focus, select:focus {
+            background: #ffffff;
+            box-shadow: 0 0 0 2px #3b82f6;
+        }
+
+        /* Password container */
         .password-container {
             position: relative;
-            margin-bottom: 20px;
         }
 
-        .password-container input[type="text"],
-        .password-container input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            box-sizing: border-box;
-            color: #6c757d;
-            padding-right: 40px;
-            margin-bottom: 0;
-        }
-
-        /* Ikon Mata (Show/Hide) */
         .toggle-password {
             position: absolute;
+            right: 12px;
             top: 50%;
-            right: 10px;
             transform: translateY(-50%);
             cursor: pointer;
-            color: #888;
+            color: #777;
             font-size: 18px;
         }
 
-        /* Styling input umum yang lain */
-        .form-group input[type="text"],
-        .form-group input[type="tel"],
-        .form-group input[type="email"],
-        .form-group select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            box-sizing: border-box;
-            color: #6c757d;
-        }
-
-        .btn-daftar {
+        /* Button */
+        .btn-submit {
             width: 100%;
             padding: 12px;
-            background-color: #3f51b5;
-            color: white;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
             border: none;
-            border-radius: 4px;
+            border-radius: 10px;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: background-color 0.3s;
+            transition: .25s;
         }
 
-        .login-link {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
+        .btn-submit:hover {
+            transform: scale(1.03);
+            background: linear-gradient(135deg, #1e40af, #2563eb);
         }
-        
-        /* Tambahan styling pesan error/sukses */
+
+        /* Login Text */
+        .login-text {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 14px;
+            color: #e2e8f0;
+        }
+
+        .login-text a {
+            color: #ffffffff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Error & success messages */
         .message {
             padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 4px;
-            text-align: center;
+            margin-bottom: 18px;
+            border-radius: 8px;
+            font-size: 14px;
         }
 
-        /* PERBAIKAN: Styling Copyright Footer */
-        .copyright-footer {
-            /* Pastikan lebar sama dengan register-container */
-            width: 100%; 
-            max-width: 480px; /* Lebar = max-width container (400px) + padding kiri/kanan (2x40px = 80px) */
+        /* Footer */
+        footer {
+            margin-top: 25px;
+            font-size: 13px;
+            color: #e0e7ff;
             text-align: center;
-            font-size: 12px;
-            color: #6c757d; /* Warna abu-abu yang lebih cocok */
-            margin-top: 20px; /* Jarak dari register-container di atasnya */
         }
     </style>
 </head>
+
 <body>
 
-    <div class="header">Library-Hub</div>
+    <div class="register-card">
+        <h2>Daftar Akun</h2>
 
-    <div class="register-container">
-        <h2>REGISTER</h2>
+        {{-- Success message --}}
+        @if (session('success'))
+            <div class="message" style="background:#d1fae5;color:#065f46;">
+                {{ session('success') }}
+            </div>
+        @endif
 
-        <?php
-        if ($error_message) {
-            echo '<div class="message error">' . $error_message . '</div>';
-        }
-        if ($success_message) {
-            echo '<div class="message success">' . $success_message . '</div>';
-        }
-        ?>
+        {{-- Validation errors --}}
+        @if ($errors->any())
+            <div class="message" style="background:#fee2e2;color:#b91c1c;">
+                <ul style="margin-left: 20px;">
+                    @foreach ($errors->all() as $e)
+                        <li>{{ $e }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+        <form action="{{ route('register.store') }}" method="POST">
+            @csrf
 
-            <div class="form-group">
-                <label for="nama_lengkap">Nama Lengkap</label>
-                <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Nama Lengkap Anda" required>
+            <label>Nama Lengkap</label>
+            <input type="text" name="nama_lengkap" placeholder="Nama lengkap" value="{{ old('nama_lengkap') }}" required>
+
+            <label>Nomor Telepon</label>
+            <input type="tel" name="nomor_telepon" placeholder="08xxxx" value="{{ old('nomor_telepon') }}" required>
+
+            <label>Email</label>
+            <input type="email" name="email" placeholder="nama@example.com" value="{{ old('email') }}" required>
+
+            <label>Role</label>
+            <select name="role" required>
+                <option value="pengguna" {{ old('role','pengguna')=='pengguna' ? 'selected' : '' }}>Pengguna</option>
+                <option value="admin" {{ old('role')=='admin' ? 'selected' : '' }}>Admin</option>
+            </select>
+
+            <label>Kata Sandi</label>
+            <div class="password-container">
+                <input type="password" name="kata_sandi" id="kata_sandi" placeholder="Kata sandi" required>
+                <span class="toggle-password" data-target="kata_sandi" onclick="togglePassword(this)">
+                    <i class="bi bi-eye"></i>
+                </span>
             </div>
 
-            <div class="form-group">
-                <label for="nomor_telepon">Nomor Telepon</label>
-                <input type="tel" id="nomor_telepon" name="nomor_telepon" placeholder="Nomor Telepon" required>
+            <label>Konfirmasi Kata Sandi</label>
+            <div class="password-container">
+                <input type="password" name="kata_sandi_confirmation" id="kata_sandi_confirmation" placeholder="Ulangi kata sandi" required>
+                <span class="toggle-password" data-target="kata_sandi_confirmation" onclick="togglePassword(this)">
+                    <i class="bi bi-eye"></i>
+                </span>
             </div>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Email Anda" required>
-            </div>
-
-            <div class="form-group">
-                <label for="role">Role</label>
-                <select id="role" name="role" required>
-                    <option value="Pengguna">Pengguna</option>
-                    <option value="Admin">Admin</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="kata_sandi">Kata Sandi</label>
-                <div class="password-container">
-                    <input type="password" id="kata_sandi" name="kata_sandi" placeholder="Kata Sandi" required>
-                    <span class="toggle-password" data-target="kata_sandi" onclick="togglePassword(this)">👁️</span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="konfirmasi_sandi">Konfirmasi Kata Sandi</label>
-                <div class="password-container">
-                    <input type="password" id="konfirmasi_sandi" name="konfirmasi_sandi" placeholder="Konfirmasi Kata Sandi" required>
-                    <span class="toggle-password" data-target="konfirmasi_sandi" onclick="togglePassword(this)">👁️</span>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-daftar">Daftar</button>
+            <button type="submit" class="btn-submit">Daftar</button>
         </form>
-        
-        <div class="login-link">
-        Sudah punya akun? <a href="/login">Masuk</a>
+
+        <div class="login-text">
+            Sudah punya akun? <a href="{{ route('login.show') }}">Masuk</a>
         </div>
     </div>
-    
-    <div class="copyright-footer">
-        © 2025 Library-Hub
-    </div>
 
-<script>
-    /**
-     * Fungsi untuk mengubah tipe input password menjadi text (show) atau sebaliknya (hide).
-     * @param {HTMLElement} iconElement - Elemen ikon mata yang diklik.
-     */
-    function togglePassword(iconElement) {
-        // Ambil ID dari input yang terhubung
-        const targetId = iconElement.getAttribute('data-target');
-        const passwordInput = document.getElementById(targetId);
+    <footer>© 2025 Library-Hub</footer>
 
-        // Periksa tipe input saat ini
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            // Ubah ikon/teks menjadi 'sembunyikan' (misal: 🔒 atau teks)
-            iconElement.textContent = '🔒';
-        } else {
-            passwordInput.type = 'password';
-            // Ubah ikon/teks menjadi 'tampilkan' (misal: 👁️ atau teks)
-            iconElement.textContent = '👁️';
+    <script>
+        function togglePassword(el) {
+            const target = document.getElementById(el.getAttribute('data-target'));
+            const icon = el.querySelector("i");
+
+            if (target.type === "password") {
+                target.type = "text";
+                icon.classList.replace("bi-eye", "bi-eye-slash");
+            } else {
+                target.type = "password";
+                icon.classList.replace("bi-eye-slash", "bi-eye");
+            }
         }
-    }
-</script>
+    </script>
 
 </body>
 </html>
-

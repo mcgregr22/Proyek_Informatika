@@ -1,127 +1,164 @@
-<!-- resources/views/login.blade.php -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Library Hub</title>
+
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .container {
-            width: 100%;
+        body {
             min-height: 100vh;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6, #60a5fa);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding: 20px;
+            animation: fadeIn 1s ease-in-out;
         }
 
-        .login-box {
-            background: #fff;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CARD LOGIN (Glassmorphism) */
+        .login-card {
+            width: 100%;
+            max-width: 380px;
             padding: 40px;
-            border-radius: 6px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 320px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            color: #ffffff;
+            animation: cardPop 0.7s ease;
+        }
+
+        @keyframes cardPop {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .title {
             text-align: center;
-        }
-
-        .logo {
-            font-size: 22px;
+            font-size: 26px;
             font-weight: bold;
-            margin-bottom: 30px;
-            color: #2b2bff;
+            margin-bottom: 35px;
+            letter-spacing: 1px;
         }
 
-        h2 {
-            color: #1d2c8a;
-            font-size: 20px;
-            margin-bottom: 20px;
+        label {
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: block;
+            color: #f1f5f9;
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255,255,255,0.85);
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            background: #ffffff;
+            box-shadow: 0 0 0 2px #3b82f6;
         }
 
         button {
             width: 100%;
-            padding: 10px;
-            background-color: #2b2bff;
-            border: none;
-            border-radius: 4px;
+            padding: 12px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
             color: white;
+            font-size: 15px;
             font-weight: bold;
+            border: none;
+            border-radius: 10px;
             cursor: pointer;
+            transition: 0.2s;
         }
 
         button:hover {
-            background-color: #1d1dbe;
+            transform: scale(1.03);
+            background: linear-gradient(135deg, #1e40af, #2563eb);
         }
 
-        .footer {
-            margin-top: 40px;
-            color: #666;
-            font-size: 13px;
-        }
-
-        .register-link {
-            margin-top: 10px;
+        .register {
+            text-align: center;
+            margin-top: 25px;
             font-size: 14px;
+            color: #e2e8f0;
         }
 
-        .register-link a {
-            color: #2b2bff;
+        .register a {
+            color: #ffffffff;
             text-decoration: none;
+            font-weight: bold;
         }
 
-        .register-link a:hover {
+        .register a:hover {
             text-decoration: underline;
         }
 
-        /* ✨ Tambahan: pesan error */
         .error {
-            color: red;
+            margin-top: -10px;
+            margin-bottom: 15px;
             font-size: 13px;
-            margin-top: 10px;
+            color: #ffb3b3;
+            text-align: center;
         }
     </style>
+
 </head>
+
 <body>
-    <div class="container">
-        <div class="login-box">
-            <div class="logo">Library-<i>Hub</i></div>
-            <h2>LOGIN</h2>
-            <form action="/login" method="POST">
-                @csrf
-                <label for="email">Email</label><br>
-                <input type="email" name="email" placeholder="nama@contoh.com" required><br>
 
-                <label for="password">Kata Sandi</label><br>
-                <input type="password" name="password" placeholder="••••••" required><br>
+    <div class="login-card">
 
-                <button type="submit">MASUK</button>
+        <div class="title">Masuk ke Library-Hub</div>
 
-                <!-- 🔻 tampilkan pesan error kalau login gagal -->
-                @if(session('error'))
-                    <p class="error">{{ session('error') }}</p>
-                @endif
-            </form>
+        <!-- Error & success -->
+        @if ($errors->any())
+            <p class="error">{{ $errors->first() }}</p>
+        @endif
 
-            <div class="register-link">
-                Belum punya akun? <a href="/register">Daftar</a>
-            </div>
+        @if (session('error'))
+            <p class="error">{{ session('error') }}</p>
+        @endif
+
+        @if (session('success'))
+            <p class="error" style="color:#bbffbb;">{{ session('success') }}</p>
+        @endif
+
+        <form action="/login" method="POST">
+            @csrf
+
+            <label>Email</label>
+            <input type="email" name="email" placeholder="nama@contoh.com" required>
+
+            <label>Kata Sandi</label>
+            <input type="password" name="password" placeholder="••••••••" required>
+
+            <button type="submit">Masuk</button>
+        </form>
+
+        <div class="register">
+            Belum punya akun? <a href="/register">Daftar</a>
         </div>
-
-        <div class="footer">© 2025 Library-Hub</div>
     </div>
+
 </body>
 </html>

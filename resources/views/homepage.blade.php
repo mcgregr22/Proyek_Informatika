@@ -1,171 +1,388 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library-Hub</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Poppins', sans-serif;
-        }
-        .navbar-brand span {
-            color: #0d6efd;
-            font-weight: 700;
-        }
-        .banner {
-            background: linear-gradient(90deg, #001f54, #003f88);
-            color: white;
-            border-radius: 12px;
-            padding: 40px 20px;
-            margin-top: 30px;
-        }
-        .banner h2 {
-            font-weight: 700;
-        }
-        .book-card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease;
-        }
-        .book-card:hover {
-            transform: translateY(-5px);
-        }
-        .footer {
-            margin-top: 60px;
-            text-align: center;
-            padding: 20px 0;
-            border-top: 1px solid #ddd;
-            color: #777;
-        }
-        .navbar-icon {
-            font-size: 1.2rem;
-            margin-left: 15px;
-            color: #333;
-            transition: color 0.2s;
-        }
-        .navbar-icon:hover {
-            color: #0d6efd;
-        }
-    </style>
-</head>
-<body>
+@extends('layouts.homepage')
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">
-                Library-<span>Hub</span>
-            </a>
+@section('title', 'Library-Hub Home')
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+{{-- 1. Menyuntikkan CSS khusus Homepage --}}
+@push('styles')
+<style>
+  /* Menghilangkan margin/padding bawaan browser */
+  body {
+    background-color: #f0f3f5;
+    /* Warna latar yang lebih lembut dari #f8f9fa */
+  }
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Dropdown Kategori -->
-                <ul class="navbar-nav ms-4">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-semibold" href="#" role="button" data-bs-toggle="dropdown">
-                            Kategori
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Humor & Comedy</a></li>
-                            <li><a class="dropdown-item" href="#">History</a></li>
-                            <li><a class="dropdown-item" href="#">Science & Tech</a></li>
-                            <li><a class="dropdown-item" href="#">Fiction</a></li>
-                            <li><a class="dropdown-item" href="#">Romance</a></li>
-                        </ul>
-                    </li>
-                </ul>
+  /* Menghilangkan jarak header di atas banner */
+  .banner {
+    /* Menjaga styling gradient & warna */
+    background: linear-gradient(135deg, #0b2256 0%, #3e64ff 100%);
+    color: white;
+    border-radius: 16px;
+    padding: 50px 40px;
+    margin-top: 0px;
+    box-shadow: 0 10px 30px rgba(13, 30, 86, 0.4);
+    transition: transform 0.3s ease;
 
-                <!-- Search -->
-                <form class="d-flex ms-auto me-3" role="search">
-                    <input class="form-control" type="search" placeholder="Cari Buku">
-                </form>
+    text-align: center;
+  }
 
-                <!-- Menu kanan -->
-                <ul class="navbar-nav align-items-center">
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="/swapbook">Swapbook</a></li>
-                    <li class="nav-item"><a class="nav-link fw-semibold" href="#">My Collection</a></li>
-                </ul>
+  .banner:hover {
+    transform: scale(1.005);
+    box-shadow: 0 12px 35px rgba(13, 30, 86, 0.55);
+  }
 
-                <!-- 3 Icon Kanan -->
-                <div class="d-flex align-items-center ms-3">
-                  <a href="{{ url('/keranjang') }}" class="navbar-icon"><i class="bi bi-cart"></i></a>
+  .banner h2 {
+    font-weight: 800;
+    font-size: 2.2rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  }
 
-                    <a href="#" class="navbar-icon"><i class="bi bi-chat-dots"></i></a>
-                    <a href="#" class="navbar-icon"><i class="bi bi-person-circle"></i></a>
-                </div>
-            </div>
-        </div>
-    </nav>
+  /* ========================================
+   SEARCH FORM
+   ======================================== */
+  .search-form {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    max-width: 600px;
+  }
 
-    <!-- Banner -->
-    <div class="container">
-        <div class="banner text-center mt-4">
-            <h2>WELCOME TO LIBRARY-HUB</h2>
-            <p>"The only thing that you absolutely have to know, is the location of the library."</p>
-            <a href="#" class="btn btn-light btn-sm mt-3">SHOP NOW</a>
-        </div>
+  .search-form select,
+  .search-form input {
+    border-radius: 10px;
+    /* Lebih membulat */
+    padding: 8px 14px;
+    border: 1px solid #d1d5db;
+    /* Border abu-abu halus */
+    background-color: #fff;
+    transition: all 0.3s ease;
+  }
+
+  .search-form input {
+    width: 55%;
+  }
+
+  .search-form select:focus,
+  .search-form input:focus {
+    border-color: #4f46e5;
+    /* Biru Indigo */
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+    outline: none;
+  }
+
+  /* ========================================
+   SECTION HEADERS & BUTTONS
+   ======================================== */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e5e7eb;
+    /* Garis pemisah yang bersih */
+  }
+
+  .section-header h5 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1f2937;
+    /* Warna teks gelap */
+  }
+
+  .section-header a {
+    color: #4f46e5;
+    /* Warna tautan Indigo */
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .section-header a:hover {
+    color: #3730a3;
+    text-decoration: underline;
+  }
+
+  /* Tombol Pengelolaan (Mencolok dan Modern) */
+  .btn-manage {
+    background: linear-gradient(90deg, #4f46e5 0%, #3e64ff 100%);
+    /* Gradien Indigo */
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    padding: 10px 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .btn-manage:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.6);
+    filter: brightness(1.1);
+  }
+
+  /* Tombol Kembali */
+  .btn-back {
+    background: linear-gradient(90deg, #ffffff 0%, #ffffffff 100%);
+    /* Gradien abu-abu */
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(50, 53, 59, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .btn-back:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(107, 114, 128, 0.6);
+    filter: brightness(1.1);
+  }
+
+  /* ========================================
+    BOOK CARDS
+   ======================================== */
+  .book-card {
+    border: 1px solid #f3f4f6;
+    /* Border sangat halus */
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
+    /* Shadow halus saat diam */
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    /* Mengamankan sudut */
+  }
+
+  .book-card:hover {
+    transform: translateY(-6px);
+    /* Mengangkat lebih tinggi */
+    box-shadow: 0 18px 30px rgba(0, 0, 0, 0.15);
+    /* Shadow dramatis saat hover */
+  }
+
+  /* Gambar Buku */
+  .book-thumb {
+    width: 100%;
+    height: 250px;
+    /* Tinggi yang lebih vertikal */
+    object-fit: cover;
+    border-radius: 10px;
+    /* Menyesuaikan sudut card */
+  }
+
+  .price {
+    color: #ef4444;
+    /* Warna merah yang kontras (merah Tailwind 500) */
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-top: 5px;
+  }
+
+  /* Listing Badges */
+  .listing-badge {
+    font-size: 0.65rem;
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  }
+
+  .listing-badge.sell {
+    background: linear-gradient(45deg, #f59e0b, #d97706);
+    /* Orange/Amber */
+  }
+
+  .listing-badge.exchange {
+    background: linear-gradient(45deg, #10b981, #059669);
+    /* Hijau Teal/Emerald */
+  }
+
+  /* Footer styling sudah terintegrasi di Master Layout */
+
+  @media (max-width: 768px) {
+    .book-thumb {
+      height: 180px;
+    }
+
+    .search-form input {
+      width: 70%;
+    }
+  }
+</style>
+@endpush
+
+{{-- 2. Menyuntikkan Search Form ke Header Master Layout --}}
+@section('search_form')
+<form id="searchForm" class="search-form mx-auto d-none d-lg-flex" role="search" action="{{ route('homepage') }}" method="GET">
+  <select name="kategori" class="form-select" id="kategoriSelect">
+    <option value="">Kategori</option>
+    @foreach ($kategoriList as $kat)
+    <option value="{{ $kat->nama_kategori }}"
+      {{ $kategoriDipilih == $kat->nama_kategori ? 'selected' : '' }}>
+      {{ $kat->nama_kategori }}
+    </option>
+    @endforeach
+  </select>
+
+  <input class="form-control" type="search" name="q" value="{{ $q ?? '' }}" placeholder="Cari Buku...">
+
+  <!-- Tambahkan tombol submit untuk memudahkan -->
+  <button type="submit" class="btn btn-primary">Cari</button>
+</form>
+
+{{-- JavaScript untuk submit form saat dropdown kategori berubah --}}
+@push('scripts')
+<script>
+  document.getElementById('kategoriSelect').addEventListener('change', function() {
+    document.getElementById('searchForm').submit();
+  });
+</script>
+@endpush
+@endsection
+
+<!-- 3. Konten Utama -->
+@section('content')
+
+<div class="container-fluid p-0">
+
+  <div class="banner">
+    <h2>Selamat Datang di Library-Hub</h2>
+  </div>
+
+  <!-- 🔍 Pesan jika hasil pencarian kosong -->
+  @if(($q || $kategoriDipilih) && $booksRecs->isEmpty())
+  <div class="alert alert-warning mt-3 mx-3 text-center">
+    @if($q)
+    Buku "<strong>{{ $q }}</strong>" tidak ditemukan.
+    @else
+    Buku di kategori "<strong>{{ $kategoriDipilih }}</strong>" tidak ditemukan.
+    @endif
+  </div>
+  @endif
+
+  {{-- Jika ada query pencarian ($q) atau kategori dipilih, tampilkan hasil --}}
+  @if($q || $kategoriDipilih)
+  @if($booksRecs->isNotEmpty())
+  <div class="section-header mt-4">
+    <h5>
+      @if($q)
+      Hasil Pencarian untuk "{{ $q }}"
+      @else
+      Buku di Kategori "{{ $kategoriDipilih }}"
+      @endif
+    </h5>
+    {{-- Tombol Kembali --}}
+    <a href="{{ route('homepage') }}" class="btn btn-back">Kembali</a>
+  </div>
+  <div class="row g-3">
+    @foreach ($booksRecs as $b)
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="card book-card h-100 position-relative">
+        <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
+
+          {{-- 🔹 Label Listing Type --}}
+          @php $types = explode(',', $b->listing_type ?? ''); @endphp
+          <div class="position-absolute d-flex flex-row gap-1" style="top:8px; left:8px;">
+            @foreach ($types as $type)
+            @if (trim($type) === 'sell')
+            <span class="listing-badge sell">Dijual</span>
+            @elseif (trim($type) === 'exchange')
+            <span class="listing-badge exchange">Tukar</span>
+            @endif
+            @endforeach
+          </div>
+
+          <div class="card-body text-center">
+            @if($b->cover_image)
+            <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
+            @else
+            <div class="py-5 bg-light rounded mb-2">📕</div>
+            @endif
+            <h6 class="fw-semibold text-truncate">{{ $b->title }}</h6>
+            <div class="text-muted small">{{ $b->author }}</div>
+            <div class="badge rounded-pill bg-light text-dark small fw-semibold">{{ $b->kondisi }}</div>
+            <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
+          </div>
+        </a>
+      </div>
     </div>
+    @endforeach
+  </div>
+  @endif
+  {{-- Jika tidak ada query pencarian atau kategori, tampilkan daftar buku per kategori --}}
+  @else
+  {{-- ================================
+      DAFTAR BUKU PER KATEGORI OTOMATIS
+    ================================ --}}
+  @foreach ($kategoriWithBooks as $kat)
+  @if ($kat->books->isNotEmpty())
+  <div class="section-header">
+    <h5 class="fw-semibold">{{ $kat->nama_kategori }}</h5>
+    <a href="{{ route('homepage', ['kategori' => $kat->nama_kategori]) }}" class="text-decoration-none small text-primary">Lihat Selengkapnya...</a>
+  </div>
 
-    <!-- Book Categories -->
-    <div class="container mt-5">
-        <h4 class="mb-3 fw-semibold">Humor & Comedy</h4>
-        <div class="row g-3">
-            @for ($i = 0; $i < 4; $i++)
-            <div class="col-md-3">
-                <div class="card book-card">
-                    <div class="card-body text-center">
-                        <div class="bg-light p-5 rounded mb-2">📘</div>
-                        <h6 class="fw-semibold">Judul Buku</h6>
-                        <p class="text-muted mb-0">Rp. 99.000,00</p>
-                    </div>
-                </div>
-            </div>
-            @endfor
-        </div>
+  <div class="row g-3 mb-4">
+    @foreach ($kat->books as $b)
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="card book-card h-100 position-relative">
+        <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
 
-        <h4 class="mb-3 mt-5 fw-semibold">History</h4>
-        <div class="row g-3">
-            @for ($i = 0; $i < 6; $i++)
-            <div class="col-md-2">
-                <div class="card book-card">
-                    <div class="card-body text-center">
-                        <div class="bg-light p-4 rounded mb-2">📗</div>
-                        <h6 class="fw-semibold">Judul Buku</h6>
-                        <p class="text-muted mb-0">Rp. 99.000,00</p>
-                    </div>
-                </div>
-            </div>
-            @endfor
-        </div>
+          {{-- 🔹 Label Listing Type --}}
+          @php $types = explode(',', $b->listing_type ?? ''); @endphp
+          <div class="position-absolute d-flex flex-row gap-1" style="top:8px; left:8px;">
+            @foreach ($types as $type)
+            @if (trim($type) === 'sell')
+            <span class="listing-badge sell">Dijual</span>
+            @elseif (trim($type) === 'exchange')
+            <span class="listing-badge exchange">Tukar</span>
+            @endif
+            @endforeach
+          </div>
 
-        <h4 class="mb-3 mt-5 fw-semibold">Recommendations</h4>
-        <div class="row g-3">
-            @for ($i = 0; $i < 5; $i++)
-            <div class="col-md-2">
-                <div class="card book-card">
-                    <div class="card-body text-center">
-                        <div class="bg-light p-4 rounded mb-2">📕</div>
-                        <h6 class="fw-semibold">Judul Buku</h6>
-                        <p class="text-muted mb-0">Rp. 99.000,00</p>
-                    </div>
-                </div>
+          <div class="card-body text-center">
+            {{-- COVER --}}
+            @if($b->cover_image)
+            <img src="{{ asset('storage/' . $b->cover_image) }}"
+              alt="cover" class="book-thumb mb-2">
+            @else
+            <div class="py-5 bg-light rounded mb-2">📕</div>
+            @endif
+
+            {{-- JUDUL --}}
+            <h6 class="fw-semibold text-truncate">{{ $b->title }}</h6>
+
+            {{-- AUTHOR --}}
+            <div class="text-muted small">{{ $b->author }}</div>
+
+            {{-- KONDISI --}}
+            <div class="badge rounded-pill bg-light text-dark small fw-semibold">
+              {{ $b->kondisi }}
             </div>
-            @endfor
-        </div>
+
+            {{-- HARGA --}}
+            <div class="price mt-1">
+              Rp {{ number_format($b->harga, 0, ',', '.') }}
+            </div>
+
+          </div>
+        </a>
+      </div>
     </div>
+    @endforeach
+  </div>
+  @endif
+  @endforeach
+  @endif
 
-    <!-- Footer -->
-    <div class="footer">
-        <p>© 2025 Library-Hub</p>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</div>
+@endsection
