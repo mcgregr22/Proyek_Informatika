@@ -220,8 +220,18 @@ class MidtransController extends Controller
         // Simpan semua
         $order->save();
 
-        // Jika paid (settlement/capture) → hapus keranjang (idempotent)
+        // Jika paid (settlement/capture) → transfer ownership buku dan hapus keranjang (idempotent)
         if (in_array($transactionStatus, ['settlement', 'capture'])) {
+            // Transfer ownership buku ke pembeli
+            foreach ($order->items as $item) {
+                $buku = $item->buku;
+                if ($buku) {
+                    $buku->user_id = $order->user_id;
+                    $buku->save();
+                    Log::info("Ownership buku ID {$buku->id_buku} ditransfer ke user_id: {$order->user_id}");
+                }
+            }
+
             Keranjang::where('user_id', $order->user_id)->delete();
             Log::info("Keranjang dihapus untuk user_id: {$order->user_id}");
         }

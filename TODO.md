@@ -1,2 +1,2 @@
--   [ ] Edit badges in search results section to be side by side
--   [ ] Edit badges in category sections to be side by side
+-   [x] Modify MidtransController to transfer book ownership on successful payment
+-   [ ] Test the ownership transfer functionality

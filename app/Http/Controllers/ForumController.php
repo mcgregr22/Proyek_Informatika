@@ -62,38 +62,36 @@ class ForumController extends Controller
     }
 
     public function deleteComment($id)
-{
-    // cari komentar berdasarkan id_comment
-    $comment = ForumComment::findOrFail($id);
+    {
+        // cari komentar berdasarkan id_comment
+        $comment = ForumComment::findOrFail($id);
 
-    // hanya admin yang boleh menghapus komentar
-    if (Auth::user()->role !== 'admin') {
-        return back()->with('error', 'Anda tidak memiliki izin.');
+        // hanya admin atau pemilik komentar yang boleh menghapus komentar
+        if (Auth::user()->role !== 'admin' && $comment->user_id !== Auth::id()) {
+            return back()->with('error', 'Anda tidak memiliki izin.');
+        }
+
+        $comment->delete();
+
+        return back()->with('success', 'Komentar berhasil dihapus.');
     }
 
-    $comment->delete();
+    public function deletePost($id_post)
+    {
+        // ambil post
+        $post = ForumPost::findOrFail($id_post);
 
-    return back()->with('success', 'Komentar berhasil dihapus.');
-}
+        // cek apakah admin
+        if (Auth::user()->role != 'admin') {
+            return back()->with('error', 'Anda tidak memiliki izin untuk menghapus post.');
+        }
 
-public function deletePost($id_post)
-{
-    // ambil post
-    $post = ForumPost::findOrFail($id_post);
+        // hapus semua komentar terkait
+        ForumComment::where('id_post', $id_post)->delete();
 
-    // cek apakah admin
-    if (Auth::user()->role != 'admin') {
-        return back()->with('error', 'Anda tidak memiliki izin untuk menghapus post.');
+        // hapus post
+        $post->delete();
+
+        return back()->with('success', 'Post berhasil dihapus.');
     }
-
-    // hapus semua komentar terkait
-    ForumComment::where('id_post', $id_post)->delete();
-
-    // hapus post
-    $post->delete();
-
-    return back()->with('success', 'Post berhasil dihapus.');
-}
-
-
 }

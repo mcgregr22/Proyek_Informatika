@@ -149,18 +149,18 @@
                 <div class="post-date">{{ $post->created_at->format('d M Y, H:i') }}</div>
             </div>
 
-            {{-- Admin Delete --}}
+            {{-- Delete Button for Admin or Post Owner --}}
             @auth
-            @if(Auth::user()->role == 'admin')
-                <form action="{{ route('forum.post.delete', $post->id_post) }}"
-                      method="POST"
-                      onsubmit="return confirm('Yakin ingin hapus post ini?')">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-danger btn-sm delete-btn">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </form>
+            @if(Auth::user()->role == 'admin' || $post->user_id == Auth::id())
+            <form action="{{ route('forum.post.delete', $post->id_post) }}"
+                method="POST"
+                onsubmit="return confirm('Yakin ingin hapus post ini?')">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-danger btn-sm delete-btn">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </form>
             @endif
             @endauth
 
@@ -184,8 +184,8 @@
                     <span class="comment-text">{{ $comment->komentar }}</span>
                 </div>
 
-                {{-- ADMIN ONLY DELETE --}}
-                @if(auth()->check() && auth()->user()->role === 'admin')
+                {{-- Delete Button for Admin or Comment Owner --}}
+                @if(auth()->check() && (auth()->user()->role === 'admin' || $comment->user_id == auth()->id()))
                 <form action="{{ route('forum.comment.delete', $comment->id_comment) }}" method="POST"
                     onsubmit="return confirm('Hapus komentar ini?')">
 
@@ -206,8 +206,8 @@
 
         {{-- COMMENT FORM --}}
         <form action="{{ route('forum.comment', $post->id_post) }}"
-              method="POST"
-              class="comment-form d-flex align-items-center mt-3">
+            method="POST"
+            class="comment-form d-flex align-items-center mt-3">
 
             @csrf
 
