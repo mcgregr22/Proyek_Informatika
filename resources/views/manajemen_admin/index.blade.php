@@ -8,10 +8,10 @@
 </div>
 
 @if (session('success'))
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-    {{ session('success') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  {{ session('success') }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 @endif
 
 <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
@@ -46,24 +46,30 @@
             </td>
             <td class="text-center">
               <div class="btn-group" role="group" aria-label="Aksi">
-                <a href="{{ route('manajemen_admin.edit', $user->id) }}" 
-                   class="btn btn-success btn-sm px-3 d-flex align-items-center gap-1">
+                @if(auth()->user()->role != 'admin' || $user->role != 'admin')
+                <a href="{{ route('manajemen_admin.edit', $user->id) }}"
+                  class="btn btn-success btn-sm px-3 d-flex align-items-center gap-1">
                   <i class="bi bi-pencil-square"></i> Edit
                 </a>
-                <a href="{{ route('manajemen_admin.role', $user->id) }}" 
-                   class="btn btn-warning btn-sm px-3 text-white d-flex align-items-center gap-1">
+                @endif
+                @if($user->role != 'admin')
+                <a href="{{ route('manajemen_admin.role', $user->id) }}"
+                  class="btn btn-warning btn-sm px-3 text-white d-flex align-items-center gap-1">
                   <i class="bi bi-person-gear"></i> Role
                 </a>
-                <form action="{{ route('manajemen_admin.delete', $user->id) }}" 
-                      method="POST" class="d-inline" 
-                      onsubmit="return confirm('Yakin ingin menghapus user ini?')">
+                @endif
+                @if(auth()->user()->role != 'admin' || $user->role != 'admin')
+                <form action="{{ route('manajemen_admin.delete', $user->id) }}"
+                  method="POST" class="d-inline"
+                  onsubmit="return confirm('Yakin ingin menghapus user ini?')">
                   @csrf
                   @method('DELETE')
-                  <button type="submit" 
-                          class="btn btn-danger btn-sm px-3 d-flex align-items-center gap-1">
+                  <button type="submit"
+                    class="btn btn-danger btn-sm px-3 d-flex align-items-center gap-1">
                     <i class="bi bi-trash"></i> Hapus
                   </button>
                 </form>
+                @endif
               </div>
             </td>
           </tr>
@@ -82,18 +88,22 @@
     background-color: #f1f6ff;
     transition: background-color 0.2s ease-in-out;
   }
+
   .card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
+
   .card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.08);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
   }
+
   .btn-group .btn {
     border-radius: 20px;
     font-weight: 500;
   }
-  .btn-group .btn + .btn {
+
+  .btn-group .btn+.btn {
     margin-left: 6px;
   }
 </style>

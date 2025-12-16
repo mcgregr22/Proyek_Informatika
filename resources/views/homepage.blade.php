@@ -189,9 +189,6 @@
 
   /* Listing Badges */
   .listing-badge {
-    position: absolute;
-    top: 8px;
-    left: 8px;
     font-size: 0.65rem;
     padding: 4px 10px;
     border-radius: 10px;
@@ -238,7 +235,7 @@
   </select>
 
   <input class="form-control" type="search" name="q" value="{{ $q ?? '' }}" placeholder="Cari Buku...">
-  
+
   <!-- Tambahkan tombol submit untuk memudahkan -->
   <button type="submit" class="btn btn-primary">Cari</button>
 </form>
@@ -264,127 +261,127 @@
 
   <!-- 🔍 Pesan jika hasil pencarian kosong -->
   @if(($q || $kategoriDipilih) && $booksRecs->isEmpty())
-    <div class="alert alert-warning mt-3 mx-3 text-center">
-        @if($q)
-          Buku "<strong>{{ $q }}</strong>" tidak ditemukan.
-        @else
-          Buku di kategori "<strong>{{ $kategoriDipilih }}</strong>" tidak ditemukan.
-        @endif
-    </div>
+  <div class="alert alert-warning mt-3 mx-3 text-center">
+    @if($q)
+    Buku "<strong>{{ $q }}</strong>" tidak ditemukan.
+    @else
+    Buku di kategori "<strong>{{ $kategoriDipilih }}</strong>" tidak ditemukan.
+    @endif
+  </div>
   @endif
 
   {{-- Jika ada query pencarian ($q) atau kategori dipilih, tampilkan hasil --}}
   @if($q || $kategoriDipilih)
-    @if($booksRecs->isNotEmpty())
-      <div class="section-header mt-4">
-        <h5>
-          @if($q)
-            Hasil Pencarian untuk "{{ $q }}"
-          @else
-            Buku di Kategori "{{ $kategoriDipilih }}"
-          @endif
-        </h5>
-        {{-- Tombol Kembali --}}
-        <a href="{{ route('homepage') }}" class="btn btn-back">Kembali</a>
-      </div>
-      <div class="row g-3">
-        @foreach ($booksRecs as $b)
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="card book-card h-100 position-relative">
-            <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
+  @if($booksRecs->isNotEmpty())
+  <div class="section-header mt-4">
+    <h5>
+      @if($q)
+      Hasil Pencarian untuk "{{ $q }}"
+      @else
+      Buku di Kategori "{{ $kategoriDipilih }}"
+      @endif
+    </h5>
+    {{-- Tombol Kembali --}}
+    <a href="{{ route('homepage') }}" class="btn btn-back">Kembali</a>
+  </div>
+  <div class="row g-3">
+    @foreach ($booksRecs as $b)
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="card book-card h-100 position-relative">
+        <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
 
-              {{-- 🔹 Label Listing Type --}}
-              @php $types = explode(',', $b->listing_type ?? ''); @endphp
-              <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
-                @foreach ($types as $type)
-                @if (trim($type) === 'sell')
-                <span class="listing-badge sell">Dijual</span>
-                @elseif (trim($type) === 'exchange')
-                <span class="listing-badge exchange">Tukar</span>
-                @endif
-                @endforeach
-              </div>
-
-              <div class="card-body text-center">
-                @if($b->cover_image)
-                <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
-                @else
-                <div class="py-5 bg-light rounded mb-2">📕</div>
-                @endif
-                <h6 class="fw-semibold text-truncate">{{ $b->title }}</h6>
-                <div class="text-muted small">{{ $b->author }}</div>
-                <div class="badge rounded-pill bg-light text-dark small fw-semibold">{{ $b->kondisi }}</div>
-                <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
-              </div>
-            </a>
+          {{-- 🔹 Label Listing Type --}}
+          @php $types = explode(',', $b->listing_type ?? ''); @endphp
+          <div class="position-absolute d-flex flex-row gap-1" style="top:8px; left:8px;">
+            @foreach ($types as $type)
+            @if (trim($type) === 'sell')
+            <span class="listing-badge sell">Dijual</span>
+            @elseif (trim($type) === 'exchange')
+            <span class="listing-badge exchange">Tukar</span>
+            @endif
+            @endforeach
           </div>
-        </div>
-        @endforeach
+
+          <div class="card-body text-center">
+            @if($b->cover_image)
+            <img src="{{ asset('storage/' . $b->cover_image) }}" alt="cover" class="book-thumb mb-2">
+            @else
+            <div class="py-5 bg-light rounded mb-2">📕</div>
+            @endif
+            <h6 class="fw-semibold text-truncate">{{ $b->title }}</h6>
+            <div class="text-muted small">{{ $b->author }}</div>
+            <div class="badge rounded-pill bg-light text-dark small fw-semibold">{{ $b->kondisi }}</div>
+            <div class="price mt-1">Rp {{ number_format($b->harga,0,',','.') }}</div>
+          </div>
+        </a>
       </div>
-    @endif
+    </div>
+    @endforeach
+  </div>
+  @endif
   {{-- Jika tidak ada query pencarian atau kategori, tampilkan daftar buku per kategori --}}
   @else
-    {{-- ================================
+  {{-- ================================
       DAFTAR BUKU PER KATEGORI OTOMATIS
     ================================ --}}
-    @foreach ($kategoriWithBooks as $kat)
-      @if ($kat->books->isNotEmpty())
-          <div class="section-header">
-              <h5 class="fw-semibold">{{ $kat->nama_kategori }}</h5>
-              <a href="{{ route('homepage', ['kategori' => $kat->nama_kategori]) }}" class="text-decoration-none small text-primary">Lihat Selengkapnya...</a>
+  @foreach ($kategoriWithBooks as $kat)
+  @if ($kat->books->isNotEmpty())
+  <div class="section-header">
+    <h5 class="fw-semibold">{{ $kat->nama_kategori }}</h5>
+    <a href="{{ route('homepage', ['kategori' => $kat->nama_kategori]) }}" class="text-decoration-none small text-primary">Lihat Selengkapnya...</a>
+  </div>
+
+  <div class="row g-3 mb-4">
+    @foreach ($kat->books as $b)
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="card book-card h-100 position-relative">
+        <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
+
+          {{-- 🔹 Label Listing Type --}}
+          @php $types = explode(',', $b->listing_type ?? ''); @endphp
+          <div class="position-absolute d-flex flex-row gap-1" style="top:8px; left:8px;">
+            @foreach ($types as $type)
+            @if (trim($type) === 'sell')
+            <span class="listing-badge sell">Dijual</span>
+            @elseif (trim($type) === 'exchange')
+            <span class="listing-badge exchange">Tukar</span>
+            @endif
+            @endforeach
           </div>
 
-          <div class="row g-3 mb-4">
-              @foreach ($kat->books as $b)
-                  <div class="col-6 col-md-4 col-lg-2">
-                      <div class="card book-card h-100 position-relative">
-                          <a href="{{ route('buku.show', $b->id_buku) }}" class="text-decoration-none text-dark">
+          <div class="card-body text-center">
+            {{-- COVER --}}
+            @if($b->cover_image)
+            <img src="{{ asset('storage/' . $b->cover_image) }}"
+              alt="cover" class="book-thumb mb-2">
+            @else
+            <div class="py-5 bg-light rounded mb-2">📕</div>
+            @endif
 
-                              {{-- 🔹 Label Listing Type --}}
-                              @php $types = explode(',', $b->listing_type ?? ''); @endphp
-                              <div class="position-absolute d-flex flex-column gap-1" style="top:8px; left:8px;">
-                                @foreach ($types as $type)
-                                @if (trim($type) === 'sell')
-                                <span class="listing-badge sell">Dijual</span>
-                                @elseif (trim($type) === 'exchange')
-                                <span class="listing-badge exchange">Tukar</span>
-                                @endif
-                                @endforeach
-                              </div>
+            {{-- JUDUL --}}
+            <h6 class="fw-semibold text-truncate">{{ $b->title }}</h6>
 
-                              <div class="card-body text-center">
-                                  {{-- COVER --}}
-                                  @if($b->cover_image)
-                                      <img src="{{ asset('storage/' . $b->cover_image) }}"
-                                           alt="cover" class="book-thumb mb-2">
-                                  @else
-                                      <div class="py-5 bg-light rounded mb-2">📕</div>
-                                  @endif
+            {{-- AUTHOR --}}
+            <div class="text-muted small">{{ $b->author }}</div>
 
-                                  {{-- JUDUL --}}
-                                  <h6 class="fw-semibold text-truncate">{{ $b->title }}</h6>
+            {{-- KONDISI --}}
+            <div class="badge rounded-pill bg-light text-dark small fw-semibold">
+              {{ $b->kondisi }}
+            </div>
 
-                                  {{-- AUTHOR --}}
-                                  <div class="text-muted small">{{ $b->author }}</div>
+            {{-- HARGA --}}
+            <div class="price mt-1">
+              Rp {{ number_format($b->harga, 0, ',', '.') }}
+            </div>
 
-                                  {{-- KONDISI --}}
-                                  <div class="badge rounded-pill bg-light text-dark small fw-semibold">
-                                      {{ $b->kondisi }}
-                                  </div>
-
-                                  {{-- HARGA --}}
-                                  <div class="price mt-1">
-                                      Rp {{ number_format($b->harga, 0, ',', '.') }}
-                                  </div>
-
-                              </div>
-                          </a>
-                      </div>
-                  </div>
-              @endforeach
           </div>
-      @endif
+        </a>
+      </div>
+    </div>
     @endforeach
+  </div>
+  @endif
+  @endforeach
   @endif
 
 </div>

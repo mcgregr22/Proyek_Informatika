@@ -1,0 +1,2 @@
+-   [ ] Edit badges in search results section to be side by side
+-   [ ] Edit badges in category sections to be side by side

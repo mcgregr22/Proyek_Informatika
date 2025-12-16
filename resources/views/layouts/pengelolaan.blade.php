@@ -65,7 +65,7 @@
   <div class="flex min-h-screen">
 
     {{-- SIDEBAR --}}
-    <aside class="w-72 bg-white border-r border-zinc-200 shadow-sm flex flex-col"
+    <aside class="fixed top-16 left-0 h-[calc(100vh-4rem)] z-30 w-72 bg-white border-r border-zinc-200 shadow-sm flex flex-col"
       x-show="openSidebar"
       x-transition.duration.200ms>
       <nav class="flex-1 px-4 py-5 space-y-1 text-[1.05rem]">
@@ -124,7 +124,7 @@
     </aside>
 
     {{-- KONTEN UTAMA --}}
-    <main class="flex-1 p-8">
+    <main class="flex-1 p-8 ml-72">
       @yield('content')
     </main>
   </div>

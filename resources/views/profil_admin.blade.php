@@ -11,7 +11,7 @@
 <div class="max-w-3xl mx-auto mt-10">
 
   {{-- Kartu Profil --}}
-  <div class="bg-white rounded-2xl shadow-md p-10 border border-zinc-200">
+  <div class="bg-white rounded-2xl shadow-md p-6 border border-zinc-200">
 
     {{-- Header --}}
     <div class="text-center mb-8">

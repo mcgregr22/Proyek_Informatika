@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ManajemenAdminController extends Controller
 {
@@ -18,6 +19,13 @@ class ManajemenAdminController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
+        $currentUser = auth::user();
+
+        // Admin tidak bisa edit akun admin lain
+        if ($currentUser->role === 'admin' && $user->role === 'admin') {
+            return redirect()->route('manajemen_admin')->with('error', 'Anda tidak dapat mengedit akun admin lain.');
+        }
+
         return view('manajemen_admin.edit', compact('user'));
     }
 
@@ -47,7 +55,15 @@ class ManajemenAdminController extends Controller
     // ✅ 4. delete user
     public function destroy($id)
     {
-        User::findOrFail($id)->delete();
+        $user = User::findOrFail($id);
+        $currentUser = auth::user();
+
+        // Admin tidak bisa hapus akun admin lain
+        if ($currentUser->role === 'admin' && $user->role === 'admin') {
+            return redirect()->route('manajemen_admin')->with('error', 'Anda tidak dapat menghapus akun admin lain.');
+        }
+
+        $user->delete();
         return back()->with('success', 'Akun berhasil dihapus!');
     }
 
@@ -58,43 +74,45 @@ class ManajemenAdminController extends Controller
         return view('manajemen_admin.role', compact('user'));
     }
 
-public function updateRole(Request $request, $id)
-{
-    $request->validate([
-        'role' => 'required|string'
-    ]);
+    public function updateRole(Request $request, $id)
+    {
+        $request->validate([
+            'role' => 'required|string'
+        ]);
 
-    $user = User::findOrFail($id);
-    $newRole = strtolower($request->input('role')); // normalisasi ke huruf kecil semua
-    $currentUser = auth()->user();
+        $user = User::findOrFail($id);
+        $newRole = strtolower($request->input('role')); // normalisasi ke huruf kecil semua
+        $currentUser = auth::user();
 
-    // 🟢 Pastikan user login terbaca
-    if (!$currentUser) {
-        return redirect()->route('login.show')->with('error', 'Sesi login Anda telah berakhir. Silakan login kembali.');
-    }
+        // 🟢 Pastikan user login terbaca
+        if (!$currentUser) {
+            return redirect()->route('login.show')->with('error', 'Sesi login Anda telah berakhir. Silakan login kembali.');
+        }
 
-    // ⚠ Jika role sama, beri peringatan
-    if ($user->role === $newRole) {
-        return redirect()->back()->with('warning', 'Role pengguna sudah ' . $newRole . '.');
-    }
+        // 🚫 Admin tidak bisa edit role admin lain
+        if ($currentUser->role === 'admin' && $user->role === 'admin') {
+            return redirect()->route('manajemen_admin')->with('error', 'Anda tidak dapat mengedit role admin lain.');
+        }
 
-    // 🚫 Jika admin mengubah dirinya sendiri jadi pengguna
-    if ($currentUser->id === $user->id && in_array($newRole, ['user', 'pengguna'])) {
+        // ⚠ Jika role sama, beri peringatan
+        if ($user->role === $newRole) {
+            return redirect()->back()->with('warning', 'Role pengguna sudah ' . $newRole . '.');
+        }
+
+        // 🚫 Jika admin mengubah dirinya sendiri jadi pengguna
+        if ($currentUser->id === $user->id && in_array($newRole, ['user', 'pengguna'])) {
+            $user->role = $newRole;
+            $user->save();
+
+            auth::logout(); // Logout otomatis
+            return redirect()->route('login.show')
+                ->with('warning', 'Anda telah mengubah peran Anda menjadi pengguna dan otomatis keluar.');
+        }
+
+        // ✅ Selain itu, ubah biasa
         $user->role = $newRole;
         $user->save();
 
-        auth()->logout(); // Logout otomatis
-        return redirect()->route('login.show')
-            ->with('warning', 'Anda telah mengubah peran Anda menjadi pengguna dan otomatis keluar.');
+        return redirect()->route('manajemen_admin')->with('success', 'Role berhasil diperbarui!');
     }
-
-    // ✅ Selain itu, ubah biasa
-    $user->role = $newRole;
-    $user->save();
-
-    return redirect()->route('manajemen_admin')->with('success', 'Role berhasil diperbarui!');
-}
-
-
-
 }

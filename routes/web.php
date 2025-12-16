@@ -22,6 +22,7 @@ use App\Http\Controllers\PurchaseAdminController;
 // HALAMAN AWAL
 // ----------------------
 Route::get('/', fn() => view('/beranda'));
+Route::get('/', fn() => view('/beranda'))->name('home');
 Route::get('/beranda', fn() => view('home'))->name('home');
 Route::get('/home', fn() => view('home'))->name('home');
 Route::get('/kontak', fn() => view('contact'))->name('contact');
@@ -66,23 +67,25 @@ Route::middleware('auth')->group(function () {
 // Tambah buku
 // =========================
 Route::get('/pengelolaan/tambahbuku', [BukuController::class, 'create'])
-    ->name('pengelolaan.tambahbuku');
+  ->name('pengelolaan.tambahbuku');
 
 // =========================
 // BUKU CONTROLLER
 // =========================
 Route::post('/buku/tambah', [BukuController::class, 'store'])->name('buku.store');
+Route::get('/buku/edit/{book}', [BukuController::class, 'edit'])->name('buku.edit');
+Route::put('/buku/update/{book}', [BukuController::class, 'update'])->name('buku.update');
 Route::delete('/buku/hapus/{book}', [BukuController::class, 'destroy'])->name('buku.destroy');
 
 // =========================
 // KATEGORI CONTROLLER
 // =========================
 Route::post('/kategori/tambah', [KategoriController::class, 'store'])
-    ->middleware('auth')
-    ->name('kategori.store');
+  ->middleware('auth')
+  ->name('kategori.store');
 // Semua buku berdasarkan kategori
 Route::get('/kategori/{nama}', [HomepageController::class, 'kategoriShow'])
-     ->name('kategori.show');
+  ->name('kategori.show');
 
 
 
@@ -176,12 +179,13 @@ Route::middleware(['auth'])->prefix('forumdiscuss')->group(function () {
   Route::post('/{id_post}/comment', [ForumController::class, 'storeComment'])->name('forum.comment');
 });
 // delete komen
-Route::delete('/forum/comment/{id}', 
-    [ForumController::class, 'deleteComment']
+Route::delete(
+  '/forum/comment/{id}',
+  [ForumController::class, 'deleteComment']
 )->name('forum.comment.delete');
 // delete post
 Route::delete('/forum/post/{id_post}/delete', [ForumController::class, 'deletePost'])
-    ->name('forum.post.delete');
+  ->name('forum.post.delete');
 
 
 // ===============================================
@@ -191,19 +195,19 @@ Route::get('/purchase', [PurchaseController::class, 'index'])
   ->middleware('auth')
   ->name('purchase.index');
 // Untuk Admin
-    Route::get('/admin/purchase', [PurchaseAdminController::class, 'index'])
-        ->name('admin.purchase.index');
+Route::get('/admin/purchase', [PurchaseAdminController::class, 'index'])
+  ->name('admin.purchase.index');
 
 // =========================
 // Riwayat Tukar Buku
 // =========================
 // Untuk Admin
 Route::get('/swap_history', [App\Http\Controllers\SwapHistoryController::class, 'index'])
-    ->name('swap.history');
+  ->name('swap.history');
 // Untuk User
 Route::get('swap_history_user', [App\Http\Controllers\SwapHistoryController::class, 'userHistory'])
-    ->middleware('auth')
-    ->name('swap.history.user');
+  ->middleware('auth')
+  ->name('swap.history.user');
 
 
 // =========================
@@ -235,25 +239,24 @@ Route::post('/checkout', [MidtransController::class, 'createCheckout'])
 
 
 // ----------------------------
-    // SWAPBOOK
-    // ----------------------------
+// SWAPBOOK
+// ----------------------------
 
-    // Halaman utama permintaan tukar buku (sidebar "Permintaan Tukar Buku")
-    Route::get('/pengelolaan/swapbook', [SwapbookController::class, 'index'])
-        ->name('swap.index');
+// Halaman utama permintaan tukar buku (sidebar "Permintaan Tukar Buku")
+Route::get('/pengelolaan/swapbook', [SwapbookController::class, 'index'])
+  ->name('swap.index');
 
-    // Form dari "Koleksi Buku Saya" untuk mengirim permintaan tukar
-    Route::post('/pengelolaan/swapbook', [SwapbookController::class, 'store'])
-        ->name('swap.store');
+// Form dari "Koleksi Buku Saya" untuk mengirim permintaan tukar
+Route::post('/pengelolaan/swapbook', [SwapbookController::class, 'store'])
+  ->name('swap.store');
 
-    // Alias lama: /swapbook -> redirect ke halaman di atas (biar kalau ada URL lama, tetap aman)
-    Route::get('/swapbook', fn () => redirect()->route('swap.index'))
-        ->name('swap.alias');
+// Alias lama: /swapbook -> redirect ke halaman di atas (biar kalau ada URL lama, tetap aman)
+Route::get('/swapbook', fn() => redirect()->route('swap.index'))
+  ->name('swap.alias');
 
-    // Incoming request: terima / tolak
-    Route::patch('/swap/requests/{swap}/accept', [SwapbookController::class, 'accept'])
-        ->name('swap.accept');
+// Incoming request: terima / tolak
+Route::patch('/swap/requests/{swap}/accept', [SwapbookController::class, 'accept'])
+  ->name('swap.accept');
 
-    Route::patch('/swap/requests/{swap}/reject', [SwapbookController::class, 'reject'])
-        ->name('swap.reject');
-
+Route::patch('/swap/requests/{swap}/reject', [SwapbookController::class, 'reject'])
+  ->name('swap.reject');

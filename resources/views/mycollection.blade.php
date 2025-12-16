@@ -67,6 +67,12 @@
 
       {{-- Button --}}
       <div class="p-4 pt-0">
+        <div class="flex gap-2 mb-2">
+          <a href="{{ route('buku.edit', $b->id_buku) }}"
+            class="flex-1 px-3 py-2 rounded-xl text-white text-sm font-semibold bg-green-600 hover:bg-green-700 text-center">
+            Edit Buku
+          </a>
+        </div>
         <form action="{{ route('swap.store') }}" method="POST">
           @csrf
           <input type="hidden" name="requested_book_id" value="{{ $requestedId }}">

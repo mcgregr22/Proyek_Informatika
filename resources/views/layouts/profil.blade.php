@@ -51,7 +51,7 @@
     <div class="flex items-center px-6 h-16">
 
       <!-- LOGO -->
-      <a href="/homepage" class="flex items-center gap-3">
+      <a href="#" class="flex items-center gap-3">
         <span class="text-2xl font-extrabold tracking-tight">
           <span class="text-indigo-600">Library-</span>
           <span class="italic text-zinc-900">Hub</span>
@@ -62,7 +62,7 @@
       <div class="flex-1"></div>
 
       <div class="flex items-center gap-8">
-        <!-- Forum Discuss button -->
+        <!-- Forum Discuss button
         <a href="/forumdiscuss" class="w-1 h-1 flex items-center justify-center rounded-full hover:bg-zinc-100 text-zinc-500">
           <i class="bi bi-chat-dots text-xl"></i>
         </a>
@@ -72,6 +72,15 @@
         <a href="{{ route('profil_user') }}" class="w-1 h-1 flex items-center justify-center rounded-full hover:bg-zinc-100 text-zinc-500">
           <i class="bi bi-person-circle text-xl"></i>
         </a>
+
+        <!-- Logout Button -->
+        <form action="{{ route('logout') }}" method="POST" class="inline">
+          @csrf
+          <button type="submit" class="flex items-center gap-2 px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 font-medium">
+            <i class="bi bi-box-arrow-right"></i>
+            Keluar
+          </button>
+        </form>
       </div>
 
 

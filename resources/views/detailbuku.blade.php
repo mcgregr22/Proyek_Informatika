@@ -82,8 +82,8 @@
 @section('content')
 
 <a href="{{ url()->previous() }}"
-   class="d-inline-flex align-items-center gap-2 mb-3 px-4 py-2 rounded-3 text-primary"
-   style="background:#eef4ff; border:1px solid #d0dffe; font-weight:600;">
+  class="d-inline-flex align-items-center gap-2 mb-3 px-4 py-2 rounded-3 text-primary"
+  style="background:#eef4ff; border:1px solid #d0dffe; font-weight:600;">
   <i class="bi bi-arrow-left fs-5"></i>
   Kembali
 </a>
@@ -99,11 +99,11 @@
       ======================== --}}
       <div class="col-md-4 text-center">
         @if($book->cover_image)
-          <img src="{{ asset('storage/' . $book->cover_image) }}" class="thumb" alt="cover">
+        <img src="{{ asset('storage/' . $book->cover_image) }}" class="thumb" alt="cover">
         @else
-          <div class="thumb d-flex align-items-center justify-content-center bg-light" style="height:380px;">
-            📘
-          </div>
+        <div class="thumb d-flex align-items-center justify-content-center bg-light" style="height:380px;">
+          📘
+        </div>
         @endif
       </div>
 
@@ -115,8 +115,11 @@
         <h2 class="title">{{ $book->title }}</h2>
         <div class="text-muted mb-1">oleh <strong>{{ $book->author }}</strong></div>
 
+        @if(str_contains($book->listing_type, 'sell'))
         <div class="price mb-4">Rp {{ number_format($book->harga,0,',','.') }}</div>
+        @endif
 
+        @if(str_contains($book->listing_type, 'sell'))
         {{-- QTY + ADD TO CART --}}
         <div class="d-flex align-items-center mb-4">
           <span class="me-3 text-muted">Jumlah:</span>
@@ -136,17 +139,21 @@
             </button>
           </form>
         </div>
+        @endif
 
         {{-- BUTTONS --}}
         <div class="d-flex gap-3 flex-wrap mb-4">
 
+          @if(str_contains($book->listing_type, 'exchange'))
           <form action="{{ route('mycollection.index') }}" method="GET">
             <input type="hidden" name="requested" value="{{ $book->id_buku }}">
             <button type="submit" class="btn btn-primary btn-modern d-flex align-items-center gap-2">
               <i class="bi bi-arrow-repeat"></i> Tukar Buku
             </button>
           </form>
+          @endif
 
+          @if(str_contains($book->listing_type, 'sell'))
           <form action="{{ route('midtrans.buyNow', $book->id_buku) }}" method="POST">
             @csrf
             <input type="hidden" id="qtyBuyNow" name="qty" value="1">
@@ -154,6 +161,7 @@
               Beli Sekarang
             </button>
           </form>
+          @endif
 
         </div>
 
@@ -199,12 +207,12 @@
 {{-- TOAST NOTIFIKASI --}}
 <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-4" style="z-index:9999;">
   <div id="cartToast" class="toast align-items-center text-white bg-success border-0 shadow-lg">
-      <div class="d-flex">
-          <div class="toast-body">
-              ✅ Buku berhasil ditambahkan ke keranjang!
-          </div>
-          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    <div class="d-flex">
+      <div class="toast-body">
+        ✅ Buku berhasil ditambahkan ke keranjang!
       </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
   </div>
 </div>
 
@@ -212,33 +220,33 @@
 @endsection
 
 
-      @push('scripts')
-      <script>
-        // ===== Qty Utama =====
-        const qtyInput = document.getElementById('qty');
-        const qtyInlineInput = document.getElementById('qtyInline');
-        const qtyBuyNow = document.getElementById('qtyBuyNow'); // 🔥 WAJIB ADA
+@push('scripts')
+<script>
+  // ===== Qty Utama =====
+  const qtyInput = document.getElementById('qty');
+  const qtyInlineInput = document.getElementById('qtyInline');
+  const qtyBuyNow = document.getElementById('qtyBuyNow'); // 🔥 WAJIB ADA
 
-        document.getElementById('plus').addEventListener('click', () => {
-          qtyInput.value = parseInt(qtyInput.value) + 1;
-          qtyInlineInput.value = qtyInput.value;
-          qtyBuyNow.value = qtyInput.value; // 🔥 UPDATE BERHASIL
-        });
+  document.getElementById('plus').addEventListener('click', () => {
+    qtyInput.value = parseInt(qtyInput.value) + 1;
+    qtyInlineInput.value = qtyInput.value;
+    qtyBuyNow.value = qtyInput.value; // 🔥 UPDATE BERHASIL
+  });
 
-        document.getElementById('minus').addEventListener('click', () => {
-          if (parseInt(qtyInput.value) > 1) {
-            qtyInput.value = parseInt(qtyInput.value) - 1;
-            qtyInlineInput.value = qtyInput.value;
-            qtyBuyNow.value = qtyInput.value; // 🔥 UPDATE BERHASIL
-          }
-        });
+  document.getElementById('minus').addEventListener('click', () => {
+    if (parseInt(qtyInput.value) > 1) {
+      qtyInput.value = parseInt(qtyInput.value) - 1;
+      qtyInlineInput.value = qtyInput.value;
+      qtyBuyNow.value = qtyInput.value; // 🔥 UPDATE BERHASIL
+    }
+  });
 
-        qtyInput.addEventListener('input', () => {
-          qtyInlineInput.value = qtyInput.value;
-          qtyBuyNow.value = qtyInput.value; // 🔥 UPDATE BERHASIL
-        });
+  qtyInput.addEventListener('input', () => {
+    qtyInlineInput.value = qtyInput.value;
+    qtyBuyNow.value = qtyInput.value; // 🔥 UPDATE BERHASIL
+  });
 
-        document.getElementById("addCartInline").addEventListener("submit", function(e) {
+  document.getElementById("addCartInline").addEventListener("submit", function(e) {
     e.preventDefault(); // cegah submit default
 
     let form = this;
@@ -247,22 +255,22 @@
     fetch(form.action, {
         method: "POST",
         headers: {
-            "X-CSRF-TOKEN": form.querySelector('input[name="_token"]').value,
-            "Content-Type": "application/json"
+          "X-CSRF-TOKEN": form.querySelector('input[name="_token"]').value,
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            book_id: form.querySelector('input[name="book_id"]').value,
-            qty: form.querySelector('input[name="qty"]').value
+          book_id: form.querySelector('input[name="book_id"]').value,
+          qty: form.querySelector('input[name="qty"]').value
         })
-    })
-    .then(res => res.json())
-    .then(() => {
+      })
+      .then(res => res.json())
+      .then(() => {
         // Tampilkan TOAST
         let toastEl = document.getElementById('cartToast');
         let toast = new bootstrap.Toast(toastEl);
         toast.show();
-    })
-    .catch(err => console.error("Error:", err));
-});
-      </script>
-      @endpush
+      })
+      .catch(err => console.error("Error:", err));
+  });
+</script>
+@endpush

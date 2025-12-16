@@ -1,6 +1,6 @@
 @extends('layouts.pengelolaan')
 
-@section('title', 'Tambah Buku | Library-Hub')
+@section('title', 'Edit Buku | Library-Hub')
 
 @section('content')
 
@@ -8,19 +8,20 @@
 
     {{-- TITLE --}}
     <div class="mb-6">
-        <h2 class="text-2xl font-semibold text-gray-800">Tambah Buku</h2>
-        <p class="text-gray-500 text-sm">Lengkapi data buku dengan benar.</p>
+        <h2 class="text-2xl font-semibold text-gray-800">Edit Buku</h2>
+        <p class="text-gray-500 text-sm">Ubah data buku dengan benar.</p>
     </div>
 
-    {{-- Flash sukses --}}
+    {{-- Flash messages --}}
     @if (session('success'))
     <div class="rounded-xl border border-green-200 bg-green-50 text-green-700 p-3 mb-5">
         {{ session('success') }}
     </div>
     @endif
 
-    <form action="{{ route('buku.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('buku.update', $book->id_buku) }}" method="POST" enctype="multipart/form-data">
         @csrf
+        @method('PUT')
 
         {{-- ====================== --}}
         {{-- SECTION 1 : INFORMASI UTAMA --}}
@@ -38,7 +39,7 @@
                         required>
                         <option value="">-- Pilih Kategori --</option>
                         @foreach ($kategori as $k)
-                        <option value="{{ $k->nama_kategori }}">{{ $k->nama_kategori }}</option>
+                        <option value="{{ $k->nama_kategori }}" {{ $book->kategori == $k->nama_kategori ? 'selected' : '' }}>{{ $k->nama_kategori }}</option>
                         @endforeach
                     </select>
 
@@ -56,7 +57,7 @@
                 <label class="block text-sm font-medium mb-1">Judul Buku</label>
                 <input type="text" name="title"
                     class="w-full border rounded-lg px-3 h-[42px] @error('title') border-red-400 @enderror"
-                    placeholder="Masukkan judul buku" value="{{ old('title') }}" required>
+                    placeholder="Masukkan judul buku" value="{{ $book->title }}" required>
                 @error('title') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -65,7 +66,7 @@
                 <label class="block text-sm font-medium mb-1">Penulis</label>
                 <input type="text" name="author"
                     class="w-full border rounded-lg px-3 h-[42px] @error('author') border-red-400 @enderror"
-                    placeholder="Masukkan nama penulis" required>
+                    placeholder="Masukkan nama penulis" value="{{ $book->author }}" required>
                 @error('author') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -74,7 +75,7 @@
                 <label class="block text-sm font-medium mb-1">ISBN</label>
                 <input type="text" name="isbn"
                     class="w-full border rounded-lg px-3 h-[42px] @error('isbn') border-red-400 @enderror"
-                    placeholder="Masukkan nomor ISBN" required>
+                    placeholder="Masukkan nomor ISBN" value="{{ $book->isbn }}" required>
                 @error('isbn') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -82,7 +83,7 @@
             <div>
                 <label class="block text-sm font-medium mb-1">Tanggal Rilis</label>
                 <input type="date" name="tanggal_rilis"
-                    class="w-full border rounded-lg px-3 h-[42px]" required>
+                    class="w-full border rounded-lg px-3 h-[42px]" value="{{ $book->tanggal_rilis }}" required>
             </div>
 
             {{-- Bahasa --}}
@@ -90,7 +91,7 @@
                 <label class="block text-sm font-medium mb-1">Bahasa</label>
                 <input type="text" name="bahasa"
                     class="w-full border rounded-lg px-3 h-[42px]"
-                    placeholder="Indonesia / Inggris / dll">
+                    placeholder="Indonesia / Inggris / dll" value="{{ $book->bahasa }}">
             </div>
 
             {{-- Penerbit --}}
@@ -98,7 +99,7 @@
                 <label class="block text-sm font-medium mb-1">Penerbit</label>
                 <input type="text" name="penerbit"
                     class="w-full border rounded-lg px-3 h-[42px]"
-                    placeholder="Nama penerbit" required>
+                    placeholder="Nama penerbit" value="{{ $book->penerbit }}">
             </div>
         </div>
 
@@ -112,16 +113,16 @@
 
             {{-- Listing Type --}}
             <div class="md:col-span-2">
-                <label class="block text-xs text-red-500 font-normal mt-1">*apabila penawaran buku "Dijual" wajib masukan harga dan jika "Tukar" tidak perlu</label>
+                <!-- <label class="block text-sm font-medium mb-1">Penawaran</label> -->
 
                 <div class="flex gap-4">
                     <label class="flex items-center gap-2 border rounded-lg px-4 h-[42px] cursor-pointer">
-                        <input type="checkbox" name="listing_type[]" value="exchange">
+                        <input type="checkbox" name="listing_type[]" value="exchange" {{ in_array('exchange', explode(',', $book->listing_type)) ? 'checked' : '' }}>
                         <span class="text-sm">Tukar</span>
                     </label>
 
                     <label class="flex items-center gap-2 border rounded-lg px-4 h-[42px] cursor-pointer">
-                        <input type="checkbox" name="listing_type[]" value="sell">
+                        <input type="checkbox" name="listing_type[]" value="sell" {{ in_array('sell', explode(',', $book->listing_type)) ? 'checked' : '' }}>
                         <span class="text-sm">Jual</span>
                     </label>
                 </div>
@@ -132,7 +133,7 @@
                 <label class="block text-sm font-medium mb-1">Harga</label>
                 <input type="number" min="0" name="harga" id="hargaInput"
                     class="w-full border rounded-lg px-3 h-[42px]"
-                    placeholder="Masukkan harga (Rp)">
+                    placeholder="Masukkan harga (Rp)" value="{{ $book->harga }}">
                 <!-- <p class="text-xs text-gray-500 mt-1">Isi harga meskipun Exchange agar tetap dapat dijual.</p> -->
             </div>
 
@@ -141,8 +142,8 @@
                 <label class="block text-sm font-medium mb-1">Kondisi Buku</label>
                 <select name="kondisi"
                     class="w-full border rounded-lg px-3 h-[42px]" required>
-                    <option value="Baru">Baru</option>
-                    <option value="Bekas">Bekas</option>
+                    <option value="Baru" {{ $book->kondisi == 'Baru' ? 'selected' : '' }}>Baru</option>
+                    <option value="Bekas" {{ $book->kondisi == 'Bekas' ? 'selected' : '' }}>Bekas</option>
                 </select>
             </div>
         </div>
@@ -155,7 +156,7 @@
 
         <textarea name="deskripsi" rows="4"
             class="w-full border rounded-lg px-3 py-2"
-            placeholder="Tuliskan deskripsi buku secara lengkap..." required></textarea>
+            placeholder="Tuliskan deskripsi buku secara lengkap..." required>{{ $book->deskripsi }}</textarea>
 
 
         {{-- ====================== --}}
@@ -163,19 +164,40 @@
         {{-- ====================== --}}
         <h3 class="text-lg font-semibold text-gray-700 mt-8 mb-3">Cover Buku</h3>
 
+        @if($book->cover_image)
+        <div class="mb-3">
+            <img src="{{ asset('storage/' . $book->cover_image) }}" alt="Current Cover" class="w-32 h-32 object-cover rounded-lg border">
+        </div>
+        @endif
+
         <input type="file" name="cover_image"
             class="block w-full border rounded-lg px-3 h-[42px] bg-white"
             accept="image/*">
 
 
         {{-- SUBMIT BUTTON --}}
-        <div class="mt-8 flex justify-end">
-            <button type="submit"
-                class="px-6 h-[45px] bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium">
-                Tambah Buku
+        <div class="mt-8 flex justify-between items-center">
+            <button type="button" onclick="deleteBook()"
+                class="px-6 h-[45px] bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium">
+                Hapus Buku
             </button>
+            <div class="flex gap-3">
+                <a href="{{ route('mycollection.index') }}" class="px-6 h-[45px] bg-gray-500 hover:bg-gray-600 text-white rounded-lg text-sm font-medium flex items-center">
+                    Batal
+                </a>
+                <button type="submit"
+                    class="px-6 h-[45px] bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium">
+                    Update Buku
+                </button>
+            </div>
         </div>
 
+    </form>
+
+    {{-- DELETE FORM OUTSIDE UPDATE FORM --}}
+    <form id="deleteForm" action="{{ route('buku.destroy', $book->id_buku) }}" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
     </form>
 </div>
 
@@ -212,3 +234,38 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    // Fungsi untuk toggle harga berdasarkan listing type
+    function toggleHarga() {
+        const exchangeChecked = document.querySelector('input[name="listing_type[]"][value="exchange"]').checked;
+        const sellChecked = document.querySelector('input[name="listing_type[]"][value="sell"]').checked;
+        const hargaContainer = document.getElementById('hargaContainer');
+        const hargaInput = document.getElementById('hargaInput');
+
+        if (sellChecked) {
+            hargaContainer.style.display = 'block';
+            hargaInput.required = true;
+        } else {
+            hargaContainer.style.display = 'none';
+            hargaInput.required = false;
+        }
+    }
+
+    // Fungsi untuk menghapus buku
+    function deleteBook() {
+        if (confirm('Apakah Anda yakin ingin menghapus buku ini?')) {
+            document.getElementById('deleteForm').submit();
+        }
+    }
+
+    // Event listener untuk checkbox
+    document.querySelectorAll('input[name="listing_type[]"]').forEach(checkbox => {
+        checkbox.addEventListener('change', toggleHarga);
+    });
+
+    // Inisialisasi saat load
+    toggleHarga();
+</script>
+@endpush

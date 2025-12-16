@@ -11,14 +11,13 @@
 <div class="max-w-3xl mx-auto mt-10">
 
   {{-- Kartu Profil --}}
-  <div class="bg-white rounded-2xl shadow-md p-10 border border-zinc-200">
+  <div class="bg-white rounded-2xl shadow-md p-6 border border-zinc-200">
 
     {{-- Header --}}
     <div class="text-center mb-8">
-      <img 
-        src="https://cdn-icons-png.flaticon.com/512/149/149071.png" 
-        class="w-28 h-28 mx-auto rounded-full border-4 border-indigo-600"
-      >
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+        class="w-28 h-28 mx-auto rounded-full border-4 border-indigo-600">
       <h2 class="mt-4 text-2xl font-semibold text-indigo-700">{{ $user->name }}</h2>
     </div>
 
@@ -37,8 +36,7 @@
             type="text"
             name="name"
             value="{{ $user->name }}"
-            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
-          >
+            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none">
         </div>
 
         <div>
@@ -47,8 +45,7 @@
             type="email"
             name="email"
             value="{{ $user->email }}"
-            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
-          >
+            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none">
         </div>
 
         <div>
@@ -57,8 +54,7 @@
             type="text"
             name="phone"
             value="{{ $user->phone ?? '' }}"
-            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
-          >
+            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none">
         </div>
 
         <div>
@@ -68,8 +64,7 @@
             name="role"
             value="{{ $user->role }}"
             class="w-full border border-zinc-300 rounded-lg px-4 py-2 bg-zinc-100"
-            readonly
-          >
+            readonly>
         </div>
 
       </div>
@@ -87,8 +82,7 @@
             type="email"
             name="email_confirm"
             value="{{ $user->email }}"
-            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
-          >
+            class="w-full border border-zinc-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none">
         </div>
 
         <div>
@@ -100,14 +94,12 @@
               type="password"
               name="password"
               placeholder="Kosongkan jika tidak ingin mengubah"
-              class="w-full border border-zinc-300 rounded-lg px-4 py-2 pr-12 focus:ring-indigo-500 focus:outline-none"
-            >
+              class="w-full border border-zinc-300 rounded-lg px-4 py-2 pr-12 focus:ring-indigo-500 focus:outline-none">
 
-            <button 
-              type="button" 
+            <button
+              type="button"
               id="togglePassword"
-              class="absolute top-1/2 right-3 -translate-y-1/2 text-zinc-500"
-            >
+              class="absolute top-1/2 right-3 -translate-y-1/2 text-zinc-500">
               <i id="toggleIcon" class="bi bi-eye text-lg"></i>
             </button>
           </div>
